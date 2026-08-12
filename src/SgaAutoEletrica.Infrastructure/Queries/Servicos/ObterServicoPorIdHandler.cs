@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Servicos.DTOs;
+using SgaAutoEletrica.Application.Features.Servicos.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Servicos.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Servicos;
 
 public class ObterServicoPorIdHandler : IRequestHandler<ObterServicoPorIdQuery, ServicoDTO?>
 {

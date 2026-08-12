@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Infrastructure.Persistence.Repositories;
@@ -8,6 +9,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<ICategoriaPecaRepository, CategoriaPecaRepository>();

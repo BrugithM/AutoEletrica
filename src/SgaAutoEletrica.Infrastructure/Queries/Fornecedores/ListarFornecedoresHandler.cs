@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Fornecedores.DTOs;
+using SgaAutoEletrica.Application.Features.Fornecedores.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Fornecedores.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Fornecedores;
 
 public class ListarFornecedoresHandler : IRequestHandler<ListarFornecedoresQuery, List<FornecedorDTO>>
 {

@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Buscas.DTOs;
+using SgaAutoEletrica.Application.Features.Buscas.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Buscas.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Buscas;
 
 public class BuscarProdutosHandler : IRequestHandler<BuscarProdutosQuery, List<PecaBuscaDTO>>
 {

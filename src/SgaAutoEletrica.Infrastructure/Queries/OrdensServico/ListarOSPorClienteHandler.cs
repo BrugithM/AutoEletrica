@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.OrdensServico.DTOs;
+using SgaAutoEletrica.Application.Features.OrdensServico.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.OrdensServico.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.OrdensServico;
 
 public class ListarOSPorClienteHandler : IRequestHandler<ListarOSPorClienteQuery, List<OrdemServicoResumoDTO>>
 {
