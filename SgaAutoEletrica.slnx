@@ -4,5 +4,6 @@
     <Project Path="src/SgaAutoEletrica.Domain/SgaAutoEletrica.Domain.csproj" />
     <Project Path="src/SgaAutoEletrica.Infrastructure/SgaAutoEletrica.Infrastructure.csproj" />
     <Project Path="src/SgaAutoEletrica.Migrator/SgaAutoEletrica.Migrator.csproj" />
+    <Project Path="src/SgaAutoEletrica.UI/SgaAutoEletrica.UI.csproj" />
   </Folder>
 </Solution>
