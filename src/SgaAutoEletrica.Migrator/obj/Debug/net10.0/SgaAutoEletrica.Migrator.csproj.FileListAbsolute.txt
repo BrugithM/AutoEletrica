@@ -159,3 +159,4 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Migrator\bin\Debug\net10.0\Micro
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Migrator\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Migrator\bin\Debug\net10.0\SgaAutoEletrica.Application.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Migrator\bin\Debug\net10.0\SgaAutoEletrica.Application.pdb
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Migrator\obj\Debug\net10.0\SgaAutoEletrica.Migrator.sourcelink.json

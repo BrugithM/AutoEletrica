@@ -17,3 +17,4 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Infrastructure\obj\Debug\net10.0
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Infrastructure\obj\Debug\net10.0\ref\SgaAutoEletrica.Infrastructure.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Infrastructure\bin\Debug\net10.0\SgaAutoEletrica.Application.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Infrastructure\bin\Debug\net10.0\SgaAutoEletrica.Application.pdb
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Infrastructure\obj\Debug\net10.0\SgaAutoEletrica.Infrastructure.sourcelink.json

@@ -13,3 +13,4 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Application\obj\Debug\net10.0\Sg
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Application\obj\Debug\net10.0\refint\SgaAutoEletrica.Application.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Application\obj\Debug\net10.0\SgaAutoEletrica.Application.pdb
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Application\obj\Debug\net10.0\ref\SgaAutoEletrica.Application.dll
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Application\obj\Debug\net10.0\SgaAutoEletrica.Application.sourcelink.json
