@@ -1,14 +1,9 @@
 ﻿<Window x:Class="SgaAutoEletrica.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:SgaAutoEletrica.UI.ViewModels"
         Title="SGA - Sistema de Gestão para Autoelétrica" 
         Height="700" Width="1200"
         WindowStartupLocation="CenterScreen">
-
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,43 +18,38 @@
                            Foreground="White" Margin="0,10,0,30" HorizontalAlignment="Center"/>
                 
                 <Button Content="Dashboard" 
-                        Command="{Binding NavegarDashboardCommand}"
+                        Click="BtnDashboard_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                 
                 <Button Content="Clientes" 
-                        Command="{Binding NavegarClientesCommand}"
+                        Click="BtnClientes_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                 
                 <Button Content="Veículos" 
-                        Command="{Binding NavegarVeiculosCommand}"
+                        Click="BtnVeiculos_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                 
                 <Button Content="Peças" 
-                        Command="{Binding NavegarPecasCommand}"
+                        Click="BtnPecas_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                 
                 <Button Content="Serviços" 
-                        Command="{Binding NavegarServicosCommand}"
+                        Click="BtnServicos_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                 
                 <Button Content="Fornecedores" 
-                        Command="{Binding NavegarFornecedoresCommand}"
+                        Click="BtnFornecedores_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                 
                 <Button Content="Ordens de Serviço" 
-                        Command="{Binding NavegarOrdensServicoCommand}"
+                        Click="BtnOS_Click"
                         Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
             </StackPanel>
         </Border>
 
         <!-- Conteúdo Principal -->
         <Border Grid.Column="1" Background="#ECF0F1">
-            <Grid Margin="20">
-                <TextBlock Text="{Binding CurrentView}" 
-                           FontSize="32" FontWeight="Bold"
-                           Foreground="#2C3E50"
-                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Grid>
+            <ContentControl x:Name="ContentArea" Margin="10"/>
         </Border>
     </Grid>
 </Window>

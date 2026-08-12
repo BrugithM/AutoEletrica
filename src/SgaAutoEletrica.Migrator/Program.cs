@@ -18,6 +18,7 @@ services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
 
 services.AddInfrastructure();
+services.AddLogging();
 services.AddApplication();
 
 var serviceProvider = services.BuildServiceProvider();

@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Pecas.DTOs;
+using SgaAutoEletrica.Application.Features.Pecas.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Pecas.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Pecas;
 
 public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, List<PecaDTO>>
 {

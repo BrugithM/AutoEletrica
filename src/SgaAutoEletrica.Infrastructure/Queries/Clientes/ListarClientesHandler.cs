@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Clientes.DTOs;
+using SgaAutoEletrica.Application.Features.Clientes.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Clientes.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Clientes;
 
 public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, List<ClienteDTO>>
 {

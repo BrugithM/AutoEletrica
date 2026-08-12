@@ -1,10 +1,11 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Dashboard.DTOs;
+using SgaAutoEletrica.Application.Features.Dashboard.Queries;
 using SgaAutoEletrica.Domain.Enums;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Dashboard.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Dashboard;
 
 public class ObterResumoDiarioHandler : IRequestHandler<ObterResumoDiarioQuery, ResumoDiarioDTO>
 {

@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
+using SgaAutoEletrica.Application.Features.Veiculos.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Veiculos.Queries;
+namespace SgaAutoEletrica.Infrastructure.Queries.Veiculos;
 
 public class ObterVeiculoPorIdHandler : IRequestHandler<ObterVeiculoPorIdQuery, VeiculoDTO?>
 {
