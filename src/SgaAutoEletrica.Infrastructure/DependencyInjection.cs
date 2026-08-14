@@ -10,8 +10,8 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICategoriaPecaRepository, CategoriaPecaRepository>();
         services.AddScoped<IServicoRepository, ServicoRepository>();
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();

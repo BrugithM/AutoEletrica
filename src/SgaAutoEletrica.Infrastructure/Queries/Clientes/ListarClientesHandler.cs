@@ -25,6 +25,7 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, List<C
         }
 
         return await query
+            .AsNoTracking()
             .OrderBy(c => c.NomeCompleto)
             .Select(c => new ClienteDTO
             {

@@ -18,6 +18,7 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
     public async Task<PecaDTO?> Handle(ObterPecaPorIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.Pecas
+            .AsNoTracking()
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
             .Where(p => p.Id == request.Id)

@@ -18,6 +18,7 @@ public class ObterVeiculoPorIdHandler : IRequestHandler<ObterVeiculoPorIdQuery, 
     public async Task<VeiculoDTO?> Handle(ObterVeiculoPorIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.Veiculos
+            .AsNoTracking()
             .Where(v => v.Id == request.Id)
             .Select(v => new VeiculoDTO
             {

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SgaAutoEletrica.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d79cfd874719689fbeeb1e6ba0922a59ab5459e1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8cb1ccc87f659e19088e40734d54128aa6e96744")]
 [assembly: System.Reflection.AssemblyProductAttribute("SgaAutoEletrica.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SgaAutoEletrica.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

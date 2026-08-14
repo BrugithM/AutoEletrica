@@ -18,6 +18,7 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, List<PecaDTO
     public async Task<List<PecaDTO>> Handle(ListarPecasQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Pecas
+            .AsNoTracking()
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
             .AsQueryable();

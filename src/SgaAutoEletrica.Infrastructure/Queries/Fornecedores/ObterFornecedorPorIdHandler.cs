@@ -18,6 +18,7 @@ public class ObterFornecedorPorIdHandler : IRequestHandler<ObterFornecedorPorIdQ
     public async Task<FornecedorDTO?> Handle(ObterFornecedorPorIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.Fornecedores
+            .AsNoTracking()
             .Where(f => f.Id == request.Id)
             .Select(f => new FornecedorDTO
             {

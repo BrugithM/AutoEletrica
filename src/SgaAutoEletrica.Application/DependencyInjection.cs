@@ -1,5 +1,7 @@
 using System.Reflection;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using SgaAutoEletrica.Application.Features.Clientes.Commands;
 
 namespace SgaAutoEletrica.Application;
 
