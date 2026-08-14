@@ -12,13 +12,13 @@ public partial class App : System.Windows.Application
 {
     public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
-     public App()
+    public App()
     {
         DispatcherUnhandledException += App_DispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
     }
 
-    private void App_DispatcherUnhandledException(object sender, 
+    private void App_DispatcherUnhandledException(object sender,
         System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
         MessageBox.Show(
@@ -27,7 +27,7 @@ public partial class App : System.Windows.Application
         e.Handled = true; // Impede o app de fechar
     }
 
-    private void CurrentDomain_UnhandledException(object sender, 
+    private void CurrentDomain_UnhandledException(object sender,
         UnhandledExceptionEventArgs e)
     {
         var ex = e.ExceptionObject as Exception;
@@ -42,7 +42,7 @@ public partial class App : System.Windows.Application
         try
         {
             var services = new ServiceCollection();
-            
+
             var dbPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 "SgaAutoEletrica",
@@ -63,6 +63,9 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.Dashboard.DashboardViewModel>();
             services.AddTransient<Views.Dashboard.DashboardView>();
+
+            services.AddTransient<ViewModels.Clientes.ListaClientesViewModel>();
+            services.AddTransient<Views.Clientes.ListaClientesView>();
 
             ServiceProvider = services.BuildServiceProvider();
 

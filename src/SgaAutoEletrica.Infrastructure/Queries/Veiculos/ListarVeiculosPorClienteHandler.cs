@@ -18,6 +18,7 @@ public class ListarVeiculosPorClienteHandler : IRequestHandler<ListarVeiculosPor
     public async Task<List<VeiculoDTO>> Handle(ListarVeiculosPorClienteQuery request, CancellationToken cancellationToken)
     {
         return await _context.Veiculos
+            .AsNoTracking()
             .Where(v => v.ClienteId == request.ClienteId)
             .OrderBy(v => v.Modelo)
             .Select(v => new VeiculoDTO

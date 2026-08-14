@@ -18,6 +18,7 @@ public class ObterOSPorIdHandler : IRequestHandler<ObterOSPorIdQuery, OrdemServi
     public async Task<OrdemServicoDetalheDTO?> Handle(ObterOSPorIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.OrdensServico
+            .AsNoTracking()
             .Include(os => os.Cliente)
             .Include(os => os.Veiculo)
             .Include(os => os.ItensPeca).ThenInclude(i => i.Peca)

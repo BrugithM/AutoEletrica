@@ -4,7 +4,7 @@ using SgaAutoEletrica.Domain.ValueObjects;
 
 namespace SgaAutoEletrica.Application.Features.Clientes.Commands;
 
-public class AtualizarClienteHandler : IRequest<AtualizarClienteCommand>
+public class AtualizarClienteHandler : IRequestHandler<AtualizarClienteCommand>
 {
     private readonly IClienteRepository _repository;
     private readonly IUnitOfWork _unitOfWork;

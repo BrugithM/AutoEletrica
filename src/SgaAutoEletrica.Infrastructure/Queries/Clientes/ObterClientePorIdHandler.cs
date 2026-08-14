@@ -18,6 +18,7 @@ public class ObterClientePorIdHandler : IRequestHandler<ObterClientePorIdQuery, 
     public async Task<ClienteDTO?> Handle(ObterClientePorIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.Clientes
+            .AsNoTracking()
             .Where(c => c.Id == request.Id)
             .Select(c => new ClienteDTO
             {

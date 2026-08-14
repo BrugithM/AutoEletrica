@@ -18,6 +18,7 @@ public class ObterVeiculoPorPlacaHandler : IRequestHandler<ObterVeiculoPorPlacaQ
     public async Task<VeiculoDTO?> Handle(ObterVeiculoPorPlacaQuery request, CancellationToken cancellationToken)
     {
         return await _context.Veiculos
+            .AsNoTracking()
             .Where(v => v.Placa.Valor == request.Placa)
             .Select(v => new VeiculoDTO
             {

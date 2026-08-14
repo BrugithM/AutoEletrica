@@ -25,6 +25,7 @@ public class ListarFornecedoresHandler : IRequestHandler<ListarFornecedoresQuery
         }
 
         return await query
+            .AsNoTracking()
             .OrderBy(f => f.NomeEmpresa)
             .Select(f => new FornecedorDTO
             {

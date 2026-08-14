@@ -18,6 +18,7 @@ public class ListarOSHandler : IRequestHandler<ListarOSQuery, List<OrdemServicoR
     public async Task<List<OrdemServicoResumoDTO>> Handle(ListarOSQuery request, CancellationToken cancellationToken)
     {
         var query = _context.OrdensServico
+            .AsNoTracking()
             .Include(os => os.Cliente)
             .Include(os => os.Veiculo)
             .AsQueryable();
