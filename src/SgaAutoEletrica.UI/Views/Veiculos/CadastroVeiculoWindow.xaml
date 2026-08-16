@@ -1,0 +1,86 @@
+<Window x:Class="SgaAutoEletrica.UI.Views.Veiculos.CadastroVeiculoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Titulo}" Height="550" Width="500"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Dados do Veículo" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <TextBlock Grid.Row="1" Text="Cliente:"/>
+        <ComboBox Grid.Row="2" ItemsSource="{Binding Clientes}"
+                  SelectedItem="{Binding ClienteSelecionado}"
+                  DisplayMemberPath="NomeCompleto"
+                  Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="3" Text="Placa:"/>
+        <TextBox Grid.Row="4" Text="{Binding Placa, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10" MaxLength="7"/>
+
+        <TextBlock Grid.Row="5" Text="Marca:"/>
+        <TextBox Grid.Row="6" Text="{Binding Marca, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="7" Text="Modelo:"/>
+        <TextBox Grid.Row="8" Text="{Binding Modelo, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="9" Text="Ano:"/>
+        <TextBox Grid.Row="10" Text="{Binding Ano, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="11" Text="Versão:"/>
+        <TextBox Grid.Row="12" Text="{Binding Versao, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="13" Text="Motor:"/>
+        <TextBox Grid.Row="14" Text="{Binding Motor, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="15" Text="Tipo Motor:"/>
+        <ComboBox Grid.Row="16" Height="28" Margin="0,0,0,10"
+                  SelectedItem="{Binding TipoMotor}">
+            <ComboBoxItem Content="Gasolina"/>
+            <ComboBoxItem Content="Etanol"/>
+            <ComboBoxItem Content="Flex"/>
+            <ComboBoxItem Content="Diesel"/>
+            <ComboBoxItem Content="GNV"/>
+            <ComboBoxItem Content="Elétrico"/>
+            <ComboBoxItem Content="Híbrido"/>
+            <ComboBoxItem Content="Outro"/>
+        </ComboBox>
+
+        <TextBlock Grid.Row="17" Text="Cor:"/>
+        <TextBox Grid.Row="18" Text="{Binding Cor, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="19" Text="Observação:"/>
+        <TextBox Grid.Row="20" Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="28" Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="21" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Salvar" Width="100" Height="30" Margin="0,0,10,0" Click="BtnSalvar_Click"/>
+            <Button Content="Cancelar" Width="100" Height="30" Click="BtnCancelar_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

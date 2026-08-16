@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.UI.Views.Dashboard;
 using SgaAutoEletrica.UI.Views.Clientes;
+using SgaAutoEletrica.UI.Views.Veiculos;
 
 namespace SgaAutoEletrica.UI;
 
@@ -23,8 +24,10 @@ public partial class MainWindow : Window
     }
 
     private void BtnVeiculos_Click(object sender, RoutedEventArgs e)
-        => ShowPlaceholder("Tela de Veículos - em breve");
-
+    {
+        var view = App.ServiceProvider.GetRequiredService<ListaVeiculosView>();
+        ContentArea.Content = view;
+    }
     private void BtnPecas_Click(object sender, RoutedEventArgs e)
         => ShowPlaceholder("Tela de Peças - em breve");
 

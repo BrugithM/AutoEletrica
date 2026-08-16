@@ -1,0 +1,160 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using MediatR;
+using SgaAutoEletrica.Application.Features.Clientes.DTOs;
+using SgaAutoEletrica.Application.Features.Clientes.Queries;
+using SgaAutoEletrica.Application.Features.Veiculos.Commands;
+using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
+using SgaAutoEletrica.Application.Features.Veiculos.Queries;
+
+namespace SgaAutoEletrica.UI.ViewModels.Veiculos;
+
+public class CadastroVeiculoViewModel : INotifyPropertyChanged
+{
+    private readonly IMediator _mediator;
+    private readonly Guid? _veiculoId;
+
+    public string Placa { get; set; } = string.Empty;
+    public string Modelo { get; set; } = string.Empty;
+    public string Marca { get; set; } = string.Empty;
+    public int Ano { get; set; } = DateTime.Now.Year;
+    public string Versao { get; set; } = string.Empty;
+    public string Motor { get; set; } = string.Empty;
+    public string TipoMotor { get; set; } = string.Empty;
+    public string Cor { get; set; } = string.Empty;
+    public string Observacao { get; set; } = string.Empty;
+
+    public ObservableCollection<ClienteResumoDTO> Clientes { get; } = new();
+
+    private ClienteResumoDTO? _clienteSelecionado;
+    public ClienteResumoDTO? ClienteSelecionado
+    {
+        get => _clienteSelecionado;
+        set { _clienteSelecionado = value; OnPropertyChanged(); }
+    }
+
+    private string _titulo = "Novo Veículo";
+    public string Titulo
+    {
+        get => _titulo;
+        private set { _titulo = value; OnPropertyChanged(); }
+    }
+
+    public CadastroVeiculoViewModel(IMediator mediator, Guid? veiculoId = null)
+    {
+        _mediator = mediator;
+        _veiculoId = veiculoId;
+        
+        if (veiculoId.HasValue)
+        {
+            Titulo = "Editar Veículo";
+            CarregarDadosAsync(veiculoId.Value);
+        }
+    }
+
+    private async void CarregarDadosAsync(Guid veiculoId)
+    {
+        var veiculo = await _mediator.Send(new ObterVeiculoPorIdQuery { Id = veiculoId });
+        if (veiculo != null)
+        {
+            Placa = veiculo.Placa;
+            Modelo = veiculo.Modelo;
+            Marca = veiculo.Marca;
+            Ano = veiculo.Ano;
+            Versao = veiculo.Versao ?? "";
+            Motor = veiculo.Motor ?? "";
+            TipoMotor = veiculo.TipoMotor ?? "";
+            Cor = veiculo.Cor ?? "";
+            Observacao = veiculo.Observacao ?? "";
+
+            await CarregarClientesAsync();
+            ClienteSelecionado = Clientes.FirstOrDefault(c=> c.Id == veiculo.ClienteId);
+            
+            OnPropertyChanged(nameof(Placa));
+            OnPropertyChanged(nameof(Modelo));
+            OnPropertyChanged(nameof(Marca));
+            OnPropertyChanged(nameof(Ano));
+            OnPropertyChanged(nameof(Versao));
+            OnPropertyChanged(nameof(Motor));
+            OnPropertyChanged(nameof(TipoMotor));
+            OnPropertyChanged(nameof(Cor));
+            OnPropertyChanged(nameof(Observacao));
+        }
+    }
+
+    public async Task CarregarClientesAsync()
+    {
+        Clientes.Clear();
+        var resultado = await _mediator.Send(new ListarClientesQuery());
+        foreach (var cliente in resultado.Select(c => new ClienteResumoDTO
+        {
+            Id = c.Id,
+            NomeCompleto = c.NomeCompleto,
+            Telefone = c.Telefone
+        }))
+        {
+            Clientes.Add(cliente);
+        }
+    }
+
+    public async Task<bool> SalvarAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Placa))
+        {
+            MessageBox.Show("Placa é obrigatória.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (ClienteSelecionado == null)
+        {
+            MessageBox.Show("Selecione um cliente.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Modelo) || string.IsNullOrWhiteSpace(Marca))
+        {
+            MessageBox.Show("Modelo e Marca são obrigatórios.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (_veiculoId.HasValue)
+        {
+            await _mediator.Send(new AtualizarVeiculoCommand
+            {
+                Id = _veiculoId.Value,
+                Modelo = Modelo,
+                Marca = Marca,
+                Ano = Ano,
+                Versao = Versao,
+                Motor = Motor,
+                TipoMotor = TipoMotor,
+                Cor = Cor,
+                Observacao = Observacao
+            });
+        }
+        else
+        {
+            await _mediator.Send(new CriarVeiculoCommand
+            {
+                Placa = Placa,
+                ClienteId = ClienteSelecionado.Id,
+                Modelo = Modelo,
+                Marca = Marca,
+                Ano = Ano,
+                Versao = Versao,
+                Motor = Motor,
+                TipoMotor = TipoMotor,
+                Cor = Cor,
+                Observacao = Observacao
+            });
+        }
+
+        return true;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}

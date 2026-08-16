@@ -4,13 +4,10 @@ using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 namespace SgaAutoEletrica.Application.Features.Veiculos.Queries;
 
 /// <summary>
-/// Busca veículos por múltiplos critérios.
+/// Busca veículos por um termo único que procura em:
+/// placa, modelo, marca e nome do cliente.
 /// </summary>
 public class BuscarVeiculosQuery : IRequest<List<VeiculoDTO>>
 {
-    public string? Placa { get; set; }
-    public string? Marca { get; set; }
-    public string? Modelo { get; set; }
-    public int? Ano { get; set; }
-    public string? NomeCliente { get; set; }
+    public string? TermoBusca { get; set; }
 }

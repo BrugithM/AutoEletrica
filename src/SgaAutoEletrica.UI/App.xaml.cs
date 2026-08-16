@@ -52,6 +52,9 @@ public partial class App : System.Windows.Application
 
             Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
+            Console.WriteLine($"Banco: {dbPath}");
+            Console.WriteLine($"Existe? {File.Exists(dbPath)}");
+
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite($"Data Source={dbPath}"));
 
@@ -66,6 +69,9 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.Clientes.ListaClientesViewModel>();
             services.AddTransient<Views.Clientes.ListaClientesView>();
+
+            services.AddTransient<ViewModels.Veiculos.ListaVeiculosViewModel>();
+            services.AddTransient<Views.Veiculos.ListaVeiculosView>();
 
             ServiceProvider = services.BuildServiceProvider();
 
