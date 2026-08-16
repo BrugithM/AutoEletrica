@@ -19,22 +19,19 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
     {
         var query = _context.Veiculos
             .Include(v => v.Cliente)
+            .AsNoTracking()
             .AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(request.Placa))
-            query = query.Where(v => v.Placa.Valor.Contains(request.Placa));
+        if (!string.IsNullOrWhiteSpace(request.TermoBusca))
+        {
+            var termo = request.TermoBusca.Trim().ToLower();
 
-        if (!string.IsNullOrWhiteSpace(request.Marca))
-            query = query.Where(v => v.Marca.Contains(request.Marca));
-
-        if (!string.IsNullOrWhiteSpace(request.Modelo))
-            query = query.Where(v => v.Modelo.Contains(request.Modelo));
-
-        if (request.Ano.HasValue)
-            query = query.Where(v => v.Ano == request.Ano.Value);
-
-        if (!string.IsNullOrWhiteSpace(request.NomeCliente))
-            query = query.Where(v => v.Cliente.NomeCompleto.Contains(request.NomeCliente));
+            query = query.Where(v =>
+                v.Placa.Valor.ToLower().Contains(termo) ||
+                v.Modelo.ToLower().Contains(termo) ||
+                v.Marca.ToLower().Contains(termo) ||
+                v.Cliente.NomeCompleto.ToLower().Contains(termo));
+        }
 
         return await query
             .OrderBy(v => v.Cliente.NomeCompleto)
