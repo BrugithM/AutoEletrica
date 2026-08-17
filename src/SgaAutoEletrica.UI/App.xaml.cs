@@ -73,6 +73,15 @@ public partial class App : System.Windows.Application
             services.AddTransient<ViewModels.Veiculos.ListaVeiculosViewModel>();
             services.AddTransient<Views.Veiculos.ListaVeiculosView>();
 
+            services.AddTransient<ViewModels.Pecas.ListaPecasViewModel>();
+            services.AddTransient<Views.Pecas.ListaPecasView>();
+
+            services.AddTransient<ViewModels.Servicos.ListaServicosViewModel>();
+            services.AddTransient<Views.Servicos.ListaServicosView>();
+
+            services.AddTransient<ViewModels.Fornecedores.ListaFornecedoresViewModel>();
+            services.AddTransient<Views.Fornecedores.ListaFornecedoresView>();
+
             ServiceProvider = services.BuildServiceProvider();
 
             using var scope = ServiceProvider.CreateScope();

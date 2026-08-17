@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\App.xaml
-6290394171
+13-660032536
 
-15-296455152
+30-903055642
 241-1013625811
-MainWindow.xaml;Views\Clientes\CadastroClienteWindow.xaml;Views\Clientes\ListaClientesView.xaml;Views\Dashboard\DashboardView.xaml;Views\Veiculos\CadastroVeiculoWindow.xaml;Views\Veiculos\ListaVeiculosView.xaml;
+MainWindow.xaml;Views\Clientes\CadastroClienteWindow.xaml;Views\Clientes\ListaClientesView.xaml;Views\Dashboard\DashboardView.xaml;Views\Fornecedores\CadastroFornecedorWindow.xaml;Views\Fornecedores\ListaFornecedoresView.xaml;Views\Pecas\CadastroPecaWindow.xaml;Views\Pecas\ListaPecasView.xaml;Views\Pecas\MovimentacaoEstoqueWindow.xaml;Views\Servicos\CadastroServicoWindow.xaml;Views\Servicos\ListaServicosView.xaml;Views\Veiculos\CadastroVeiculoWindow.xaml;Views\Veiculos\ListaVeiculosView.xaml;
 
 False
 
