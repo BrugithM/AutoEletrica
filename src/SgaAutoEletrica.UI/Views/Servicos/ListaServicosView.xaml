@@ -1,0 +1,58 @@
+<UserControl x:Class="SgaAutoEletrica.UI.Views.Servicos.ListaServicosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Serviços" FontSize="24" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" 
+                     Text="{Binding TermoBusca, UpdateSourceTrigger=PropertyChanged}"
+                     Height="30" FontSize="14" Padding="5" Margin="0,0,10,0"
+                     ToolTip="Busca por nome"/>
+
+            <Button Grid.Column="1" Content="Buscar" Command="{Binding BuscarCommand}"
+                    Width="80" Height="30" Margin="0,0,10,0"/>
+
+            <Button Grid.Column="2" Content="Limpar" Command="{Binding LimparCommand}"
+                    Width="80" Height="30" Margin="0,0,10,0"/>
+
+            <Button Grid.Column="3" Content="+ Novo Serviço" Command="{Binding NovoServicoCommand}"
+                    Width="120" Height="30" Background="#27AE60" Foreground="White"/>
+        </Grid>
+
+        <DataGrid Grid.Row="2" 
+                  ItemsSource="{Binding Servicos}"
+                  SelectedItem="{Binding ServicoSelecionado}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="250"/>
+                <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="350"/>
+                <DataGridTextColumn Header="Preço Padrão" Binding="{Binding PrecoPadrao, StringFormat=C2}" Width="120"/>
+                <DataGridTextColumn Header="Ativo" Binding="{Binding Ativo}" Width="70"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Editar" Command="{Binding EditarServicoCommand}" 
+                    Width="80" Height="30" Margin="0,0,10,0"/>
+            <Button Content="Excluir" Command="{Binding ExcluirServicoCommand}" 
+                    Width="80" Height="30" Background="#C0392B" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
