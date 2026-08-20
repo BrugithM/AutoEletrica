@@ -44,10 +44,9 @@ public partial class App : System.Windows.Application
             var services = new ServiceCollection();
 
             var dbPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                "SgaAutoEletrica",
-                "Data",
-                "sga_dev.db"
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "SgaAutoEletrica",
+            "sga_dev.db"
             );
 
             Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
@@ -81,6 +80,9 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.Fornecedores.ListaFornecedoresViewModel>();
             services.AddTransient<Views.Fornecedores.ListaFornecedoresView>();
+
+            services.AddTransient<ViewModels.OrdensServico.ListaOSViewModel>();
+            services.AddTransient<Views.OrdensServico.ListaOSView>();
 
             ServiceProvider = services.BuildServiceProvider();
 

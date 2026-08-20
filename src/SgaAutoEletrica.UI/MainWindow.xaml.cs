@@ -6,6 +6,7 @@ using SgaAutoEletrica.UI.Views.Veiculos;
 using SgaAutoEletrica.UI.Views.Pecas;
 using SgaAutoEletrica.UI.Views.Servicos;
 using SgaAutoEletrica.UI.Views.Fornecedores;
+using SgaAutoEletrica.UI.Views.OrdensServico;
 
 namespace SgaAutoEletrica.UI;
 
@@ -50,7 +51,10 @@ public partial class MainWindow : Window
 }
 
     private void BtnOS_Click(object sender, RoutedEventArgs e)
-        => ShowPlaceholder("Tela de Ordens de Serviço - em breve");
+{
+    var view = App.ServiceProvider.GetRequiredService<ListaOSView>();
+    ContentArea.Content = view;
+}
 
     private void NavegarParaDashboard()
     {
