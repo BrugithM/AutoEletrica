@@ -33,6 +33,7 @@ public class OrdemServico
             throw new ArgumentException("Número da OS deve ser maior que zero.", nameof(numero));
 
         Id = Guid.NewGuid();
+        Numero = numero;
         ClienteId = clienteId;
         VeiculoId = veiculoId;
         Observacao = observacao;
