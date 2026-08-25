@@ -1,0 +1,12 @@
+namespace SgaAutoEletrica.Application.Features.Fornecedores.DTOs;
+
+public class NotaFiscalEntradaDTO
+{
+    public Guid Id { get; set; }
+    public string Numero { get; set; } = string.Empty;
+    public DateTime DataEntrada { get; set; }
+    public string NomeFornecedor { get; set; } = string.Empty;
+    public string CnpjFornecedor { get; set; } = string.Empty;
+    public decimal ValorTotal { get; set; }
+    public string? Observacao { get; set; }
+}

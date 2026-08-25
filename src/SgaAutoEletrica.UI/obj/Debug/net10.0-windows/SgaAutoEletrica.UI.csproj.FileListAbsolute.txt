@@ -121,3 +121,17 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Vie
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\CriacaoOSWindow.g.cs
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\DetalhesOSWindow.g.cs
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\ListaOSView.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\CancelarOSWindow.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\CancelarOSWindow.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\GerarNFWindow.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\GerarNFWindow.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\ListaNotasFiscaisView.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\ListaNotasFiscaisView.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Fornecedores\CriarNotaFiscalEntradaWindow.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Fornecedores\CriarNotaFiscalEntradaWindow.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Buscas\BuscarProdutosView.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Buscas\BuscarProdutosView.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Buscas\BuscarNotasEmitidasView.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Buscas\BuscarNotasEmitidasView.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Buscas\BuscarNotasEntradaView.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Buscas\BuscarNotasEntradaView.g.cs

@@ -1,7 +1,9 @@
 <Window x:Class="SgaAutoEletrica.UI.Views.OrdensServico.DetalhesOSWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Detalhes da OS" Height="600" Width="700"
+        Title="Detalhes da OS"
+        Height="600"
+        Width="700"
         WindowStartupLocation="CenterScreen">
 
     <Grid Margin="20">
@@ -12,26 +14,92 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="TxtTitulo" Grid.Row="0" Text="Ordem de Serviço" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+        <TextBlock x:Name="TxtTitulo"
+                Grid.Row="0"
+                Text="Ordem de Serviço"
+                FontSize="20"
+                FontWeight="Bold"
+                Margin="0,0,0,10"/>
 
-        <StackPanel x:Name="PanelInfo" Grid.Row="1" Margin="0,0,0,10">
+        <StackPanel x:Name="PanelInfo"
+                Grid.Row="1"
+                Margin="0,0,0,10">
             <TextBlock x:Name="TxtCliente"/>
             <TextBlock x:Name="TxtVeiculo"/>
             <TextBlock x:Name="TxtStatus"/>
             <TextBlock x:Name="TxtObservacao"/>
         </StackPanel>
 
-        <DataGrid x:Name="GridItens" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="GridItens"
+                Grid.Row="2"
+                AutoGenerateColumns="False"
+                IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="80"/>
-                <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="300"/>
-                <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="60"/>
-                <DataGridTextColumn Header="Valor" Binding="{Binding Valor, StringFormat=C2}" Width="100"/>
+                <DataGridTextColumn Header="Tipo"
+                        Binding="{Binding Tipo}"
+                        Width="80"/>
+                <DataGridTextColumn Header="Descrição"
+                        Binding="{Binding Descricao}"
+                        Width="300"/>
+                <DataGridTextColumn Header="Qtd"
+                        Binding="{Binding Quantidade}"
+                        Width="60"/>
+                <DataGridTextColumn Header="Valor"
+                        Binding="{Binding Valor, StringFormat=C2}"
+                        Width="100"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="3" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="Fechar" Width="100" Height="30" Click="BtnFechar_Click"/>
+        <StackPanel Grid.Row="3"
+                Margin="0,15,0,0">
+            <TextBlock x:Name="TxtTotal"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+                <Button x:Name="BtnIniciar"
+                        Content="Iniciar Serviço"
+                        Width="120"
+                        Height="30"
+                        Margin="0,0,10,0"
+                        Click="BtnIniciar_Click"/>
+                <Button x:Name="BtnAguardarPecas"
+                        Content="Aguardar Peças"
+                        Width="120"
+                        Height="30"
+                        Margin="0,0,10,0"
+                        Click="BtnAguardarPecas_Click"/>
+                <Button x:Name="BtnFinalizar"
+                        Content="Finalizar"
+                        Width="110"
+                        Height="30"
+                        Margin="0,0,10,0"
+                        Background="#27AE60"
+                        Foreground="White"
+                        Click="BtnFinalizar_Click"/>
+                <Button x:Name="BtnGerarNF"
+                        Content="Gerar NF"
+                        Width="110"
+                        Height="30"
+                        Margin="0,0,10,0"
+                        Background="#3498DB"
+                        Foreground="White"
+                        Click="BtnGerarNF_Click"/>
+                <Button x:Name="BtnCancelar"
+                        Content="Cancelar OS"
+                        Width="110"
+                        Height="30"
+                        Background="#C0392B"
+                        Foreground="White"
+                        Click="BtnCancelar_Click"/>
+                <Button Content="OK"
+                        Width="100"
+                        Height="30"
+                        Click="BtnFechar_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

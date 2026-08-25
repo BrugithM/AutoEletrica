@@ -56,6 +56,29 @@ public partial class MainWindow : Window
     ContentArea.Content = view;
 }
 
+private void BtnNotasFiscais_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.OrdensServico.ListaNotasFiscaisView>();
+    ContentArea.Content = view;
+}
+
+private void BtnBuscarProdutos_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarProdutosView>();
+    ContentArea.Content = view;
+}
+
+private void BtnBuscarNotasEmitidas_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEmitidasView>();
+    ContentArea.Content = view;
+}
+private void BtnBuscarNotasEntrada_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEntradaView>();
+    ContentArea.Content = view;
+}
+
     private void NavegarParaDashboard()
     {
         try

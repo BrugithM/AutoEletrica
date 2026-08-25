@@ -9,50 +9,76 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Fornecedores" FontSize="24" FontWeight="Bold" Margin="0,0,0,15"/>
+        <TextBlock Grid.Row="0"
+                Text="Fornecedores"
+                FontSize="24"
+                FontWeight="Bold"
+                Margin="0,0,0,15"/>
 
         <Grid Grid.Row="1" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" 
-                     Text="{Binding TermoBusca, UpdateSourceTrigger=PropertyChanged}"
-                     Height="30" FontSize="14" Padding="5" Margin="0,0,10,0"
-                     ToolTip="Busca por nome da empresa"/>
+    <TextBox Grid.Column="0" 
+             Text="{Binding TermoBusca, UpdateSourceTrigger=PropertyChanged}"
+             Height="30" FontSize="14" Padding="5" Margin="0,0,10,0"
+             ToolTip="Busca por nome da empresa"/>
 
-            <Button Grid.Column="1" Content="Buscar" Command="{Binding BuscarCommand}"
-                    Width="80" Height="30" Margin="0,0,10,0"/>
+    <Button Grid.Column="1" Content="Buscar" Command="{Binding BuscarCommand}"
+            Width="80" Height="30" Margin="0,0,10,0"/>
 
-            <Button Grid.Column="2" Content="Limpar" Command="{Binding LimparCommand}"
-                    Width="80" Height="30" Margin="0,0,10,0"/>
+    <Button Grid.Column="2" Content="Limpar" Command="{Binding LimparCommand}"
+            Width="80" Height="30" Margin="0,0,10,0"/>
 
-            <Button Grid.Column="3" Content="+ Novo Fornecedor" Command="{Binding NovoFornecedorCommand}"
-                    Width="130" Height="30" Background="#27AE60" Foreground="White"/>
-        </Grid>
+    <Button Grid.Column="3" Content="+ Nova NF Entrada" Click="BtnNovaNFEntrada_Click"
+            Width="130" Height="30" Margin="0,0,10,0" Background="#3498DB" Foreground="White"/>
 
-        <DataGrid Grid.Row="2" 
+    <Button Grid.Column="4" Content="+ Novo Fornecedor" Command="{Binding NovoFornecedorCommand}"
+            Width="130" Height="30" Background="#27AE60" Foreground="White"/>
+</Grid>
+
+        <DataGrid Grid.Row="2"
                   ItemsSource="{Binding Fornecedores}"
                   SelectedItem="{Binding FornecedorSelecionado}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nome da Empresa" Binding="{Binding NomeEmpresa}" Width="250"/>
-                <DataGridTextColumn Header="CNPJ" Binding="{Binding Cnpj}" Width="180"/>
-                <DataGridTextColumn Header="Telefone" Binding="{Binding Telefone}" Width="130"/>
-                <DataGridTextColumn Header="Contato" Binding="{Binding Contato}" Width="200"/>
+                <DataGridTextColumn Header="Nome da Empresa"
+                        Binding="{Binding NomeEmpresa}"
+                        Width="250"/>
+                <DataGridTextColumn Header="CNPJ"
+                        Binding="{Binding Cnpj}"
+                        Width="180"/>
+                <DataGridTextColumn Header="Telefone"
+                        Binding="{Binding Telefone}"
+                        Width="130"/>
+                <DataGridTextColumn Header="Contato"
+                        Binding="{Binding Contato}"
+                        Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="Editar" Command="{Binding EditarFornecedorCommand}" 
-                    Width="80" Height="30" Margin="0,0,10,0"/>
-            <Button Content="Excluir" Command="{Binding ExcluirFornecedorCommand}" 
-                    Width="80" Height="30" Background="#C0392B" Foreground="White"/>
+        <StackPanel Grid.Row="3"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0">
+            <Button Content="Editar"
+                    Command="{Binding EditarFornecedorCommand}"
+                    Width="80"
+                    Height="30"
+                    Margin="0,0,10,0"/>
+            <Button Content="Excluir"
+                    Command="{Binding ExcluirFornecedorCommand}"
+                    Width="80"
+                    Height="30"
+                    Background="#C0392B"
+                    Foreground="White"/>
         </StackPanel>
     </Grid>
 </UserControl>
