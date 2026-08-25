@@ -19,12 +19,12 @@ public partial class App : System.Windows.Application
     }
 
     private void App_DispatcherUnhandledException(object sender,
-        System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
         MessageBox.Show(
             $"Erro na interface:\n\n{e.Exception.Message}\n\n{e.Exception.StackTrace}",
             "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-        e.Handled = true; // Impede o app de fechar
+        e.Handled = true;
     }
 
     private void CurrentDomain_UnhandledException(object sender,
@@ -83,6 +83,20 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.OrdensServico.ListaOSViewModel>();
             services.AddTransient<Views.OrdensServico.ListaOSView>();
+
+            services.AddTransient<ViewModels.OrdensServico.ListaNotasFiscaisViewModel>();
+            services.AddTransient<Views.OrdensServico.ListaNotasFiscaisView>();
+
+            services.AddTransient<ViewModels.Fornecedores.CriarNotaFiscalEntradaViewModel>();
+
+            services.AddTransient<ViewModels.Buscas.BuscarProdutosViewModel>();
+            services.AddTransient<Views.Buscas.BuscarProdutosView>();
+
+            services.AddTransient<ViewModels.Buscas.BuscarNotasEmitidasViewModel>();
+            services.AddTransient<Views.Buscas.BuscarNotasEmitidasView>();
+
+            services.AddTransient<ViewModels.Buscas.BuscarNotasEntradaViewModel>();
+            services.AddTransient<Views.Buscas.BuscarNotasEntradaView>();
 
             ServiceProvider = services.BuildServiceProvider();
 

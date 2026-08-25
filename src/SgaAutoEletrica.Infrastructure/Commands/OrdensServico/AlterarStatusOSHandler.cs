@@ -1,28 +1,26 @@
 using MediatR;
-using SgaAutoEletrica.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Features.OrdensServico.Commands;
 using SgaAutoEletrica.Domain.Enums;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.OrdensServico.Commands;
+namespace SgaAutoEletrica.Infrastructure.Commands.OrdensServico;
 
 public class AlterarStatusOSHandler : IRequestHandler<AlterarStatusOSCommand>
 {
-    private readonly IOrdemServicoRepository _osRepository;
-    private readonly IPecaRepository _pecaRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
-    public AlterarStatusOSHandler(
-        IOrdemServicoRepository osRepository,
-        IPecaRepository pecaRepository,
-        IUnitOfWork unitOfWork)
+    public AlterarStatusOSHandler(AppDbContext context)
     {
-        _osRepository = osRepository;
-        _pecaRepository = pecaRepository;
-        _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task Handle(AlterarStatusOSCommand request, CancellationToken cancellationToken)
     {
-        var os = await _osRepository.ObterPorId(request.OrdemServicoId, cancellationToken)
+        var os = await _context.OrdensServico
+            .Include(o => o.ItensPeca)
+            .Include(o => o.ItensServico)
+            .FirstOrDefaultAsync(o => o.Id == request.OrdemServicoId, cancellationToken)
             ?? throw new InvalidOperationException("OS não encontrada.");
 
         switch (request.NovoStatus)
@@ -40,24 +38,22 @@ public class AlterarStatusOSHandler : IRequestHandler<AlterarStatusOSCommand>
                 break;
 
             case StatusOS.Cancelada:
-                // Devolve todas as peças ao estoque
+                // Devolve peças ao estoque
                 foreach (var item in os.ItensPeca)
                 {
-                    var peca = await _pecaRepository.ObterPorId(item.PecaId, cancellationToken);
+                    var peca = await _context.Pecas.FindAsync([item.PecaId], cancellationToken);
                     if (peca != null)
                     {
                         peca.DarEntradaEstoque(item.Quantidade);
-                        _pecaRepository.Atualizar(peca);
                     }
                 }
                 os.Cancelar(request.MotivoCancelamento ?? "Cancelado pelo usuário");
                 break;
 
             default:
-                throw new InvalidOperationException($"Status {request.NovoStatus} não permitido.");
+                throw new InvalidOperationException($"Status {request.NovoStatus} não é válido para esta operação.");
         }
 
-        _osRepository.Atualizar(os);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

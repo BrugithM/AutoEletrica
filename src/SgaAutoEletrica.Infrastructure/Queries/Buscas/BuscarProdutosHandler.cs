@@ -19,22 +19,42 @@ public class BuscarProdutosHandler : IRequestHandler<BuscarProdutosQuery, List<P
     {
         var query = _context.Pecas
             .Include(p => p.CategoriaPeca)
+            .AsNoTracking()
             .AsQueryable();
 
         if (request.Id.HasValue)
+        {
             query = query.Where(p => p.Id == request.Id.Value);
-
-        if (!string.IsNullOrWhiteSpace(request.CodigoPeca))
-            query = query.Where(p => p.CodigoPeca != null && p.CodigoPeca.Contains(request.CodigoPeca));
+        }
 
         if (!string.IsNullOrWhiteSpace(request.CodigoBarras))
-            query = query.Where(p => p.CodigoBarras != null && p.CodigoBarras.Valor == request.CodigoBarras);
+        {
+            var termo = request.CodigoBarras.Trim();
+            query = query.Where(p => p.CodigoBarras != null && p.CodigoBarras.Valor.Contains(termo));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.CodigoPeca))
+        {
+            var termo = request.CodigoPeca.Trim().ToLower();
+            query = query.Where(p => p.CodigoPeca != null && p.CodigoPeca.ToLower().Contains(termo));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.IdPeca))
+        {
+            var termo = request.IdPeca.Trim().ToLower();
+            query = query.Where(p => p.IdPeca.ToLower().Contains(termo));
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Marca))
-            query = query.Where(p => p.Marca.Contains(request.Marca));
+        {
+            var termo = request.Marca.Trim().ToLower();
+            query = query.Where(p => p.Marca.ToLower().Contains(termo));
+        }
 
         if (request.CategoriaId.HasValue)
+        {
             query = query.Where(p => p.CategoriaId == request.CategoriaId.Value);
+        }
 
         return await query
             .OrderBy(p => p.Nome)

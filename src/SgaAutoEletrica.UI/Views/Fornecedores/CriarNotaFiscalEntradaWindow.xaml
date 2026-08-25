@@ -1,0 +1,97 @@
+<Window x:Class="SgaAutoEletrica.UI.Views.Fornecedores.CriarNotaFiscalEntradaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Nova Nota Fiscal de Entrada" Height="600" Width="650"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Nova Nota Fiscal de Entrada" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <TextBlock Text="Número da NF:"/>
+                <TextBox Text="{Binding Numero, UpdateSourceTrigger=PropertyChanged}" Height="28"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Fornecedor:"/>
+                <ComboBox ItemsSource="{Binding Fornecedores}"
+          SelectedItem="{Binding FornecedorSelecionado}"
+          DisplayMemberPath="NomeEmpresa"
+          Height="28"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="2" Text="Observação:"/>
+        <TextBox Grid.Row="3" Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}" 
+                 Height="40" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="4" Text="Adicionar itens:" FontWeight="Bold" Margin="0,5,0,5"/>
+
+        <Grid Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0" ItemsSource="{Binding PecasDisponiveis}"
+                          SelectedItem="{Binding PecaSelecionada}"
+                          DisplayMemberPath="Nome"
+                          Height="28" Margin="0,0,5,0"/>
+
+                <TextBox Grid.Column="1" Text="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="28" Margin="0,0,5,0"/>
+
+                <TextBox Grid.Column="2" Text="{Binding ValorUnitario, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="28" Margin="0,0,5,0"/>
+
+                <Button Grid.Column="3" Content="Adicionar" Click="BtnAdicionarItem_Click" 
+                        Width="80" Height="28"/>
+            </Grid>
+
+            <DataGrid Grid.Row="1" ItemsSource="{Binding ItensNF}" AutoGenerateColumns="False" IsReadOnly="True"
+                      Height="200" Margin="0,5,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Peça" Binding="{Binding NomePeca}" Width="200"/>
+                    <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="60"/>
+                    <DataGridTextColumn Header="Valor Unit." Binding="{Binding ValorUnitario, StringFormat=C2}" Width="100"/>
+                    <DataGridTextColumn Header="Total" Binding="{Binding ValorTotal, StringFormat=C2}" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <StackPanel Grid.Row="6" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <TextBlock Text="{Binding ValorTotal}" FontSize="16" FontWeight="Bold" 
+           HorizontalAlignment="Right" Margin="0,0,0,10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Salvar NF" Width="110" Height="30" 
+                        Background="#27AE60" Foreground="White" Margin="0,0,10,0" Click="BtnSalvar_Click"/>
+                <Button Content="Cancelar" Width="100" Height="30" Click="BtnCancelar_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

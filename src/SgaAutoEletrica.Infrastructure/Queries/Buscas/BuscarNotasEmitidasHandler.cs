@@ -20,28 +20,50 @@ public class BuscarNotasEmitidasHandler : IRequestHandler<BuscarNotasEmitidasQue
         var query = _context.NotasFiscaisSaida
             .Include(nf => nf.Cliente)
             .Include(nf => nf.Veiculo)
+            .Include(nf => nf.Itens)
+            .AsNoTracking()
             .AsQueryable();
 
+        // Placa — case-insensitive e busca parcial
         if (!string.IsNullOrWhiteSpace(request.Placa))
-            query = query.Where(nf => nf.Veiculo.Placa.Valor.Contains(request.Placa));
-
-        if (!string.IsNullOrWhiteSpace(request.NomeCliente))
-            query = query.Where(nf => nf.Cliente.NomeCompleto.Contains(request.NomeCliente));
-
-        if (request.DataInicio.HasValue)
-            query = query.Where(nf => nf.DataEmissao >= request.DataInicio.Value);
-
-        if (request.DataFim.HasValue)
-            query = query.Where(nf => nf.DataEmissao <= request.DataFim.Value);
-
-        if (!string.IsNullOrWhiteSpace(request.Observacao))
-            query = query.Where(nf => nf.Observacao != null && nf.Observacao.Contains(request.Observacao));
-
-        if (!string.IsNullOrWhiteSpace(request.CodigoPeca) || !string.IsNullOrWhiteSpace(request.NomePeca))
         {
-            query = query.Where(nf => nf.Itens.Any(i =>
-                (request.CodigoPeca == null || i.Descricao.Contains(request.CodigoPeca)) &&
-                (request.NomePeca == null || i.Descricao.Contains(request.NomePeca))));
+            var termo = request.Placa.Trim().ToLower();
+            query = query.Where(nf => nf.Veiculo.Placa.Valor.ToLower().Contains(termo));
+        }
+
+        // Nome do Cliente — case-insensitive e busca parcial
+        if (!string.IsNullOrWhiteSpace(request.NomeCliente))
+        {
+            var termo = request.NomeCliente.Trim().ToLower();
+            query = query.Where(nf => nf.Cliente.NomeCompleto.ToLower().Contains(termo));
+        }
+
+        // Peça/Serviço — busca na descrição dos itens
+        if (!string.IsNullOrWhiteSpace(request.NomePeca))
+        {
+            var termo = request.NomePeca.Trim().ToLower();
+            query = query.Where(nf => nf.Itens.Any(i => i.Descricao.ToLower().Contains(termo)));
+        }
+
+        // Observação — case-insensitive e busca parcial
+        if (!string.IsNullOrWhiteSpace(request.Observacao))
+        {
+            var termo = request.Observacao.Trim().ToLower();
+            query = query.Where(nf => nf.Observacao != null && nf.Observacao.ToLower().Contains(termo));
+        }
+
+        // Data Início
+        if (request.DataInicio.HasValue)
+        {
+            var data = request.DataInicio.Value.Date;
+            query = query.Where(nf => nf.DataEmissao >= data);
+        }
+
+        // Data Fim
+        if (request.DataFim.HasValue)
+        {
+            var data = request.DataFim.Value.Date.AddDays(1); // inclui o dia inteiro
+            query = query.Where(nf => nf.DataEmissao < data);
         }
 
         return await query
