@@ -22,4 +22,9 @@ public class ItemServicoOS
         ServicoId = servicoId;
         PrecoUnitario = precoUnitario;
     }
+
+    public void DefinirOrdemServico(Guid ordemServicoId)
+{
+    OrdemServicoId = ordemServicoId;
+}
 }

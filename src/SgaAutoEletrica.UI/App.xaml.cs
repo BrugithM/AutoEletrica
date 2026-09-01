@@ -56,7 +56,8 @@ public partial class App : System.Windows.Application
             Console.WriteLine($"Existe? {File.Exists(dbPath)}");
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite($"Data Source={dbPath}"));
+                options.UseSqlite($"Data Source={dbPath}"),
+                ServiceLifetime.Transient);
 
             services.AddInfrastructure();
             services.AddLogging();
@@ -137,5 +138,6 @@ public partial class App : System.Windows.Application
         catch
         {
         }
+        Environment.Exit(0);
     }
 }

@@ -139,3 +139,5 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Vie
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\ConfiguracoesImpressoraView.g.cs
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\BackupView.baml
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\BackupView.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\EditarOSWindow.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\OrdensServico\EditarOSWindow.g.cs
