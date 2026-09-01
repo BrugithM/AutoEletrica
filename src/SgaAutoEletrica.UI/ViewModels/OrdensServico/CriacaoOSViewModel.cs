@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using MediatR;
 using SgaAutoEletrica.Application.Features.Clientes.Queries;
 using SgaAutoEletrica.Application.Features.Clientes.DTOs;
@@ -26,6 +27,20 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
     public ObservableCollection<ItemPecaTemporario> PecasNaOS { get; } = new();
     public ObservableCollection<ItemServicoTemporario> ServicosNaOS { get; } = new();
+
+    private ItemPecaTemporario? _pecaSelecionadaParaRemover;
+    public ItemPecaTemporario? PecaSelecionadaParaRemover
+    {
+        get => _pecaSelecionadaParaRemover;
+        set { _pecaSelecionadaParaRemover = value; OnPropertyChanged(); }
+    }
+
+    private ItemServicoTemporario? _servicoSelecionadoParaRemover;
+    public ItemServicoTemporario? ServicoSelecionadoParaRemover
+    {
+        get => _servicoSelecionadoParaRemover;
+        set { _servicoSelecionadoParaRemover = value; OnPropertyChanged(); }
+    }
 
     private ClienteResumoDTO? _clienteSelecionado;
     public ClienteResumoDTO? ClienteSelecionado
@@ -73,24 +88,32 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
     public decimal ValorTotalServicos => ServicosNaOS.Sum(s => s.Preco);
     public decimal ValorTotalGeral => ValorTotalPecas + ValorTotalServicos;
 
+    public ICommand RemoverPecaCommand { get; }
+    public ICommand RemoverServicoCommand { get; }
+
     public CriacaoOSViewModel(IMediator mediator)
     {
         _mediator = mediator;
+
+        RemoverPecaCommand = new RelayCommand(
+            param => RemoverPeca((ItemPecaTemporario)param!),
+            param => param is ItemPecaTemporario);
+
+        RemoverServicoCommand = new RelayCommand(
+            param => RemoverServico((ItemServicoTemporario)param!),
+            param => param is ItemServicoTemporario);
     }
 
     public async Task CarregarDadosAsync()
     {
-        // Clientes
         var clientes = await _mediator.Send(new ListarClientesQuery());
         foreach (var c in clientes)
             Clientes.Add(new ClienteResumoDTO { Id = c.Id, NomeCompleto = c.NomeCompleto, Telefone = c.Telefone });
 
-        // Peças
         var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true });
         foreach (var p in pecas)
             PecasDisponiveis.Add(p);
 
-        // Serviços
         var servicos = await _mediator.Send(new ListarServicosQuery());
         foreach (var s in servicos)
             ServicosDisponiveis.Add(s);
@@ -150,51 +173,67 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ValorTotalGeral));
     }
 
-public async Task<bool> SalvarAsync()
-{
-    if (ClienteSelecionado == null)
+    public void RemoverPeca(ItemPecaTemporario item)
     {
-        MessageBox.Show("Selecione um cliente.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-        return false;
-    }
-    if (VeiculoSelecionado == null)
-    {
-        MessageBox.Show("Selecione um veículo.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-        return false;
-    }
-    if (!PecasNaOS.Any() && !ServicosNaOS.Any())
-    {
-        MessageBox.Show("Adicione pelo menos uma peça ou serviço.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-        return false;
+        if (item == null) return;
+        PecasNaOS.Remove(item);
+        OnPropertyChanged(nameof(ValorTotalPecas));
+        OnPropertyChanged(nameof(ValorTotalGeral));
     }
 
-    try
+    public void RemoverServico(ItemServicoTemporario item)
     {
-        var command = new CriarOrdemServicoCommand
+        if (item == null) return;
+        ServicosNaOS.Remove(item);
+        OnPropertyChanged(nameof(ValorTotalServicos));
+        OnPropertyChanged(nameof(ValorTotalGeral));
+    }
+
+    public async Task<bool> SalvarAsync()
+    {
+        if (ClienteSelecionado == null)
         {
-            ClienteId = ClienteSelecionado.Id,
-            VeiculoId = VeiculoSelecionado.Id,
-            Observacao = Observacao
-        };
+            MessageBox.Show("Selecione um cliente.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+        if (VeiculoSelecionado == null)
+        {
+            MessageBox.Show("Selecione um veículo.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+        if (!PecasNaOS.Any() && !ServicosNaOS.Any())
+        {
+            MessageBox.Show("Adicione pelo menos uma peça ou serviço.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
 
-        foreach (var item in PecasNaOS)
-            command.Pecas.Add(new ItemPecaOSRequest { PecaId = item.PecaId, Quantidade = item.Quantidade });
+        try
+        {
+            var command = new CriarOrdemServicoCommand
+            {
+                ClienteId = ClienteSelecionado.Id,
+                VeiculoId = VeiculoSelecionado.Id,
+                Observacao = Observacao
+            };
 
-        foreach (var item in ServicosNaOS)
-            command.Servicos.Add(new ItemServicoOSRequest { ServicoId = item.ServicoId });
+            foreach (var item in PecasNaOS)
+                command.Pecas.Add(new ItemPecaOSRequest { PecaId = item.PecaId, Quantidade = item.Quantidade });
 
-        await _mediator.Send(command);
-        return true;
+            foreach (var item in ServicosNaOS)
+                command.Servicos.Add(new ItemServicoOSRequest { ServicoId = item.ServicoId });
+
+            await _mediator.Send(command);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            var inner = ex;
+            while (inner.InnerException != null)
+                inner = inner.InnerException;
+            MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
     }
-    catch (Exception ex)
-    {
-        var inner = ex;
-        while (inner.InnerException != null)
-            inner = inner.InnerException;
-        MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-        return false;
-    }
-}
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

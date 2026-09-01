@@ -84,12 +84,19 @@ public class OrdemServico
         RecalcularTotais();
     }
 
-    private void RecalcularTotais()
+    public void RecalcularTotais()
     {
         ValorTotalPecas = Math.Round(ItensPeca.Sum(i => i.ValorTotal), 2);
         ValorTotalServicos = Math.Round(ItensServico.Sum(i => i.PrecoUnitario), 2);
         ValorTotal = Math.Round(ValorTotalPecas + ValorTotalServicos, 2);
     }
+
+    public void AtualizarTotais(decimal totalPecas, decimal totalServicos)
+{
+    ValorTotalPecas = totalPecas;
+    ValorTotalServicos = totalServicos;
+    ValorTotal = totalPecas + totalServicos;
+}
 
     //Transições de status
     public void IniciarServico()

@@ -1,0 +1,219 @@
+<Window x:Class="SgaAutoEletrica.UI.Views.OrdensServico.EditarOSWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Titulo}"
+        Height="700"
+        Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                Text="{Binding Titulo}"
+                FontSize="20"
+                FontWeight="Bold"
+                Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="1"
+                Margin="0,0,0,10">
+            <TextBlock Text="{Binding InfoCliente}"
+                    FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding InfoVeiculo}"
+                    FontWeight="SemiBold"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2"
+                Text="Observação:"/>
+        <TextBox Grid.Row="3"
+                Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}"
+                 Height="50"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                Margin="0,0,0,10"/>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Peças -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Adicionar Peça:"
+                        FontWeight="SemiBold"
+                        Grid.Row="0"/>
+                <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        Margin="0,0,0,5">
+                    <ComboBox ItemsSource="{Binding PecasDisponiveis}"
+                              SelectedItem="{Binding PecaSelecionada}"
+                              DisplayMemberPath="Nome"
+                              Width="200"
+                            Height="28"
+                            Margin="0,0,5,0"/>
+                    <TextBlock Text="Qtd:"
+                            VerticalAlignment="Center"
+                            Margin="0,0,5,0"/>
+                    <TextBox Text="{Binding QuantidadePeca, UpdateSourceTrigger=PropertyChanged}"
+                             Width="50"
+                            Height="28"
+                            Margin="0,0,5,0"/>
+                    <Button Content="Adicionar"
+                            Command="{Binding AdicionarPecaCommand}"
+                            Width="80"
+                            Height="28"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2"
+                        Text="Peças na OS:"
+                        FontWeight="SemiBold"
+                        Margin="0,5,0,5"/>
+
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DataGrid ItemsSource="{Binding PecasNaOS}"
+                            AutoGenerateColumns="False"
+                            IsReadOnly="True"
+                              SelectedItem="{Binding PecaSelecionadaParaRemover}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Peça"
+                                    Binding="{Binding NomePeca}"
+                                    Width="150"/>
+                            <DataGridTextColumn Header="Qtd"
+                                    Binding="{Binding Quantidade}"
+                                    Width="50"/>
+                            <DataGridTextColumn Header="Preço"
+                                    Binding="{Binding PrecoUnitario, StringFormat=C2}"
+                                    Width="80"/>
+                            <DataGridTextColumn Header="Total"
+                                    Binding="{Binding ValorTotal, StringFormat=C2}"
+                                    Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Grid.Column="1"
+                            Content="Remover"
+                            Command="{Binding RemoverPecaCommand}"
+                            Width="80"
+                            Height="25"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Top"
+                            Background="#E74C3C"
+                            Foreground="White"/>
+                </Grid>
+            </Grid>
+
+            <!-- Serviços -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Adicionar Serviço:"
+                        FontWeight="SemiBold"
+                        Grid.Row="0"/>
+                <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        Margin="0,0,0,5">
+                    <ComboBox ItemsSource="{Binding ServicosDisponiveis}"
+                              SelectedItem="{Binding ServicoSelecionado}"
+                              DisplayMemberPath="Nome"
+                              Width="200"
+                            Height="28"
+                            Margin="0,0,5,0"/>
+                    <Button Content="Adicionar"
+                            Command="{Binding AdicionarServicoCommand}"
+                            Width="80"
+                            Height="28"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2"
+                        Text="Serviços na OS:"
+                        FontWeight="SemiBold"
+                        Margin="0,5,0,5"/>
+
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DataGrid ItemsSource="{Binding ServicosNaOS}"
+                            AutoGenerateColumns="False"
+                            IsReadOnly="True"
+                              SelectedItem="{Binding ServicoSelecionadoParaRemover}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Serviço"
+                                    Binding="{Binding NomeServico}"
+                                    Width="150"/>
+                            <DataGridTextColumn Header="Preço"
+                                    Binding="{Binding PrecoUnitario, StringFormat=C2}"
+                                    Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Grid.Column="1"
+                            Content="Remover"
+                            Command="{Binding RemoverServicoCommand}"
+                            Width="80"
+                            Height="25"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Top"
+                            Background="#E74C3C"
+                            Foreground="White"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <StackPanel Grid.Row="5"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0">
+            <TextBlock Text="TOTAL: "
+                    FontSize="18"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"
+                    Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding ValorTotalGeral, StringFormat=C2}"
+                    FontSize="18"
+                    FontWeight="Bold"
+                       VerticalAlignment="Center"
+                    Margin="0,0,15,0"/>
+            <Button Content="Salvar"
+                    Command="{Binding SalvarCommand}"
+                    Width="100"
+                    Height="35"
+                    Margin="0,0,10,0"
+                    Background="#27AE60"
+                    Foreground="White"
+                    FontWeight="SemiBold"/>
+            <Button Content="Fechar"
+                    Width="100"
+                    Height="35"
+                    Click="BtnFechar_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
