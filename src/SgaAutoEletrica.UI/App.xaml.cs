@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application;
+using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Infrastructure;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
@@ -101,6 +102,9 @@ public partial class App : System.Windows.Application
             services.AddTransient<ViewModels.Configuracoes.ConfiguracoesImpressoraViewModel>();
             services.AddTransient<Views.Configuracoes.ConfiguracoesImpressoraView>();
 
+            services.AddTransient<ViewModels.Configuracoes.BackupViewModel>();
+            services.AddTransient<Views.Configuracoes.BackupView>();
+
             ServiceProvider = services.BuildServiceProvider();
 
             using var scope = ServiceProvider.CreateScope();
@@ -117,6 +121,21 @@ public partial class App : System.Windows.Application
                 "Erro",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
+        }
+    }
+
+   protected override void OnExit(ExitEventArgs e)
+    {
+        base.OnExit(e);
+
+        try
+        {
+            using var scope = ServiceProvider.CreateScope();
+            var backupService = scope.ServiceProvider.GetService<IBackupService>();
+            backupService?.RealizarBackupAutomatico().GetAwaiter().GetResult();
+        }
+        catch
+        {
         }
     }
 }

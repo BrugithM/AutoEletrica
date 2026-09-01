@@ -115,4 +115,10 @@ private void BtnBuscarNotasEntrada_Click(object sender, RoutedEventArgs e)
     var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracoesImpressoraView>();
     ContentArea.Content = view;
 }
+
+private void BtnBackup_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.BackupView>();
+    ContentArea.Content = view;
+}
 }

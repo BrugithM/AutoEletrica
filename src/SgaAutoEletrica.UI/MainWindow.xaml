@@ -79,6 +79,9 @@
                                         Click="BtnConfiguracoes_Click"
                                         Style="{StaticResource MenuButtonStyle}"
                                                 Margin="0,2"/>
+                                <Button Content="Backup" 
+        Click="BtnBackup_Click"
+        Style="{StaticResource MenuButtonStyle}" Margin="0,2"/>
                         </StackPanel>
                 </Border>
 
