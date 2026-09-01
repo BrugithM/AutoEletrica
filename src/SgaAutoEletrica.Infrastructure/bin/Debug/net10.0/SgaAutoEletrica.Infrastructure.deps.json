@@ -12,7 +12,8 @@
           "Microsoft.EntityFrameworkCore.Sqlite": "10.0.10",
           "SQLitePCLRaw.bundle_e_sqlite3": "3.0.5",
           "SgaAutoEletrica.Application": "1.0.0",
-          "SgaAutoEletrica.Domain": "1.0.0"
+          "SgaAutoEletrica.Domain": "1.0.0",
+          "System.Drawing.Common": "10.0.11"
         },
         "runtime": {
           "SgaAutoEletrica.Infrastructure.dll": {}
@@ -608,6 +609,22 @@
           }
         }
       },
+      "Microsoft.Win32.SystemEvents/10.0.11": {
+        "runtime": {
+          "lib/net10.0/Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1126.37416"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net10.0/Microsoft.Win32.SystemEvents.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1126.37416"
+          }
+        }
+      },
       "Mono.TextTemplating/3.0.0": {
         "dependencies": {
           "System.CodeDom": "6.0.0"
@@ -885,6 +902,25 @@
           }
         }
       },
+      "System.Drawing.Common/10.0.11": {
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "10.0.11"
+        },
+        "runtime": {
+          "lib/net10.0/System.Drawing.Common.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1126.37416"
+          },
+          "lib/net10.0/System.Private.Windows.Core.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1126.37416"
+          },
+          "lib/net10.0/System.Private.Windows.GdiPlus.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1126.37416"
+          }
+        }
+      },
       "SgaAutoEletrica.Application/1.0.0": {
         "dependencies": {
           "AutoMapper": "16.2.0",
@@ -1146,6 +1182,13 @@
       "path": "microsoft.visualstudio.solutionpersistence/1.0.52",
       "hashPath": "microsoft.visualstudio.solutionpersistence.1.0.52.nupkg.sha512"
     },
+    "Microsoft.Win32.SystemEvents/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WXGazuzGf3eX24z1qgiGwP2df3t2T28QeZvMjlRqdjNuewQyLfbOb6rEXmk6Xs++gOQClmw90pkjPd9j/hNWDw==",
+      "path": "microsoft.win32.systemevents/10.0.11",
+      "hashPath": "microsoft.win32.systemevents.10.0.11.nupkg.sha512"
+    },
     "Mono.TextTemplating/3.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1243,6 +1286,13 @@
       "sha512": "sha512-aRZlojCCGEHDKqh43jaDgaVpYETsgd7Nx4g1zwLKMtv4iTo0627715ajEFNpEEBTgLmvZuv8K0EVxc3sM4NWJA==",
       "path": "system.composition.typedparts/9.0.0",
       "hashPath": "system.composition.typedparts.9.0.0.nupkg.sha512"
+    },
+    "System.Drawing.Common/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Schxw0FzXMAwa+If/oVxqjrmmiyUbw9KUAeqJOPnjsdAzkmUZXSZWNRLHZye2boFYlbMRkeBY6dba5hs8Mu4OQ==",
+      "path": "system.drawing.common/10.0.11",
+      "hashPath": "system.drawing.common.10.0.11.nupkg.sha512"
     },
     "SgaAutoEletrica.Application/1.0.0": {
       "type": "project",

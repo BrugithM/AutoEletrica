@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "65vu+Qw3bSs=",
+  "dgSpecHash": "mx2/sEBQPKE=",
   "success": true,
   "projectFilePath": "C:\\Projetos\\SgaAutoEletrica\\src\\SgaAutoEletrica.UI\\SgaAutoEletrica.UI.csproj",
   "expectedPackageFiles": [
@@ -39,7 +39,21 @@
     "C:\\Users\\Admin\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\3.0.5\\sqlitepclraw.bundle_e_sqlite3.3.0.5.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sqlitepclraw.config.e_sqlite3\\3.0.5\\sqlitepclraw.config.e_sqlite3.3.0.5.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sqlitepclraw.core\\3.0.5\\sqlitepclraw.core.3.0.5.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\3.0.5\\sqlitepclraw.provider.e_sqlite3.3.0.5.nupkg.sha512"
+    "C:\\Users\\Admin\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\3.0.5\\sqlitepclraw.provider.e_sqlite3.3.0.5.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.drawing.common\\10.0.11\\system.drawing.common.10.0.11.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "PackageReference System.Drawing.Common will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "projectPath": "C:\\Projetos\\SgaAutoEletrica\\src\\SgaAutoEletrica.UI\\SgaAutoEletrica.UI.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Projetos\\SgaAutoEletrica\\src\\SgaAutoEletrica.UI\\SgaAutoEletrica.UI.csproj",
+      "libraryId": "System.Drawing.Common",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    }
+  ]
 }

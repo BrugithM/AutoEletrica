@@ -74,6 +74,10 @@
                                 <Button Content=" Buscar Notas Entrada"
                                         Click="BtnBuscarNotasEntrada_Click"
                                         Style="{StaticResource MenuButtonStyle}"
+                                        Margin="0,2"/>
+                                <Button Content="Configurações"
+                                        Click="BtnConfiguracoes_Click"
+                                        Style="{StaticResource MenuButtonStyle}"
                                                 Margin="0,2"/>
                         </StackPanel>
                 </Border>

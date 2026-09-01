@@ -109,4 +109,10 @@ private void BtnBuscarNotasEntrada_Click(object sender, RoutedEventArgs e)
             TextAlignment = TextAlignment.Center
         };
     }
+
+    private void BtnConfiguracoes_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracoesImpressoraView>();
+    ContentArea.Content = view;
+}
 }
