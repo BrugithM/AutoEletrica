@@ -1,0 +1,110 @@
+<UserControl x:Class="SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracoesImpressoraView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock Text="Configurações de Impressão" FontSize="24" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <!-- OS -->
+            <GroupBox Header="OS / Nota Fiscal" Margin="0,0,0,15" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Impressora:"/>
+                    <ComboBox ItemsSource="{Binding ImpressorasInstaladas}"
+                              SelectedItem="{Binding ImpressoraOS}"
+                              Height="30" Margin="0,0,0,10"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <StackPanel Margin="0,0,15,0">
+                            <TextBlock Text="Tamanho do Papel:"/>
+                            <ComboBox ItemsSource="{Binding TamanhosPapel}"
+                                      SelectedItem="{Binding TamanhoPapelOS}"
+                                      Width="150" Height="28"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Cópias:"/>
+                            <TextBox Text="{Binding CopiasOS, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" Height="28"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Nota Fiscal -->
+            <GroupBox Header="Nota Fiscal" Margin="0,0,0,15" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Impressora:"/>
+                    <ComboBox ItemsSource="{Binding ImpressorasInstaladas}"
+                              SelectedItem="{Binding ImpressoraNF}"
+                              Height="30" Margin="0,0,0,10"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <StackPanel Margin="0,0,15,0">
+                            <TextBlock Text="Tamanho do Papel:"/>
+                            <ComboBox ItemsSource="{Binding TamanhosPapel}"
+                                      SelectedItem="{Binding TamanhoPapelNF}"
+                                      Width="150" Height="28"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Cópias:"/>
+                            <TextBox Text="{Binding CopiasNF, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" Height="28"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Cupom Fiscal -->
+            <GroupBox Header="Cupom Fiscal" Margin="0,0,0,15" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Impressora:"/>
+                    <ComboBox ItemsSource="{Binding ImpressorasInstaladas}"
+                              SelectedItem="{Binding ImpressoraCupom}"
+                              Height="30" Margin="0,0,0,10"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <StackPanel Margin="0,0,15,0">
+                            <TextBlock Text="Tamanho do Papel:"/>
+                            <ComboBox ItemsSource="{Binding TamanhosPapel}"
+                                      SelectedItem="{Binding TamanhoPapelCupom}"
+                                      Width="150" Height="28"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Cópias:"/>
+                            <TextBox Text="{Binding CopiasCupom, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" Height="28"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Etiqueta -->
+            <GroupBox Header="Etiquetas" Margin="0,0,0,15" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Impressora:"/>
+                    <ComboBox ItemsSource="{Binding ImpressorasInstaladas}"
+                              SelectedItem="{Binding ImpressoraEtiqueta}"
+                              Height="30" Margin="0,0,0,10"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <StackPanel Margin="0,0,15,0">
+                            <TextBlock Text="Tamanho do Papel:"/>
+                            <ComboBox ItemsSource="{Binding TamanhosPapel}"
+                                      SelectedItem="{Binding TamanhoPapelEtiqueta}"
+                                      Width="150" Height="28"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Cópias:"/>
+                            <TextBox Text="{Binding CopiasEtiqueta, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" Height="28"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Salvar Configurações" Command="{Binding SalvarCommand}"
+                        Width="170" Height="35" Background="#27AE60" Foreground="White" FontWeight="SemiBold"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -98,6 +98,9 @@ public partial class App : System.Windows.Application
             services.AddTransient<ViewModels.Buscas.BuscarNotasEntradaViewModel>();
             services.AddTransient<Views.Buscas.BuscarNotasEntradaView>();
 
+            services.AddTransient<ViewModels.Configuracoes.ConfiguracoesImpressoraViewModel>();
+            services.AddTransient<Views.Configuracoes.ConfiguracoesImpressoraView>();
+
             ServiceProvider = services.BuildServiceProvider();
 
             using var scope = ServiceProvider.CreateScope();

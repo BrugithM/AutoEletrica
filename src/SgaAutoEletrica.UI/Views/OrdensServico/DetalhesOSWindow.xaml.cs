@@ -1,7 +1,10 @@
 using System.Windows;
 using MediatR;
+using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Application.Features.OrdensServico.Commands;
+using SgaAutoEletrica.Application.Features.OrdensServico.DTOs;
 using SgaAutoEletrica.Application.Features.OrdensServico.Queries;
+using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Domain.Enums;
 
 namespace SgaAutoEletrica.UI.Views.OrdensServico;
@@ -128,5 +131,44 @@ public partial class DetalhesOSWindow : Window
             MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+}
+
+private void BtnImprimirOS_Click(object sender, RoutedEventArgs e)
+{
+    try
+    {
+        var os = ObterOSAsync().GetAwaiter().GetResult();
+        if (os != null)
+        {
+            var impressaoService = App.ServiceProvider.GetRequiredService<IImpressaoService>();
+            impressaoService.ImprimirOS(os);
+        }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Erro ao imprimir: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
+
+private void BtnImprimirCupom_Click(object sender, RoutedEventArgs e)
+{
+    try
+    {
+        var os = ObterOSAsync().GetAwaiter().GetResult();
+        if (os != null)
+        {
+            var impressaoService = App.ServiceProvider.GetRequiredService<IImpressaoService>();
+            impressaoService.ImprimirCupomFiscal(os);
+        }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Erro ao imprimir cupom: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
+
+private async Task<OrdemServicoDetalheDTO?> ObterOSAsync()
+{
+    return await _mediator.Send(new ObterOSPorIdQuery { Id = _osId });
 }
 }

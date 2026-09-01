@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Infrastructure.Persistence.Repositories;
+using SgaAutoEletrica.Infrastructure.Services;
 
 namespace SgaAutoEletrica.Infrastructure;
 
@@ -19,6 +20,8 @@ public static class DependencyInjection
         services.AddScoped<IVeiculoRepository, VeiculoRepository>();
         services.AddScoped<IPecaRepository, PecaRepository>();
         services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
+        services.AddScoped<IConfiguracaoImpressoraRepository, ConfiguracaoImpressoraRepository>();
+        services.AddScoped<IImpressaoService, ImpressaoService>();
 
         return services;
     }
