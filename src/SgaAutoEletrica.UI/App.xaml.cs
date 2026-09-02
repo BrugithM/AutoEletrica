@@ -1,11 +1,14 @@
 ﻿using System.IO;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Infrastructure;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
+using SgaAutoEletrica.UI.ViewModels;
+using SgaAutoEletrica.UI.Views;
 
 namespace SgaAutoEletrica.UI;
 
@@ -64,6 +67,8 @@ public partial class App : System.Windows.Application
             services.AddApplication();
 
             services.AddTransient<MainWindow>();
+            services.AddTransient<Views.LoginWindow>();
+            services.AddTransient<ViewModels.LoginViewModel>();
 
             services.AddTransient<ViewModels.Dashboard.DashboardViewModel>();
             services.AddTransient<Views.Dashboard.DashboardView>();
@@ -112,8 +117,9 @@ public partial class App : System.Windows.Application
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             context.Database.Migrate();
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+            System.Windows.Application.Current.MainWindow = loginWindow;
+            loginWindow.Show();
         }
         catch (Exception ex)
         {
@@ -125,7 +131,7 @@ public partial class App : System.Windows.Application
         }
     }
 
-   protected override void OnExit(ExitEventArgs e)
+    protected override void OnExit(ExitEventArgs e)
     {
         base.OnExit(e);
 
@@ -133,11 +139,22 @@ public partial class App : System.Windows.Application
         {
             using var scope = ServiceProvider.CreateScope();
             var backupService = scope.ServiceProvider.GetService<IBackupService>();
-            backupService?.RealizarBackupAutomatico().GetAwaiter().GetResult();
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await backupService?.RealizarBackupAutomatico()!;
+                }
+                catch
+                {
+                }
+            }).Wait(2000);
         }
         catch
         {
         }
+
         Environment.Exit(0);
     }
 }

@@ -1,0 +1,23 @@
+<Window x:Class="SgaAutoEletrica.UI.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Login - SGA AutoElétrica" Height="300" Width="400"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="30">
+        <StackPanel>
+            <TextBlock Text="SGA - AutoElétrica" FontSize="22" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Margin="0,0,0,30"/>
+
+            <TextBlock Text="Usuário:"/>
+            <TextBox Text="{Binding NomeUsuario, UpdateSourceTrigger=PropertyChanged}" 
+                     Height="30" Margin="0,0,0,15"/>
+
+            <TextBlock Text="Senha:"/>
+            <PasswordBox x:Name="TxtSenha" Height="30" Margin="0,0,0,20"/>
+
+            <Button Content="Entrar" Click="BtnLogin_Click" 
+                    Height="35" Background="#2C3E50" Foreground="White" FontWeight="SemiBold"/>
+        </StackPanel>
+    </Grid>
+</Window>
