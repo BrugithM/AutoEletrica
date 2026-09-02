@@ -10,3 +10,4 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Domain\obj\Debug\net10.0\refint\
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Domain\obj\Debug\net10.0\SgaAutoEletrica.Domain.pdb
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Domain\obj\Debug\net10.0\ref\SgaAutoEletrica.Domain.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Domain\obj\Debug\net10.0\SgaAutoEletrica.Domain.sourcelink.json
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.Domain\obj\Debug\net10.0\SgaAutoEletrica.Domain.csproj.AssemblyReference.cache

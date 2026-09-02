@@ -31,6 +31,14 @@
           }
         }
       },
+      "BCrypt.Net-Next/4.2.0": {
+        "runtime": {
+          "lib/net10.0/BCrypt-Net-Next.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.2.0.0"
+          }
+        }
+      },
       "FluentValidation/12.1.1": {
         "runtime": {
           "lib/net8.0/FluentValidation.dll": {
@@ -563,6 +571,9 @@
         }
       },
       "SgaAutoEletrica.Domain/1.0.0": {
+        "dependencies": {
+          "BCrypt.Net-Next": "4.2.0"
+        },
         "runtime": {
           "SgaAutoEletrica.Domain.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -598,6 +609,13 @@
       "sha512": "sha512-PE8HgPc5BZJnAFwjvDTE72gWL6YrYib+V7+vxtLXDYz0CH/fFgbVcwLUC9UHk5ALwspZ6Vbmoo6PHvseIk/0ZA==",
       "path": "automapper/16.2.0",
       "hashPath": "automapper.16.2.0.nupkg.sha512"
+    },
+    "BCrypt.Net-Next/4.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gwLD2KfCuwQesP17aVh4h6lpiMPEVt5Lbpndo0ej903hNUUTtyxt3ARdDjmuydBRTAUICc7OVKVbaOvc6SQYXA==",
+      "path": "bcrypt.net-next/4.2.0",
+      "hashPath": "bcrypt.net-next.4.2.0.nupkg.sha512"
     },
     "FluentValidation/12.1.1": {
       "type": "package",

@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "mx2/sEBQPKE=",
+  "dgSpecHash": "2mwT0pPpRVk=",
   "success": true,
   "projectFilePath": "C:\\Projetos\\SgaAutoEletrica\\src\\SgaAutoEletrica.UI\\SgaAutoEletrica.UI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\16.2.0\\automapper.16.2.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\mediatr\\14.2.0\\mediatr.14.2.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

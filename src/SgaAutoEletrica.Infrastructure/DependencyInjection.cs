@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IConfiguracaoImpressoraRepository, ConfiguracaoImpressoraRepository>();
         services.AddScoped<IImpressaoService, ImpressaoService>();
         services.AddScoped<IBackupService, BackupService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

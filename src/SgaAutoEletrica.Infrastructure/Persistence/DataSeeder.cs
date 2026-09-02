@@ -92,10 +92,19 @@ public static class DataSeeder
         os.Finalizar();
 
         context.OrdensServico.Add(os);
-        
+
         await context.SaveChangesAsync();
         Console.WriteLine("OS salva.");
 
         Console.WriteLine("Dados de teste inseridos com sucesso!");
+
+        if (!context.Usuarios.Any())
+        {
+            var senhaHash = BCrypt.Net.BCrypt.HashPassword("admin123");
+            var admin = new Usuario("admin", senhaHash, NivelUsuario.Administrador);
+            context.Usuarios.Add(admin);
+            await context.SaveChangesAsync();
+            Console.WriteLine("Usuário admin criado!");
+        }
     }
 }
