@@ -103,6 +103,13 @@ public static class DataSeeder
             var senhaHash = BCrypt.Net.BCrypt.HashPassword("admin123");
             var admin = new Usuario("admin", senhaHash, NivelUsuario.Administrador);
             context.Usuarios.Add(admin);
+
+            var operador = new Usuario("operador", BCrypt.Net.BCrypt.HashPassword("oper123"), NivelUsuario.Operador);
+            context.Usuarios.Add(operador);
+
+            await context.SaveChangesAsync();
+            Console.WriteLine("Usuários criados!");
+
             await context.SaveChangesAsync();
             Console.WriteLine("Usuário admin criado!");
         }

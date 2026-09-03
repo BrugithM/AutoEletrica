@@ -28,7 +28,7 @@ public class PecaRepository : IPecaRepository
             .FirstOrDefaultAsync(p => p.CodigoPeca == codigo, cancellationToken);
     }
 
-     public async Task<Peca?> ObterPorIdPeca(string idPeca, CancellationToken cancellationToken = default)
+    public async Task<Peca?> ObterPorIdPeca(string idPeca, CancellationToken cancellationToken = default)
     {
         return await _context.Pecas
             .FirstOrDefaultAsync(p => p.IdPeca == idPeca, cancellationToken);
@@ -79,5 +79,10 @@ public class PecaRepository : IPecaRepository
     public void Remover(Peca peca)
     {
         _context.Pecas.Remove(peca);
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.SaveChangesAsync(cancellationToken);
     }
 }

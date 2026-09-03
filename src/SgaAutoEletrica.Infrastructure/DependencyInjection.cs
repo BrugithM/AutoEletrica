@@ -10,7 +10,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.Lifetime = ServiceLifetime.Scoped;
+});
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICategoriaPecaRepository, CategoriaPecaRepository>();
@@ -24,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<IImpressaoService, ImpressaoService>();
         services.AddScoped<IBackupService, BackupService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddSingleton<ISessaoUsuario, SessaoUsuario>();
 
         return services;
     }

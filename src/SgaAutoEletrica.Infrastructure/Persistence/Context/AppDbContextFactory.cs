@@ -21,7 +21,6 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
         optionsBuilder.UseSqlite($"Data Source={dbPath}");
-
         return new AppDbContext(optionsBuilder.Options);
     }
 }

@@ -14,4 +14,5 @@ public interface IPecaRepository
     Task Adicionar(Peca peca, CancellationToken cancellationToken = default);
     void Atualizar(Peca peca);
     void Remover(Peca peca);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

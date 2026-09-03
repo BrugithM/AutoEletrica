@@ -47,8 +47,9 @@ public class Peca
         int estoqueMinimo = 5,
         string? codigoPeca = null,
         string? codigoBarras = null,
-        Guid? fornecedorId = null,
-        Guid? categoriaId = null)
+        Guid? categoriaId = null,
+        Guid? fornecedorId = null
+        )
     {
         if (string.IsNullOrWhiteSpace(idPeca))
             throw new ArgumentException("IdPeca é obrigatório.", nameof(idPeca));

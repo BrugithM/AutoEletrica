@@ -32,6 +32,7 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
     public ObservableCollection<CategoriaPecaDTO> Categorias { get; } = new();
     public ObservableCollection<FornecedorDTO> Fornecedores { get; } = new();
 
+    // IDs selecionados (usados com SelectedValue)
     private CategoriaPecaDTO? _categoriaSelecionada;
     public CategoriaPecaDTO? CategoriaSelecionada
     {
@@ -81,7 +82,7 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             Imposto = peca.Imposto;
             EstoqueInicial = peca.Estoque;
             EstoqueMinimo = peca.EstoqueMinimo;
-            
+
             OnPropertyChanged(nameof(IdPeca));
             OnPropertyChanged(nameof(CodigoPeca));
             OnPropertyChanged(nameof(CodigoBarras));
@@ -98,13 +99,11 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
 
     public async Task CarregarDadosAuxiliaresAsync()
     {
-        // Categorias
         Categorias.Clear();
         var categorias = await _mediator.Send(new ListarCategoriasPecaQuery());
         foreach (var cat in categorias)
             Categorias.Add(cat);
 
-        // Fornecedores
         Fornecedores.Clear();
         var fornecedores = await _mediator.Send(new ListarFornecedoresQuery());
         foreach (var forn in fornecedores)
@@ -134,42 +133,58 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             return false;
         }
 
-        if (_pecaId.HasValue)
+        try
         {
-            await _mediator.Send(new AtualizarPecaCommand
+            if (_pecaId.HasValue)
             {
-                Id = _pecaId.Value,
-                Nome = Nome,
-                Descricao = Descricao,
-                Marca = Marca,
-                ValorCusto = ValorCusto,
-                Imposto = Imposto,
-                CodigoPeca = CodigoPeca,
-                CategoriaId = CategoriaSelecionada?.Id,
-                EstoqueMinimo = EstoqueMinimo
-            });
-        }
-        else
-        {
-            await _mediator.Send(new CriarPecaCommand
+                await _mediator.Send(new AtualizarPecaCommand
+                {
+                    Id = _pecaId.Value,
+                    Nome = Nome,
+                    Descricao = Descricao,
+                    Marca = Marca,
+                    ValorCusto = ValorCusto,
+                    Imposto = Imposto,
+                    CodigoPeca = CodigoPeca,
+                    CategoriaId = CategoriaSelecionada?.Id,
+                    EstoqueMinimo = EstoqueMinimo
+                });
+            }
+            else
             {
-                IdPeca = IdPeca,
-                Nome = Nome,
-                Descricao = Descricao,
-                Marca = Marca,
-                ValorCusto = ValorCusto,
-                ValorVenda = ValorVenda,
-                Imposto = Imposto,
-                EstoqueInicial = EstoqueInicial,
-                EstoqueMinimo = EstoqueMinimo,
-                CodigoPeca = CodigoPeca,
-                CodigoBarras = CodigoBarras,
-                CategoriaId = CategoriaSelecionada?.Id,
-                FornecedorId = FornecedorSelecionado?.Id
-            });
-        }
+                await _mediator.Send(new CriarPecaCommand
+                {
+                    IdPeca = IdPeca,
+                    Nome = Nome,
+                    Descricao = Descricao,
+                    Marca = Marca,
+                    ValorCusto = ValorCusto,
+                    ValorVenda = ValorVenda,
+                    Imposto = Imposto,
+                    EstoqueInicial = EstoqueInicial,
+                    EstoqueMinimo = EstoqueMinimo,
+                    CodigoPeca = CodigoPeca,
+                    CodigoBarras = CodigoBarras,
+                    CategoriaId = CategoriaSelecionada?.Id,
+                    FornecedorId = FornecedorSelecionado?.Id
+                });
+            }
 
-        return true;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            var inner = ex;
+            while (inner.InnerException != null)
+                inner = inner.InnerException;
+
+            MessageBox.Show(
+                $"Erro ao salvar:\n\n{inner.Message}",
+                "Erro",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return false;
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
