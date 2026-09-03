@@ -1,5 +1,6 @@
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.UI.ViewModels;
 
 namespace SgaAutoEletrica.UI.Views;
@@ -22,6 +23,9 @@ public partial class LoginWindow : Window
 
         if (_viewModel.UsuarioAutenticado != null)
         {
+            var sessao = App.ServiceProvider.GetRequiredService<ISessaoUsuario>();
+            sessao.DefinirUsuario(_viewModel.UsuarioAutenticado);
+            
             var mainWindow = App.ServiceProvider.GetRequiredService<MainWindow>();
             System.Windows.Application.Current.MainWindow = mainWindow;
             mainWindow.Show();

@@ -1,22 +1,23 @@
 using MediatR;
-using SgaAutoEletrica.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Features.Pecas.Commands;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Pecas.Commands;
+namespace SgaAutoEletrica.Infrastructure.Commands.Pecas;
 
 public class AtualizarPecaHandler : IRequestHandler<AtualizarPecaCommand>
 {
-    private readonly IPecaRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
-    public AtualizarPecaHandler(IPecaRepository repository, IUnitOfWork unitOfWork)
+    public AtualizarPecaHandler(AppDbContext context)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task Handle(AtualizarPecaCommand request, CancellationToken cancellationToken)
     {
-        var peca = await _repository.ObterPorId(request.Id, cancellationToken)
+        var peca = await _context.Pecas
+            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Peça não encontrada.");
 
         peca.AtualizarDados(
@@ -29,7 +30,6 @@ public class AtualizarPecaHandler : IRequestHandler<AtualizarPecaCommand>
             request.CategoriaId,
             request.EstoqueMinimo);
 
-        _repository.Atualizar(peca);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

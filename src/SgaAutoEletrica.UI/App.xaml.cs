@@ -1,13 +1,11 @@
 ﻿using System.IO;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Infrastructure;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
-using SgaAutoEletrica.UI.ViewModels;
 using SgaAutoEletrica.UI.Views;
 
 namespace SgaAutoEletrica.UI;
@@ -23,7 +21,7 @@ public partial class App : System.Windows.Application
     }
 
     private void App_DispatcherUnhandledException(object sender,
-    System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
         MessageBox.Show(
             $"Erro na interface:\n\n{e.Exception.Message}\n\n{e.Exception.StackTrace}",
@@ -39,6 +37,7 @@ public partial class App : System.Windows.Application
             $"Erro fatal:\n\n{ex?.Message}\n\n{ex?.StackTrace}",
             "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -49,25 +48,21 @@ public partial class App : System.Windows.Application
 
             var dbPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "SgaAutoEletrica",
-            "sga_dev.db"
+                "SgaAutoEletrica",
+                "sga_dev.db"
             );
 
             Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
-            Console.WriteLine($"Banco: {dbPath}");
-            Console.WriteLine($"Existe? {File.Exists(dbPath)}");
-
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite($"Data Source={dbPath}"),
-                ServiceLifetime.Transient);
+                options.UseSqlite($"Data Source={dbPath}"));
 
             services.AddInfrastructure();
             services.AddLogging();
             services.AddApplication();
 
             services.AddTransient<MainWindow>();
-            services.AddTransient<Views.LoginWindow>();
+            services.AddTransient<LoginWindow>();
             services.AddTransient<ViewModels.LoginViewModel>();
 
             services.AddTransient<ViewModels.Dashboard.DashboardViewModel>();
@@ -113,10 +108,24 @@ public partial class App : System.Windows.Application
 
             ServiceProvider = services.BuildServiceProvider();
 
-            using var scope = ServiceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            context.Database.Migrate();
+            // Configura o banco
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
+                // Fecha qualquer conexão pendente
+                context.Database.CloseConnection();
+
+                // Abre a conexão e aplica o PRAGMA
+                context.Database.OpenConnection();
+                context.Database.ExecuteSqlRaw("PRAGMA journal_mode=WAL;");
+                context.Database.CloseConnection();
+
+                // Aplica migrações
+                context.Database.Migrate();
+            }
+
+            // Abre o login
             var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
             System.Windows.Application.Current.MainWindow = loginWindow;
             loginWindow.Show();
@@ -138,8 +147,10 @@ public partial class App : System.Windows.Application
         try
         {
             using var scope = ServiceProvider.CreateScope();
-            var backupService = scope.ServiceProvider.GetService<IBackupService>();
+            var context = scope.ServiceProvider.GetService<AppDbContext>();
+            context?.Database.CloseConnection();
 
+            var backupService = scope.ServiceProvider.GetService<IBackupService>();
             _ = Task.Run(async () =>
             {
                 try
@@ -148,11 +159,13 @@ public partial class App : System.Windows.Application
                 }
                 catch
                 {
+                    // Silencioso
                 }
             }).Wait(2000);
         }
         catch
         {
+            // Silencioso
         }
 
         Environment.Exit(0);
