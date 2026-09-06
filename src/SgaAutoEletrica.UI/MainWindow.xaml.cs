@@ -79,6 +79,12 @@ private void BtnBuscarNotasEntrada_Click(object sender, RoutedEventArgs e)
     ContentArea.Content = view;
 }
 
+private void BtnConfigEmpresa_Click(object sender, RoutedEventArgs e)
+{
+    var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracaoEmpresaView>();
+    ContentArea.Content = view;
+}
+
     private void NavegarParaDashboard()
     {
         try

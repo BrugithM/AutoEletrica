@@ -1,18 +1,22 @@
 using System.Drawing.Printing;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Application.Features.OrdensServico.DTOs;
 using SgaAutoEletrica.Domain.Enums;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Services;
 
 public class ImpressaoService : IImpressaoService
 {
     private readonly IConfiguracaoImpressoraRepository _configRepo;
+    private readonly AppDbContext _context;
 
-    public ImpressaoService(IConfiguracaoImpressoraRepository configRepo)
+    public ImpressaoService(IConfiguracaoImpressoraRepository configRepo, AppDbContext context)
     {
         _configRepo = configRepo;
+        _context = context;
     }
 
     public void ImprimirOS(OrdemServicoDetalheDTO os)
@@ -24,6 +28,7 @@ public class ImpressaoService : IImpressaoService
         var conteudo = GerarConteudoOS(os);
         EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
     }
+
     public void ImprimirNotaFiscal(OrdemServicoDetalheDTO os, string numeroNota)
     {
         var config = _configRepo.ObterPorTipo(TipoImpressao.NotaFiscal).GetAwaiter().GetResult();
@@ -33,6 +38,7 @@ public class ImpressaoService : IImpressaoService
         var conteudo = GerarConteudoNotaFiscal(os, numeroNota);
         EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
     }
+
     public void ImprimirCupomFiscal(OrdemServicoDetalheDTO os)
     {
         var config = _configRepo.ObterPorTipo(TipoImpressao.CupomFiscal).GetAwaiter().GetResult();
@@ -42,6 +48,7 @@ public class ImpressaoService : IImpressaoService
         var conteudo = GerarConteudoCupom(os);
         EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
     }
+
     private void EnviarParaImpressora(string conteudo, string nomeImpressora, int copias)
     {
         var printDocument = new PrintDocument
@@ -71,12 +78,33 @@ public class ImpressaoService : IImpressaoService
         printDocument.Print();
     }
 
+    private string ObterCabecalhoEmpresa()
+    {
+        var empresa = _context.ConfiguracoesEmpresa
+            .AsNoTracking()
+            .FirstOrDefault();
+
+        if (empresa == null)
+            return string.Empty;
+
+        var sb = new StringBuilder();
+        sb.AppendLine(empresa.NomeEmpresa);
+        sb.AppendLine($"CNPJ: {empresa.Cnpj}");
+        sb.AppendLine($"Tel: {empresa.Telefone}");
+        if (!string.IsNullOrWhiteSpace(empresa.Endereco))
+            sb.AppendLine(empresa.Endereco);
+        sb.AppendLine("----------------------------------------");
+
+        return sb.ToString();
+    }
+
     private string GerarConteudoOS(OrdemServicoDetalheDTO os)
     {
         var sb = new StringBuilder();
         sb.AppendLine("========================================");
         sb.AppendLine("         ORDEM DE SERVIÇO");
         sb.AppendLine("========================================");
+        sb.AppendLine(ObterCabecalhoEmpresa());
         sb.AppendLine($"Número: {os.Numero}");
         sb.AppendLine($"Data: {os.DataAbertura:dd/MM/yyyy HH:mm}");
         sb.AppendLine($"Status: {os.Status}");
@@ -119,6 +147,7 @@ public class ImpressaoService : IImpressaoService
         sb.AppendLine("========================================");
         sb.AppendLine("           NOTA FISCAL");
         sb.AppendLine("========================================");
+        sb.AppendLine(ObterCabecalhoEmpresa());
         sb.AppendLine($"Número NF: {numeroNota}");
         sb.AppendLine($"Data: {DateTime.Now:dd/MM/yyyy HH:mm}");
         sb.AppendLine("----------------------------------------");
@@ -142,10 +171,25 @@ public class ImpressaoService : IImpressaoService
         return sb.ToString();
     }
 
-    private string GerarConteudoCupom(OrdemServicoDetalheDTO os)
+       private string GerarConteudoCupom(OrdemServicoDetalheDTO os)
     {
+        var empresa = _context.ConfiguracoesEmpresa
+            .AsNoTracking()
+            .FirstOrDefault();
+
         var sb = new StringBuilder();
-        sb.AppendLine("        AUTO ELÉTRICA");
+        
+        if (empresa != null)
+        {
+            sb.AppendLine(empresa.NomeEmpresa);
+            sb.AppendLine($"CNPJ: {empresa.Cnpj}");
+            sb.AppendLine($"Tel: {empresa.Telefone}");
+        }
+        else
+        {
+            sb.AppendLine("        AUTO ELÉTRICA");
+        }
+        
         sb.AppendLine("========================================");
         sb.AppendLine($"OS Nº: {os.Numero}  Data: {os.DataAbertura:dd/MM/yyyy}");
         sb.AppendLine("----------------------------------------");
