@@ -62,6 +62,7 @@ public partial class DetalhesOSWindow : Window
         BtnFinalizar.IsEnabled = status != StatusOS.Finalizada && status != StatusOS.Cancelada;
         BtnEditarOS.IsEnabled = status == StatusOS.Aberta || status == StatusOS.EmAndamento;
         BtnGerarNF.IsEnabled = status == StatusOS.Finalizada;
+        BtnImprimirNF.IsEnabled = status == StatusOS.Finalizada;
         BtnCancelar.IsEnabled = status != StatusOS.Finalizada && status != StatusOS.Cancelada;
     }
 
@@ -178,4 +179,21 @@ public partial class DetalhesOSWindow : Window
         dialog.ShowDialog();
         CarregarDadosAsync().GetAwaiter().GetResult();
     }
+
+    private void BtnImprimirNF_Click(object sender, RoutedEventArgs e)
+{
+    try
+    {
+        var os = ObterOSAsync().GetAwaiter().GetResult();
+        if (os != null)
+        {
+            var impressaoService = App.ServiceProvider.GetRequiredService<IImpressaoService>();
+            impressaoService.ImprimirNotaFiscal(os, "NF-" + os.Numero);
+        }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Erro ao imprimir NF: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
 }

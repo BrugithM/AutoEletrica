@@ -24,6 +24,7 @@ public class AppDbContext : DbContext
     public DbSet<ItemNotaFiscalSaida> ItensNotaFiscalSaida => Set<ItemNotaFiscalSaida>();
     public DbSet<ConfiguracaoImpressora> ConfiguracoesImpressora => Set<ConfiguracaoImpressora>();
     public DbSet<Usuario> Usuarios => Set<Usuario>();
+    public DbSet<ConfiguracaoEmpresa> ConfiguracoesEmpresa => Set<ConfiguracaoEmpresa>();
     
     public AppDbContext(DbContextOptions<AppDbContext>options) : base(options){}
 

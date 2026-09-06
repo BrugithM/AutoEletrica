@@ -144,3 +144,5 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Vie
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\bin\Debug\net10.0-windows\BCrypt-Net-Next.dll
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\LoginWindow.baml
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\LoginWindow.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\ConfiguracaoEmpresaView.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\ConfiguracaoEmpresaView.g.cs

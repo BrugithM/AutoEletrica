@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\App.xaml
-27-937875464
+28-1663690229
 
-56599755037
+581000730298
 242-1792761329
-MainWindow.xaml;Views\Buscas\BuscarNotasEmitidasView.xaml;Views\Buscas\BuscarNotasEntradaView.xaml;Views\Buscas\BuscarProdutosView.xaml;Views\Clientes\CadastroClienteWindow.xaml;Views\Clientes\ListaClientesView.xaml;Views\Configuracoes\BackupView.xaml;Views\Configuracoes\ConfiguracoesImpressoraView.xaml;Views\Dashboard\DashboardView.xaml;Views\Fornecedores\CadastroFornecedorWindow.xaml;Views\Fornecedores\CriarNotaFiscalEntradaWindow.xaml;Views\Fornecedores\ListaFornecedoresView.xaml;Views\LoginWindow.xaml;Views\OrdensServico\CancelarOSWindow.xaml;Views\OrdensServico\CriacaoOSWindow.xaml;Views\OrdensServico\DetalhesOSWindow.xaml;Views\OrdensServico\EditarOSWindow.xaml;Views\OrdensServico\GerarNFWindow.xaml;Views\OrdensServico\ListaNotasFiscaisView.xaml;Views\OrdensServico\ListaOSView.xaml;Views\Pecas\CadastroPecaWindow.xaml;Views\Pecas\ListaPecasView.xaml;Views\Pecas\MovimentacaoEstoqueWindow.xaml;Views\Servicos\CadastroServicoWindow.xaml;Views\Servicos\ListaServicosView.xaml;Views\Veiculos\CadastroVeiculoWindow.xaml;Views\Veiculos\ListaVeiculosView.xaml;
+MainWindow.xaml;Views\Buscas\BuscarNotasEmitidasView.xaml;Views\Buscas\BuscarNotasEntradaView.xaml;Views\Buscas\BuscarProdutosView.xaml;Views\Clientes\CadastroClienteWindow.xaml;Views\Clientes\ListaClientesView.xaml;Views\Configuracoes\BackupView.xaml;Views\Configuracoes\ConfiguracaoEmpresaView.xaml;Views\Configuracoes\ConfiguracoesImpressoraView.xaml;Views\Dashboard\DashboardView.xaml;Views\Fornecedores\CadastroFornecedorWindow.xaml;Views\Fornecedores\CriarNotaFiscalEntradaWindow.xaml;Views\Fornecedores\ListaFornecedoresView.xaml;Views\LoginWindow.xaml;Views\OrdensServico\CancelarOSWindow.xaml;Views\OrdensServico\CriacaoOSWindow.xaml;Views\OrdensServico\DetalhesOSWindow.xaml;Views\OrdensServico\EditarOSWindow.xaml;Views\OrdensServico\GerarNFWindow.xaml;Views\OrdensServico\ListaNotasFiscaisView.xaml;Views\OrdensServico\ListaOSView.xaml;Views\Pecas\CadastroPecaWindow.xaml;Views\Pecas\ListaPecasView.xaml;Views\Pecas\MovimentacaoEstoqueWindow.xaml;Views\Servicos\CadastroServicoWindow.xaml;Views\Servicos\ListaServicosView.xaml;Views\Veiculos\CadastroVeiculoWindow.xaml;Views\Veiculos\ListaVeiculosView.xaml;
 
 False
 

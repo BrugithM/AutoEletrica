@@ -106,6 +106,9 @@ public partial class App : System.Windows.Application
             services.AddTransient<ViewModels.Configuracoes.BackupViewModel>();
             services.AddTransient<Views.Configuracoes.BackupView>();
 
+            services.AddTransient<ViewModels.Configuracoes.ConfiguracaoEmpresaViewModel>();
+            services.AddTransient<Views.Configuracoes.ConfiguracaoEmpresaView>();
+
             ServiceProvider = services.BuildServiceProvider();
 
             // Configura o banco
