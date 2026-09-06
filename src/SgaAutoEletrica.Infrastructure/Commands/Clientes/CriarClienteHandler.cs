@@ -1,19 +1,19 @@
 using MediatR;
-using SgaAutoEletrica.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Features.Clientes.Commands;
 using SgaAutoEletrica.Domain.Entities;
 using SgaAutoEletrica.Domain.ValueObjects;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Clientes.Commands;
+namespace SgaAutoEletrica.Infrastructure.Commands.Clientes;
 
 public class CriarClienteHandler : IRequestHandler<CriarClienteCommand, Guid>
 {
-    private readonly IClienteRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
-    public CriarClienteHandler(IClienteRepository repository, IUnitOfWork unitOfWork)
+    public CriarClienteHandler(AppDbContext context)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task<Guid> Handle(CriarClienteCommand request, CancellationToken cancellationToken)
@@ -37,8 +37,9 @@ public class CriarClienteHandler : IRequestHandler<CriarClienteCommand, Guid>
             cliente.AdicionarEndereco(endereco);
         }
 
-        await _repository.Adicionar(cliente, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.Clientes.AddAsync(cliente, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
         return cliente.Id;
     }
 }

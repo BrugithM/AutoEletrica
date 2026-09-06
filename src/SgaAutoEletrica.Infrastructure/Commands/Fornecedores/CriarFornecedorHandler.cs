@@ -1,29 +1,29 @@
 using MediatR;
-using SgaAutoEletrica.Application.Common.Interfaces;
+using SgaAutoEletrica.Application.Features.Fornecedores.Commands;
 using SgaAutoEletrica.Domain.Entities;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Fornecedores.Commands;
+namespace SgaAutoEletrica.Infrastructure.Commands.Fornecedores;
 
 public class CriarFornecedorHandler : IRequestHandler<CriarFornecedorCommand, Guid>
 {
-    private readonly IFornecedorRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
-    public CriarFornecedorHandler(IFornecedorRepository repository, IUnitOfWork unitOfWork)
+    public CriarFornecedorHandler(AppDbContext context)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task<Guid> Handle(CriarFornecedorCommand request, CancellationToken cancellationToken)
     {
         var fornecedor = new Fornecedor(request.NomeEmpresa, request.Cnpj);
-        
+
         if (!string.IsNullOrWhiteSpace(request.Telefone) || !string.IsNullOrWhiteSpace(request.Contato))
             fornecedor.AtualizarDados(request.NomeEmpresa, request.Telefone, request.Contato);
 
-        await _repository.Adicionar(fornecedor, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.Fornecedores.AddAsync(fornecedor, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
         return fornecedor.Id;
     }
 }

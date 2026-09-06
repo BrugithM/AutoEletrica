@@ -1,34 +1,33 @@
 using MediatR;
-using SgaAutoEletrica.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Features.Clientes.Commands;
 using SgaAutoEletrica.Domain.ValueObjects;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Clientes.Commands;
+namespace SgaAutoEletrica.Infrastructure.Commands.Clientes;
 
 public class AtualizarClienteHandler : IRequestHandler<AtualizarClienteCommand>
 {
-    private readonly IClienteRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
-    public AtualizarClienteHandler(IClienteRepository repository, IUnitOfWork unitOfWork)
+    public AtualizarClienteHandler(AppDbContext context)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task Handle(AtualizarClienteCommand request, CancellationToken cancellationToken)
     {
-        var cliente = await _repository.ObterPorId(request.Id, cancellationToken)
+        var cliente = await _context.Clientes
+            .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Cliente não encontrado.");
-        
+
         cliente.AtualizarDados(request.NomeCompleto, request.Telefone);
 
-        if(
-            !string.IsNullOrWhiteSpace(request.Logradouro) &&
+        if (!string.IsNullOrWhiteSpace(request.Logradouro) &&
             !string.IsNullOrWhiteSpace(request.Bairro) &&
             !string.IsNullOrWhiteSpace(request.Cidade) &&
             !string.IsNullOrWhiteSpace(request.Estado) &&
-            !string.IsNullOrWhiteSpace(request.Cep)
-        )
+            !string.IsNullOrWhiteSpace(request.Cep))
         {
             var endereco = new Endereco(
                 request.Logradouro,
@@ -37,12 +36,10 @@ public class AtualizarClienteHandler : IRequestHandler<AtualizarClienteCommand>
                 request.Estado,
                 request.Cep,
                 request.Numero,
-                request.Complemento
-            );
+                request.Complemento);
             cliente.AdicionarEndereco(endereco);
         }
 
-        _repository.Atualizar(cliente);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

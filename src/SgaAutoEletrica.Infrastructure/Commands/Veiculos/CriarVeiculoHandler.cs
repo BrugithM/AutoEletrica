@@ -1,19 +1,19 @@
 using MediatR;
-using SgaAutoEletrica.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Features.Veiculos.Commands;
 using SgaAutoEletrica.Domain.Entities;
 using SgaAutoEletrica.Domain.Enums;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
-namespace SgaAutoEletrica.Application.Features.Veiculos.Commands;
+namespace SgaAutoEletrica.Infrastructure.Commands.Veiculos;
 
 public class CriarVeiculoHandler : IRequestHandler<CriarVeiculoCommand, Guid>
 {
-    private readonly IVeiculoRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
-    public CriarVeiculoHandler(IVeiculoRepository repository, IUnitOfWork unitOfWork)
+    public CriarVeiculoHandler(AppDbContext context)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task<Guid> Handle(CriarVeiculoCommand request, CancellationToken cancellationToken)
@@ -25,10 +25,11 @@ public class CriarVeiculoHandler : IRequestHandler<CriarVeiculoCommand, Guid>
             request.Ano.HasValue)
         {
             veiculo = new Veiculo(request.Placa, request.ClienteId, request.Modelo, request.Marca, request.Ano.Value);
-            
+
             if (!string.IsNullOrWhiteSpace(request.Versao) ||
                 !string.IsNullOrWhiteSpace(request.Motor) ||
-                !string.IsNullOrWhiteSpace(request.Cor))
+                !string.IsNullOrWhiteSpace(request.Cor) ||
+                !string.IsNullOrWhiteSpace(request.Observacao))
             {
                 TipoMotor? tipoMotor = null;
                 if (!string.IsNullOrWhiteSpace(request.TipoMotor) &&
@@ -37,8 +38,15 @@ public class CriarVeiculoHandler : IRequestHandler<CriarVeiculoCommand, Guid>
                     tipoMotor = parsed;
                 }
 
-                veiculo.AtualizarDados(request.Modelo, request.Marca, request.Ano.Value,
-                    request.Versao, request.Motor, tipoMotor, request.Cor, request.Observacao);
+                veiculo.AtualizarDados(
+                    request.Modelo,
+                    request.Marca,
+                    request.Ano.Value,
+                    request.Versao,
+                    request.Motor,
+                    tipoMotor,
+                    request.Cor,
+                    request.Observacao);
             }
         }
         else
@@ -46,8 +54,9 @@ public class CriarVeiculoHandler : IRequestHandler<CriarVeiculoCommand, Guid>
             veiculo = new Veiculo(request.Placa, request.ClienteId);
         }
 
-        await _repository.Adicionar(veiculo, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.Veiculos.AddAsync(veiculo, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
         return veiculo.Id;
     }
 }
