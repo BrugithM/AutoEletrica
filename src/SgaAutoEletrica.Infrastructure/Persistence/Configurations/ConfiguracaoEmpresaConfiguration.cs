@@ -16,5 +16,6 @@ public class ConfiguracaoEmpresaConfiguration : IEntityTypeConfiguration<Configu
         builder.Property(c => c.Telefone).IsRequired().HasMaxLength(15);
         builder.Property(c => c.Endereco).HasMaxLength(300);
         builder.Property(c => c.Email).HasMaxLength(100);
+        builder.Property(c => c.LogoPath).HasMaxLength(500);
     }
 }

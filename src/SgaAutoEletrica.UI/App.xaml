@@ -3,46 +3,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:conv="clr-namespace:SgaAutoEletrica.UI.Converters"
              ShutdownMode="OnMainWindowClose">
-    <Application.Resources>
-        <conv:BoolParaVisibilidadeConverter x:Key="BoolParaVisibilidade"/>
-        <conv:InverterBoolConverter x:Key="InverterBoolConverter"/>
-        <Style x:Key="MenuButtonStyle"
-                TargetType="Button">
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Height"
-                    Value="40"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left"/>
-            <Setter Property="Padding"
-                    Value="15,0,0,0"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="5"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                    Value="True">
-                                <Setter Property="Background"
-                                        Value="#34495E"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Application.Resources>
+        <Application.Resources>
+                <conv:BoolParaVisibilidadeConverter x:Key="BoolParaVisibilidade"/>
+                <conv:InverterBoolConverter x:Key="InverterBoolConverter"/>
+                <Style x:Key="AtalhoButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Width"
+                                Value="80"/>
+                        <Setter Property="Height"
+                                Value="65"/>
+                        <Setter Property="Margin"
+                                Value="2,0"/>
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="5">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter Property="Background"
+                                                                        Value="#D5D8DC"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+                <Style x:Key="SubMenuItemStyle"
+                       TargetType="MenuItem">
+
+                        <Setter Property="Foreground"
+                                Value="Black"/>
+
+                        <Setter Property="Background"
+                                Value="White"/>
+
+                        <Setter Property="Padding"
+                                Value="8,5"/>
+
+                        <Style.Triggers>
+
+                                <Trigger Property="IsHighlighted"
+                                         Value="True">
+
+                                        <Setter Property="Background"
+                                                Value="#D5D8DC"/>
+
+                                        <Setter Property="Foreground"
+                                                Value="Black"/>
+
+                                </Trigger>
+
+                        </Style.Triggers>
+
+                </Style>
+        </Application.Resources>
 </Application>

@@ -8,10 +8,10 @@ public partial class CadastroVeiculoWindow : Window
 {
     private readonly CadastroVeiculoViewModel _viewModel;
 
-    public CadastroVeiculoWindow(IMediator mediator, Guid? veiculoId = null)
+    public CadastroVeiculoWindow(IMediator mediator, Guid? veiculoId = null, Guid? clienteIdPreSelecionado = null)
     {
         InitializeComponent();
-        _viewModel = new CadastroVeiculoViewModel(mediator, veiculoId);
+        _viewModel = new CadastroVeiculoViewModel(mediator, veiculoId, clienteIdPreSelecionado);
         DataContext = _viewModel;
         Loaded += CadastroVeiculoWindow_Loaded;
     }
