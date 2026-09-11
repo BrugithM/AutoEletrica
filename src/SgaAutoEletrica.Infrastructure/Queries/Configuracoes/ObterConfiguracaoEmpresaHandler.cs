@@ -26,7 +26,8 @@ public class ObterConfiguracaoEmpresaHandler : IRequestHandler<ObterConfiguracao
                 Cnpj = c.Cnpj,
                 Telefone = c.Telefone,
                 Endereco = c.Endereco,
-                Email = c.Email
+                Email = c.Email,
+                LogoPath = c.LogoPath
             })
             .FirstOrDefaultAsync(cancellationToken);
     }

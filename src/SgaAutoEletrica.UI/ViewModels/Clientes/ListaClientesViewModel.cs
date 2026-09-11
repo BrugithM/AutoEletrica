@@ -16,16 +16,27 @@ namespace SgaAutoEletrica.UI.ViewModels.Clientes;
 public class ListaClientesViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
+
     public ObservableCollection<ClienteDTO> Clientes { get; } = new();
-    private ClienteDTO? _clienteSelecionado;
+    public ObservableCollection<VeiculoResumoDTO> VeiculosDoCliente { get; } = new();
+
     public bool EhAdministrador => App.ServiceProvider
         .GetRequiredService<ISessaoUsuario>().EhAdministrador;
 
+    private ClienteDTO? _clienteSelecionado;
     public ClienteDTO? ClienteSelecionado
     {
         get => _clienteSelecionado;
-        set { _clienteSelecionado = value; OnPropertyChanged(); }
+        set
+        {
+            _clienteSelecionado = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TemClienteSelecionado));
+            _ = CarregarVeiculosAsync();
+        }
     }
+
+    public bool TemClienteSelecionado => ClienteSelecionado != null;
 
     private string _termoBusca = string.Empty;
     public string TermoBusca
@@ -39,16 +50,20 @@ public class ListaClientesViewModel : INotifyPropertyChanged
     public ICommand NovoClienteCommand { get; }
     public ICommand EditarClienteCommand { get; }
     public ICommand ExcluirClienteCommand { get; }
+    public ICommand AtualizarCommand { get; }
+    public ICommand VincularVeiculoCommand { get; }
 
     public ListaClientesViewModel(IMediator mediator)
     {
         _mediator = mediator;
-        
+
         BuscarCommand = new RelayCommand(async _ => await BuscarAsync());
         LimparBuscaCommand = new RelayCommand(async _ => { TermoBusca = ""; await BuscarAsync(); });
         NovoClienteCommand = new RelayCommand(async _ => await NovoClienteAsync());
-        EditarClienteCommand = new RelayCommand(async _ => await EditarClienteAsync(), _ => ClienteSelecionado != null);
-        ExcluirClienteCommand = new RelayCommand(async _ => await ExcluirClienteAsync(), _ => ClienteSelecionado != null && EhAdministrador);
+        EditarClienteCommand = new RelayCommand(async _ => await EditarClienteAsync(), _ => TemClienteSelecionado);
+        ExcluirClienteCommand = new RelayCommand(async _ => await ExcluirClienteAsync(), _ => TemClienteSelecionado && EhAdministrador);
+        AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
+        VincularVeiculoCommand = new RelayCommand(async _ => await VincularVeiculoAsync(), _ => TemClienteSelecionado);
     }
 
     public async Task BuscarAsync()
@@ -56,6 +71,7 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         try
         {
             Clientes.Clear();
+            VeiculosDoCliente.Clear();
             var resultado = await _mediator.Send(new ListarClientesQuery { TermoBusca = TermoBusca });
             foreach (var cliente in resultado)
                 Clientes.Add(cliente);
@@ -63,6 +79,19 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         catch (Exception ex)
         {
             MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async Task CarregarVeiculosAsync()
+    {
+        VeiculosDoCliente.Clear();
+        if (ClienteSelecionado == null) return;
+
+        var cliente = await _mediator.Send(new ObterClienteComVeiculosQuery { ClienteId = ClienteSelecionado.Id });
+        if (cliente != null)
+        {
+            foreach (var veiculo in cliente.Veiculos)
+                VeiculosDoCliente.Add(veiculo);
         }
     }
 
@@ -84,8 +113,9 @@ public class ListaClientesViewModel : INotifyPropertyChanged
     private async Task ExcluirClienteAsync()
     {
         if (ClienteSelecionado == null) return;
+
         var confirmacao = MessageBox.Show(
-            $"Realmente deseja excluir o cliente '{ClienteSelecionado.NomeCompleto}'?",
+            $"Deseja realmente excluir o cliente '{ClienteSelecionado.NomeCompleto}'?",
             "Confirmar exclusão",
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning);
@@ -97,6 +127,14 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         }
     }
 
+    private async Task VincularVeiculoAsync()
+    {
+        if (ClienteSelecionado == null) return;
+
+        var dialog = new SgaAutoEletrica.UI.Views.Veiculos.CadastroVeiculoWindow(_mediator, null, ClienteSelecionado.Id);
+        dialog.ShowDialog();
+        await CarregarVeiculosAsync();
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

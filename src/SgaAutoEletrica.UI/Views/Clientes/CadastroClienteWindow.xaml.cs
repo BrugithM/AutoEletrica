@@ -13,6 +13,12 @@ public partial class CadastroClienteWindow : Window
         InitializeComponent();
         _viewModel = new CadastroClienteViewModel(mediator, clienteId);
         DataContext = _viewModel;
+        Loaded += CadastroClienteWindow_Loaded;
+    }
+
+    private async void CadastroClienteWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        // Nada — o carregamento já acontece no construtor do ViewModel
     }
 
     private async void BtnSalvar_Click(object sender, RoutedEventArgs e)
@@ -22,8 +28,8 @@ public partial class CadastroClienteWindow : Window
             DialogResult = true;
     }
 
-    private void BtnCancelar_Click(object sender, RoutedEventArgs e)
+    private void BtnLimpar_Click(object sender, RoutedEventArgs e)
     {
-        DialogResult = false;
+        _viewModel.Limpar();
     }
 }

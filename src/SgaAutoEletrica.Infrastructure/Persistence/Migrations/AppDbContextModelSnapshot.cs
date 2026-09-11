@@ -75,6 +75,10 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("LogoPath")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("NomeEmpresa")
                         .IsRequired()
                         .HasMaxLength(200)

@@ -15,6 +15,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
     private readonly Guid? _veiculoId;
+    private readonly Guid? _clienteIdPreSelecionado;
 
     public string Placa { get; set; } = string.Empty;
     public string Modelo { get; set; } = string.Empty;
@@ -42,10 +43,11 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         private set { _titulo = value; OnPropertyChanged(); }
     }
 
-    public CadastroVeiculoViewModel(IMediator mediator, Guid? veiculoId = null)
+    public CadastroVeiculoViewModel(IMediator mediator, Guid? veiculoId = null, Guid? clienteIdPreSelecionado = null)
     {
         _mediator = mediator;
         _veiculoId = veiculoId;
+        _clienteIdPreSelecionado = clienteIdPreSelecionado;
         
         if (veiculoId.HasValue)
         {
@@ -96,6 +98,11 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         }))
         {
             Clientes.Add(cliente);
+        }
+
+        if (_clienteIdPreSelecionado.HasValue)
+        {
+            ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == _clienteIdPreSelecionado.Value);
         }
     }
 

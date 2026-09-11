@@ -8,6 +8,7 @@ public class ConfiguracaoEmpresa
     public string Telefone { get; private set; }
     public string? Endereco { get; private set; }
     public string? Email { get; private set; }
+    public string? LogoPath { get; private set; }
     public DateTime? UltimaAtualizacao { get; private set; }
 
     private ConfiguracaoEmpresa()
@@ -40,6 +41,12 @@ public class ConfiguracaoEmpresa
         Telefone = telefone;
         Endereco = endereco;
         Email = email;
+        UltimaAtualizacao = DateTime.UtcNow;
+    }
+
+    public void AtualizarLogo(string logoPath)
+    {
+        LogoPath = logoPath;
         UltimaAtualizacao = DateTime.UtcNow;
     }
 }

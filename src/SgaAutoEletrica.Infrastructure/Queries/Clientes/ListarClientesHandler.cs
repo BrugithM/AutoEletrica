@@ -21,7 +21,11 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, List<C
 
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
-            query = query.Where(c => c.NomeCompleto.Contains(request.TermoBusca));
+            var termo = request.TermoBusca.Trim().ToLower();
+            query = query.Where(c =>
+                c.NomeCompleto.ToLower().Contains(termo) ||
+                c.Cpf.Valor.Contains(termo) ||
+                c.Telefone.Valor.Contains(termo));
         }
 
         return await query
@@ -33,6 +37,7 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, List<C
                 NomeCompleto = c.NomeCompleto,
                 Cpf = c.Cpf.Valor,
                 Telefone = c.Telefone.Valor,
+                EnderecoCompleto = c.Endereco != null ? c.Endereco.Completo() : null,
                 DataCadastro = c.DataCadastro,
                 QuantidadeVeiculos = c.Veiculos.Count
             })

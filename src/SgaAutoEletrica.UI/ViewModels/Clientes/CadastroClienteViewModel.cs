@@ -2,7 +2,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Features.Clientes.Commands;
+using SgaAutoEletrica.Application.Features.Clientes.Queries;
 
 namespace SgaAutoEletrica.UI.ViewModels.Clientes;
 
@@ -11,30 +13,30 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
     private readonly IMediator _mediator;
     private readonly Guid? _clienteId;
 
-    public string NomeCompleto{get; set;}= string.Empty;
-    public string Cpf {get;set;}=string.Empty;
-    public string Telefone {get;set;}=string.Empty;
-    public string Logradouro {get;set;}=string.Empty;
-    public string Numero {get;set;}=string.Empty;
-    public string Complemento {get;set;}=string.Empty;
-    public string Bairro {get;set;}=string.Empty;
-    public string Cidade {get;set;}=string.Empty;
-    public string Estado {get;set;}=string.Empty;
-    public string Cep {get;set;}=string.Empty;
+    public string NomeCompleto { get; set; } = string.Empty;
+    public string Cpf { get; set; } = string.Empty;
+    public string Telefone { get; set; } = string.Empty;
+    public string Logradouro { get; set; } = string.Empty;
+    public string Numero { get; set; } = string.Empty;
+    public string Complemento { get; set; } = string.Empty;
+    public string Bairro { get; set; } = string.Empty;
+    public string Cidade { get; set; } = string.Empty;
+    public string Estado { get; set; } = string.Empty;
+    public string Cep { get; set; } = string.Empty;
 
-    private string _titulo = "NovoCliente";
+    private string _titulo = "Cadastro de Clientes";
     public string Titulo
     {
-        get=> _titulo;
-        private set {_titulo = value;OnPropertyChanged();}
+        get => _titulo;
+        private set { _titulo = value; OnPropertyChanged(); }
     }
 
     public CadastroClienteViewModel(IMediator mediator, Guid? clienteId = null)
     {
         _mediator = mediator;
-        _clienteId=clienteId;
+        _clienteId = clienteId;
 
-   if (clienteId.HasValue)
+        if (clienteId.HasValue)
         {
             Titulo = "Editar Cliente";
             CarregarDadosAsync(clienteId.Value);
@@ -42,15 +44,57 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
     }
 
     private async void CarregarDadosAsync(Guid clienteId)
+{
+    var cliente = await _mediator.Send(new ObterClienteParaEdicaoQuery { Id = clienteId });
+    if (cliente != null)
     {
-        var cliente = await _mediator.Send(new Application.Features.Clientes.Queries.ObterClientePorIdQuery { Id = clienteId });
-        if (cliente != null)
-        {
-            NomeCompleto = cliente.NomeCompleto;
-            Telefone = cliente.Telefone;
-            OnPropertyChanged(nameof(NomeCompleto));
-            OnPropertyChanged(nameof(Telefone));
-        }
+        NomeCompleto = cliente.NomeCompleto;
+        Cpf = cliente.Cpf;
+        Telefone = cliente.Telefone;
+        Logradouro = cliente.Logradouro ?? "";
+        Numero = cliente.Numero ?? "";
+        Complemento = cliente.Complemento ?? "";
+        Bairro = cliente.Bairro ?? "";
+        Cidade = cliente.Cidade ?? "";
+        Estado = cliente.Estado ?? "";
+        Cep = cliente.Cep ?? "";
+
+        OnPropertyChanged(nameof(NomeCompleto));
+        OnPropertyChanged(nameof(Cpf));
+        OnPropertyChanged(nameof(Telefone));
+        OnPropertyChanged(nameof(Logradouro));
+        OnPropertyChanged(nameof(Numero));
+        OnPropertyChanged(nameof(Complemento));
+        OnPropertyChanged(nameof(Bairro));
+        OnPropertyChanged(nameof(Cidade));
+        OnPropertyChanged(nameof(Estado));
+        OnPropertyChanged(nameof(Cep));
+    }
+}
+
+    public void Limpar()
+    {
+        NomeCompleto = string.Empty;
+        Cpf = string.Empty;
+        Telefone = string.Empty;
+        Logradouro = string.Empty;
+        Numero = string.Empty;
+        Complemento = string.Empty;
+        Bairro = string.Empty;
+        Cidade = string.Empty;
+        Estado = string.Empty;
+        Cep = string.Empty;
+
+        OnPropertyChanged(nameof(NomeCompleto));
+        OnPropertyChanged(nameof(Cpf));
+        OnPropertyChanged(nameof(Telefone));
+        OnPropertyChanged(nameof(Logradouro));
+        OnPropertyChanged(nameof(Numero));
+        OnPropertyChanged(nameof(Complemento));
+        OnPropertyChanged(nameof(Bairro));
+        OnPropertyChanged(nameof(Cidade));
+        OnPropertyChanged(nameof(Estado));
+        OnPropertyChanged(nameof(Cep));
     }
 
     public async Task<bool> SalvarAsync()
@@ -61,40 +105,51 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
             return false;
         }
 
-        if (_clienteId.HasValue)
+        try
         {
-            await _mediator.Send(new AtualizarClienteCommand
+            if (_clienteId.HasValue)
             {
-                Id = _clienteId.Value,
-                NomeCompleto = NomeCompleto,
-                Telefone = Telefone,
-                Logradouro = Logradouro,
-                Numero = Numero,
-                Complemento = Complemento,
-                Bairro = Bairro,
-                Cidade = Cidade,
-                Estado = Estado,
-                Cep = Cep
-            });
-        }
-        else
-        {
-            await _mediator.Send(new CriarClienteCommand
+                await _mediator.Send(new AtualizarClienteCommand
+                {
+                    Id = _clienteId.Value,
+                    NomeCompleto = NomeCompleto,
+                    Telefone = Telefone,
+                    Logradouro = Logradouro,
+                    Numero = Numero,
+                    Complemento = Complemento,
+                    Bairro = Bairro,
+                    Cidade = Cidade,
+                    Estado = Estado,
+                    Cep = Cep
+                });
+            }
+            else
             {
-                NomeCompleto = NomeCompleto,
-                Cpf = Cpf,
-                Telefone = Telefone,
-                Logradouro = Logradouro,
-                Numero = Numero,
-                Complemento = Complemento,
-                Bairro = Bairro,
-                Cidade = Cidade,
-                Estado = Estado,
-                Cep = Cep
-            });
-        }
+                await _mediator.Send(new CriarClienteCommand
+                {
+                    NomeCompleto = NomeCompleto,
+                    Cpf = Cpf,
+                    Telefone = Telefone,
+                    Logradouro = Logradouro,
+                    Numero = Numero,
+                    Complemento = Complemento,
+                    Bairro = Bairro,
+                    Cidade = Cidade,
+                    Estado = Estado,
+                    Cep = Cep
+                });
+            }
 
-        return true;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            var inner = ex;
+            while (inner.InnerException != null)
+                inner = inner.InnerException;
+            MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
