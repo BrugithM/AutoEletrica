@@ -8,10 +8,10 @@ public partial class CriacaoOSWindow : Window
 {
     private readonly CriacaoOSViewModel _viewModel;
 
-    public CriacaoOSWindow(IMediator mediator)
+    public CriacaoOSWindow(IMediator mediator, Guid? clienteIdPreSelecionado = null, Guid? veiculoIdPreSelecionado = null)
     {
         InitializeComponent();
-        _viewModel = new CriacaoOSViewModel(mediator);
+        _viewModel = new CriacaoOSViewModel(mediator, clienteIdPreSelecionado, veiculoIdPreSelecionado);
         DataContext = _viewModel;
         Loaded += CriacaoOSWindow_Loaded;
     }

@@ -25,8 +25,8 @@ public class ObterClienteComVeiculosHandler : IRequestHandler<ObterClienteComVei
             {
                 Id = c.Id,
                 NomeCompleto = c.NomeCompleto,
-                Cpf = c.Cpf.Valor,
-                Telefone = c.Telefone.Valor,
+                Cpf = c.Cpf.Formatado(),
+                Telefone = c.Telefone.Formatado(),
                 EnderecoCompleto = c.Endereco != null ? c.Endereco.Completo() : null,
                 Veiculos = c.Veiculos.Select(v => new VeiculoResumoDTO
                 {

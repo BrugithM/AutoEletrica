@@ -4,6 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using SgaAutoEletrica.Application.Common.Interfaces;
+using SgaAutoEletrica.Application.Features.OrdensServico.Queries;
 using SgaAutoEletrica.Application.Features.Veiculos.Commands;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.Queries;
@@ -16,12 +19,28 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
 
     public ObservableCollection<VeiculoDTO> Veiculos { get; } = new();
 
+    public bool EhAdministrador => App.ServiceProvider
+        .GetRequiredService<ISessaoUsuario>().EhAdministrador;
+
     private VeiculoDTO? _veiculoSelecionado;
     public VeiculoDTO? VeiculoSelecionado
     {
         get => _veiculoSelecionado;
-        set { _veiculoSelecionado = value; OnPropertyChanged(); }
+        set
+        {
+            _veiculoSelecionado = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TemVeiculoSelecionado));
+            OnPropertyChanged(nameof(ClienteNome));
+            OnPropertyChanged(nameof(ClienteCpf));
+            OnPropertyChanged(nameof(ClienteTelefone));
+        }
     }
+
+    public bool TemVeiculoSelecionado => VeiculoSelecionado != null;
+    public string ClienteNome => VeiculoSelecionado?.NomeCliente ?? "";
+    public string ClienteCpf => VeiculoSelecionado?.CpfCliente ?? "";
+    public string ClienteTelefone => VeiculoSelecionado?.TelefoneCliente ?? "";
 
     private string _termoBusca = string.Empty;
     public string TermoBusca
@@ -35,20 +54,22 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     public ICommand NovoVeiculoCommand { get; }
     public ICommand EditarVeiculoCommand { get; }
     public ICommand ExcluirVeiculoCommand { get; }
+    public ICommand AtualizarCommand { get; }
+    public ICommand NFsVinculadasCommand { get; }
+    public ICommand CriarOSCommand { get; }
 
     public ListaVeiculosViewModel(IMediator mediator)
     {
         _mediator = mediator;
 
         BuscarCommand = new RelayCommand(async _ => await BuscarAsync());
-        LimparCommand = new RelayCommand(async _ => 
-        { 
-            TermoBusca = string.Empty; 
-            await BuscarAsync(); 
-        });
+        LimparCommand = new RelayCommand(async _ => { TermoBusca = ""; await BuscarAsync(); });
         NovoVeiculoCommand = new RelayCommand(async _ => await NovoVeiculoAsync());
-        EditarVeiculoCommand = new RelayCommand(async _ => await EditarVeiculoAsync(), _ => VeiculoSelecionado != null);
-        ExcluirVeiculoCommand = new RelayCommand(async _ => await ExcluirVeiculoAsync(), _ => VeiculoSelecionado != null);
+        EditarVeiculoCommand = new RelayCommand(async _ => await EditarVeiculoAsync(), _ => TemVeiculoSelecionado);
+        ExcluirVeiculoCommand = new RelayCommand(async _ => await ExcluirVeiculoAsync(), _ => TemVeiculoSelecionado && EhAdministrador);
+        AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
+        NFsVinculadasCommand = new RelayCommand(async _ => await NFsVinculadasAsync(), _ => TemVeiculoSelecionado);
+        CriarOSCommand = new RelayCommand(async _ => await CriarOSAsync(), _ => TemVeiculoSelecionado);
     }
 
     public async Task BuscarAsync()
@@ -56,19 +77,20 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         try
         {
             Veiculos.Clear();
+            VeiculoSelecionado = null;
             var resultado = await _mediator.Send(new BuscarVeiculosQuery { TermoBusca = TermoBusca });
             foreach (var veiculo in resultado)
                 Veiculos.Add(veiculo);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erro na busca: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
     private async Task NovoVeiculoAsync()
     {
-        var dialog = new Views.Veiculos.CadastroVeiculoWindow(_mediator);
+        var dialog = new Views.Veiculos.CadastroVeiculoWindow(_mediator, null, VeiculoSelecionado?.ClienteId);
         dialog.ShowDialog();
         await BuscarAsync();
     }
@@ -76,8 +98,7 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     private async Task EditarVeiculoAsync()
     {
         if (VeiculoSelecionado == null) return;
-
-        var dialog = new Views.Veiculos.CadastroVeiculoWindow(_mediator, VeiculoSelecionado.Id);
+        var dialog = new Views.Veiculos.CadastroVeiculoWindow(_mediator, VeiculoSelecionado.Id, VeiculoSelecionado.ClienteId);
         dialog.ShowDialog();
         await BuscarAsync();
     }
@@ -94,16 +115,26 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
 
         if (confirmacao == MessageBoxResult.Yes)
         {
-            try
-            {
-                await _mediator.Send(new ExcluirVeiculoCommand { Id = VeiculoSelecionado.Id });
-                await BuscarAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao excluir: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            await _mediator.Send(new ExcluirVeiculoCommand { Id = VeiculoSelecionado.Id });
+            await BuscarAsync();
         }
+    }
+
+    private async Task NFsVinculadasAsync()
+    {
+        if (VeiculoSelecionado == null) return;
+        MessageBox.Show($"Lista de NFs do veículo {VeiculoSelecionado.Placa} - em breve", "Em breve");
+    }
+
+    private async Task CriarOSAsync()
+    {
+        if (VeiculoSelecionado == null) return;
+        var dialog = new Views.OrdensServico.CriacaoOSWindow(
+            _mediator, 
+            VeiculoSelecionado.ClienteId, 
+            VeiculoSelecionado.Id);
+        dialog.ShowDialog();
+        await BuscarAsync();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

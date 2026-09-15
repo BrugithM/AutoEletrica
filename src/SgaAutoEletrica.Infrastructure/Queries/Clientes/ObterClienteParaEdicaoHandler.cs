@@ -24,8 +24,8 @@ public class ObterClienteParaEdicaoHandler : IRequestHandler<ObterClienteParaEdi
             {
                 Id = c.Id,
                 NomeCompleto = c.NomeCompleto,
-                Cpf = c.Cpf.Valor,
-                Telefone = c.Telefone.Valor,
+                Cpf = c.Cpf.Formatado(),
+                Telefone = c.Telefone.Formatado(),
                 Logradouro = c.Endereco != null ? c.Endereco.Logradouro : null,
                 Numero = c.Endereco != null ? c.Endereco.Numero : null,
                 Complemento = c.Endereco != null ? c.Endereco.Complemento : null,

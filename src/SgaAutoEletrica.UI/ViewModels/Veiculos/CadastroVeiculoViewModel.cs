@@ -16,6 +16,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     private readonly IMediator _mediator;
     private readonly Guid? _veiculoId;
     private readonly Guid? _clienteIdPreSelecionado;
+    private Guid? _clienteIdDoVeiculo;
 
     public string Placa { get; set; } = string.Empty;
     public string Modelo { get; set; } = string.Empty;
@@ -25,7 +26,19 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     public string Motor { get; set; } = string.Empty;
     public string TipoMotor { get; set; } = string.Empty;
     public string Cor { get; set; } = string.Empty;
-    public string Observacao { get; set; } = string.Empty;
+    private string _observacao = string.Empty;
+    public string Observacao
+    {
+        get => _observacao;
+        set
+        {
+            _observacao = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ObservacaoLength));
+        }
+    }
+
+    public int ObservacaoLength => Observacao.Length;
 
     public ObservableCollection<ClienteResumoDTO> Clientes { get; } = new();
 
@@ -48,7 +61,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         _mediator = mediator;
         _veiculoId = veiculoId;
         _clienteIdPreSelecionado = clienteIdPreSelecionado;
-        
+
         if (veiculoId.HasValue)
         {
             Titulo = "Editar Veículo";
@@ -70,10 +83,11 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             TipoMotor = veiculo.TipoMotor ?? "";
             Cor = veiculo.Cor ?? "";
             Observacao = veiculo.Observacao ?? "";
+            _clienteIdDoVeiculo = veiculo.ClienteId;
 
             await CarregarClientesAsync();
-            ClienteSelecionado = Clientes.FirstOrDefault(c=> c.Id == veiculo.ClienteId);
-            
+            ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == veiculo.ClienteId);
+
             OnPropertyChanged(nameof(Placa));
             OnPropertyChanged(nameof(Modelo));
             OnPropertyChanged(nameof(Marca));
@@ -100,9 +114,10 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             Clientes.Add(cliente);
         }
 
-        if (_clienteIdPreSelecionado.HasValue)
+        var idPreSelecionar = _clienteIdDoVeiculo ?? _clienteIdPreSelecionado;
+        if (idPreSelecionar.HasValue)
         {
-            ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == _clienteIdPreSelecionado.Value);
+            ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == idPreSelecionar.Value);
         }
     }
 
@@ -131,6 +146,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             await _mediator.Send(new AtualizarVeiculoCommand
             {
                 Id = _veiculoId.Value,
+                Placa = Placa,
                 Modelo = Modelo,
                 Marca = Marca,
                 Ano = Ano,
@@ -161,6 +177,31 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         return true;
     }
 
+    public void Limpar()
+    {
+        Placa = string.Empty;
+        Modelo = string.Empty;
+        Marca = string.Empty;
+        Ano = DateTime.Now.Year;
+        Versao = string.Empty;
+        Motor = string.Empty;
+        TipoMotor = string.Empty;
+        Cor = string.Empty;
+        Observacao = string.Empty;
+        ClienteSelecionado = null;
+
+        OnPropertyChanged(nameof(Placa));
+        OnPropertyChanged(nameof(Modelo));
+        OnPropertyChanged(nameof(Marca));
+        OnPropertyChanged(nameof(Ano));
+        OnPropertyChanged(nameof(Versao));
+        OnPropertyChanged(nameof(Motor));
+        OnPropertyChanged(nameof(TipoMotor));
+        OnPropertyChanged(nameof(Cor));
+        OnPropertyChanged(nameof(Observacao));
+        OnPropertyChanged(nameof(ObservacaoLength));
+        OnPropertyChanged(nameof(ClienteSelecionado));
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

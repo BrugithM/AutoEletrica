@@ -25,7 +25,6 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
             var termo = request.TermoBusca.Trim().ToLower();
-
             query = query.Where(v =>
                 v.Placa.Valor.ToLower().Contains(termo) ||
                 v.Modelo.ToLower().Contains(termo) ||
@@ -49,7 +48,9 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
                 Cor = v.Cor,
                 Observacao = v.Observacao,
                 ClienteId = v.ClienteId,
-                NomeCliente = v.Cliente.NomeCompleto
+                NomeCliente = v.Cliente.NomeCompleto,
+                CpfCliente = v.Cliente.Cpf.Formatado(),
+                TelefoneCliente = v.Cliente.Telefone.Formatado()
             })
             .ToListAsync(cancellationToken);
     }
