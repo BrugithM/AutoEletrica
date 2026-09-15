@@ -29,6 +29,7 @@ public class AtualizarVeiculoHandler : IRequestHandler<AtualizarVeiculoCommand>
         }
 
         veiculo.AtualizarDados(
+            request.Placa,
             request.Modelo,
             request.Marca,
             request.Ano,

@@ -18,7 +18,6 @@ public partial class CadastroClienteWindow : Window
 
     private async void CadastroClienteWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        // Nada — o carregamento já acontece no construtor do ViewModel
     }
 
     private async void BtnSalvar_Click(object sender, RoutedEventArgs e)
@@ -32,4 +31,42 @@ public partial class CadastroClienteWindow : Window
     {
         _viewModel.Limpar();
     }
+
+    private void TxtCpf_LostFocus(object sender, RoutedEventArgs e)
+{
+    if (string.IsNullOrWhiteSpace(_viewModel.Cpf)) return;
+
+    try
+    {
+        var cpf = new SgaAutoEletrica.Domain.ValueObjects.Cpf(_viewModel.Cpf);
+        _viewModel.Cpf = cpf.Formatado();
+        OnPropertyChanged(nameof(_viewModel.Cpf));
+    }
+    catch
+    {
+    }
+}
+
+private void TxtTelefone_LostFocus(object sender, RoutedEventArgs e)
+{
+    if (string.IsNullOrWhiteSpace(_viewModel.Telefone)) return;
+
+    try
+    {
+        var tel = new SgaAutoEletrica.Domain.ValueObjects.Telefone(_viewModel.Telefone);
+        _viewModel.Telefone = tel.Formatado();
+        OnPropertyChanged(nameof(_viewModel.Telefone));
+    }
+    catch
+    {
+    }
+}
+
+private void OnPropertyChanged(string propertyName)
+{
+    var binding = TxtCpf.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty);
+    binding?.UpdateTarget();
+    var binding2 = TxtTelefone.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty);
+    binding2?.UpdateTarget();
+}
 }

@@ -257,6 +257,17 @@
                                                                    MaxWidth="80"/>
                                                 </StackPanel>
                                         </Button>
+                                        <Button Click="BtnBuscarPlaca_Click"
+                                                        Style="{StaticResource AtalhoButtonStyle}">
+                                                <StackPanel>
+                                                        <TextBlock Text="🔍"
+                                                                        FontSize="24"
+                                                                        HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="Buscar Placa"
+                                                                        FontSize="11"
+                                                                        HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                        </Button>
                                 </StackPanel>
                         </ScrollViewer>
                 </Border>
@@ -270,7 +281,7 @@
 
                 <!-- Rodapé -->
                 <Border Grid.Row="3"
-                                Background="#2C3E50">
+                        Background="#2C3E50">
                         <Grid Margin="15,0">
                                 <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -279,23 +290,23 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Column="0"
-                                                x:Name="TxtUsuario"
-                                                Foreground="White"
+                                           x:Name="TxtUsuario"
+                                           Foreground="White"
                                            VerticalAlignment="Center"
-                                                FontSize="11"/>
+                                           FontSize="11"/>
                                 <TextBlock Grid.Column="1"
-                                                x:Name="TxtBanco"
-                                                Text="Banco: Conectado"
+                                           x:Name="TxtBanco"
+                                           Text="Banco: Conectado"
                                            Foreground="#2ECC71"
-                                                VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                                FontSize="11"/>
-                                <TextBlock Grid.Column="2"
-                                                Text="Versão: 1.0.0"
-                                                Foreground="White"
                                            VerticalAlignment="Center"
-                                                HorizontalAlignment="Right"
-                                                FontSize="11"/>
+                                           HorizontalAlignment="Center"
+                                           FontSize="11"/>
+                                <TextBlock Grid.Column="2"
+                                           Text="Versão: 1.0.0"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"
+                                           FontSize="11"/>
                         </Grid>
                 </Border>
         </Grid>

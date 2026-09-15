@@ -31,7 +31,7 @@ public static class DataSeeder
         context.Veiculos.Add(veiculo1);
 
         var veiculo2 = new Veiculo("DEF4G56", cliente2.Id, "Fiesta", "Ford", 2019);
-        veiculo2.AtualizarDados("Fiesta", "Ford", 2019, "SE", "1.6", TipoMotor.Flex, "Preto");
+        veiculo2.AtualizarDados("DEF4G56","Fiesta", "Ford", 2019, "SE", "1.6", TipoMotor.Flex, "Preto");
         context.Veiculos.Add(veiculo2);
 
         await context.SaveChangesAsync();

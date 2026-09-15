@@ -19,6 +19,8 @@ namespace SgaAutoEletrica.UI.ViewModels.OrdensServico;
 public class CriacaoOSViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
+    private readonly Guid? _clienteIdPreSelecionado;
+    private readonly Guid? _veiculoIdPreSelecionado;
 
     public ObservableCollection<ClienteResumoDTO> Clientes { get; } = new();
     public ObservableCollection<VeiculoDTO> Veiculos { get; } = new();
@@ -91,9 +93,11 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
     public ICommand RemoverPecaCommand { get; }
     public ICommand RemoverServicoCommand { get; }
 
-    public CriacaoOSViewModel(IMediator mediator)
+    public CriacaoOSViewModel(IMediator mediator, Guid? clienteIdPreSelecionado = null, Guid? veiculoIdPreSelecionado = null)
     {
         _mediator = mediator;
+        _clienteIdPreSelecionado = clienteIdPreSelecionado;
+        _veiculoIdPreSelecionado = veiculoIdPreSelecionado;
 
         RemoverPecaCommand = new RelayCommand(
             param => RemoverPeca((ItemPecaTemporario)param!),
@@ -117,6 +121,11 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         var servicos = await _mediator.Send(new ListarServicosQuery());
         foreach (var s in servicos)
             ServicosDisponiveis.Add(s);
+
+        if (_clienteIdPreSelecionado.HasValue)
+        {
+            ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == _clienteIdPreSelecionado.Value);
+        }
     }
 
     private async Task CarregarVeiculosAsync()
@@ -127,6 +136,11 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         var veiculos = await _mediator.Send(new ListarVeiculosPorClienteQuery { ClienteId = ClienteSelecionado.Id });
         foreach (var v in veiculos)
             Veiculos.Add(v);
+
+        if (_veiculoIdPreSelecionado.HasValue)
+        {
+            VeiculoSelecionado = Veiculos.FirstOrDefault(v => v.Id == _veiculoIdPreSelecionado.Value);
+        }
     }
 
     public void AdicionarPeca()

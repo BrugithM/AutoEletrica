@@ -94,6 +94,7 @@ public class Veiculo
 
     // Atualiza os dados do veículo manualmente.
     public void AtualizarDados(
+        string placa,
         string modelo,
         string marca,
         int ano,
@@ -103,6 +104,8 @@ public class Veiculo
         string? cor = null,
         string? observacao = null)
     {
+        if (string.IsNullOrWhiteSpace(placa))
+            throw new ArgumentException("Placa é obrigatória.", nameof(placa));
         if (string.IsNullOrWhiteSpace(modelo))
             throw new ArgumentException("Modelo é obrigatório.", nameof(modelo));
         if (string.IsNullOrWhiteSpace(marca))
@@ -110,6 +113,7 @@ public class Veiculo
         if (ano < 1950 || ano > DateTime.Now.Year + 1)
             throw new ArgumentException($"Ano inválido: {ano}. Deve estar entre 1950 e {DateTime.Now.Year + 1}.", nameof(ano));
 
+        Placa = new ValueObjects.Placa(placa);
         Modelo = modelo;
         Marca = marca;
         Ano = ano;

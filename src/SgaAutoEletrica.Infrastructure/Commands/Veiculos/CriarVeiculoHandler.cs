@@ -39,6 +39,7 @@ public class CriarVeiculoHandler : IRequestHandler<CriarVeiculoCommand, Guid>
                 }
 
                 veiculo.AtualizarDados(
+                    request.Placa,
                     request.Modelo,
                     request.Marca,
                     request.Ano.Value,
