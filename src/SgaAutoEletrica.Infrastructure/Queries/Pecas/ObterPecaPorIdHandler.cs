@@ -18,9 +18,9 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
     public async Task<PecaDTO?> Handle(ObterPecaPorIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.Pecas
-            .AsNoTracking()
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
+            .AsNoTracking()
             .Where(p => p.Id == request.Id)
             .Select(p => new PecaDTO
             {
@@ -31,8 +31,14 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
                 Nome = p.Nome,
                 Descricao = p.Descricao,
                 Marca = p.Marca,
+                CategoriaId = p.CategoriaId,
                 CategoriaNome = p.CategoriaPeca != null ? p.CategoriaPeca.Nome : null,
+                FornecedorId = p.FornecedorId,
                 FornecedorNome = p.Fornecedor != null ? p.Fornecedor.NomeEmpresa : null,
+                FornecedorCnpj = p.Fornecedor != null ? p.Fornecedor.Cnpj.Formatado() : null,
+                FornecedorTelefone = p.Fornecedor != null && p.Fornecedor.Telefone != null
+                    ? p.Fornecedor.Telefone.Formatado() : null,
+                FornecedorContato = p.Fornecedor != null ? p.Fornecedor.Contato : null,
                 ValorCusto = p.ValorCusto,
                 ValorVenda = p.ValorVenda,
                 Imposto = p.Imposto,
@@ -41,7 +47,7 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
                 Ativo = p.Ativo,
                 MargemLucro = p.CalcularMargemLucroPercentual(),
                 PrecoComImposto = p.CalcularPrecoComImposto(),
-                EstoqueBaixo = p.EstaComEstoqueBaixo()
+                EstoqueBaixo = p.Estoque <= p.EstoqueMinimo
             })
             .FirstOrDefaultAsync(cancellationToken);
     }

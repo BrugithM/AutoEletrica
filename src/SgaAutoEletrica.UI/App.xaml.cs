@@ -42,6 +42,14 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
 
+        var culturaBr = new System.Globalization.CultureInfo("pt-BR");
+        System.Threading.Thread.CurrentThread.CurrentCulture = culturaBr;
+        System.Threading.Thread.CurrentThread.CurrentUICulture = culturaBr;
+
+        System.Windows.FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(System.Windows.FrameworkElement),
+            new System.Windows.FrameworkPropertyMetadata(
+                System.Windows.Markup.XmlLanguage.GetLanguage(culturaBr.IetfLanguageTag)));
         try
         {
             var services = new ServiceCollection();

@@ -18,6 +18,7 @@ public partial class ListaPecasView : UserControl
 
     private async void ListaPecasView_Loaded(object sender, RoutedEventArgs e)
     {
+        await _viewModel.CarregarCategoriasAsync();
         await _viewModel.BuscarAsync();
     }
 }

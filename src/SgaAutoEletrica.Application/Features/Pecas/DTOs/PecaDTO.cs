@@ -10,7 +10,15 @@ public class PecaDTO
     public string Descricao { get; set; } = string.Empty;
     public string Marca { get; set; } = string.Empty;
     public string? CategoriaNome { get; set; }
+    public Guid? CategoriaId { get; set; }
+    
+    // Fornecedor
+    public Guid? FornecedorId { get; set; }
     public string? FornecedorNome { get; set; }
+    public string? FornecedorCnpj { get; set; }
+    public string? FornecedorTelefone { get; set; }
+    public string? FornecedorContato { get; set; }
+    
     public decimal ValorCusto { get; set; }
     public decimal ValorVenda { get; set; }
     public decimal Imposto { get; set; }

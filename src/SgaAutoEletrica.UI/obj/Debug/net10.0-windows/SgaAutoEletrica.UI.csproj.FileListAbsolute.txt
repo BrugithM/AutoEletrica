@@ -146,3 +146,5 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Vie
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\LoginWindow.g.cs
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\ConfiguracaoEmpresaView.baml
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\Configuracoes\ConfiguracaoEmpresaView.g.cs
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\CategoriasPeca\CadastroCategoriaWindow.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\CategoriasPeca\CadastroCategoriaWindow.g.cs

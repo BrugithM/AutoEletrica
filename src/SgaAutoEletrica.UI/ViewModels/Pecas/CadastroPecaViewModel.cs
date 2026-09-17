@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using MediatR;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.DTOs;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.Queries;
@@ -31,8 +32,8 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
 
     public ObservableCollection<CategoriaPecaDTO> Categorias { get; } = new();
     public ObservableCollection<FornecedorDTO> Fornecedores { get; } = new();
-
-    // IDs selecionados (usados com SelectedValue)
+    private Guid? _categoriaIdParaSelecionar;
+    private Guid? _fornecedorIdParaSelecionar;
     private CategoriaPecaDTO? _categoriaSelecionada;
     public CategoriaPecaDTO? CategoriaSelecionada
     {
@@ -47,17 +48,20 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         set { _fornecedorSelecionado = value; OnPropertyChanged(); }
     }
 
-    private string _titulo = "Nova Peça";
+    private string _titulo = "Cadastro de Peças";
     public string Titulo
     {
         get => _titulo;
         private set { _titulo = value; OnPropertyChanged(); }
     }
 
+    public ICommand NovaCategoriaCommand { get; }
+
     public CadastroPecaViewModel(IMediator mediator, Guid? pecaId = null)
     {
         _mediator = mediator;
         _pecaId = pecaId;
+        NovaCategoriaCommand = new RelayCommand(async _ => await NovaCategoriaAsync());
 
         if (pecaId.HasValue)
         {
@@ -82,6 +86,9 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             Imposto = peca.Imposto;
             EstoqueInicial = peca.Estoque;
             EstoqueMinimo = peca.EstoqueMinimo;
+
+            _categoriaIdParaSelecionar = peca.CategoriaId;
+            _fornecedorIdParaSelecionar = peca.FornecedorId;
 
             OnPropertyChanged(nameof(IdPeca));
             OnPropertyChanged(nameof(CodigoPeca));
@@ -108,6 +115,30 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         var fornecedores = await _mediator.Send(new ListarFornecedoresQuery());
         foreach (var forn in fornecedores)
             Fornecedores.Add(forn);
+
+        if(_categoriaIdParaSelecionar.HasValue)
+            CategoriaSelecionada = Categorias.FirstOrDefault(c => c.Id == _categoriaIdParaSelecionar.Value);
+
+        if(_fornecedorIdParaSelecionar.HasValue)
+            FornecedorSelecionado = Fornecedores.FirstOrDefault(f => f.Id == _fornecedorIdParaSelecionar.Value);
+    }
+
+    private async Task NovaCategoriaAsync()
+    {
+        var dialog = new Views.CategoriasPeca.CadastroCategoriaWindow(_mediator);
+        if (dialog.ShowDialog() == true)
+        {
+            var nomeAntes = Categorias.Select(c => c.Nome).ToHashSet();
+
+            Categorias.Clear();
+            var categorias = await _mediator.Send(new ListarCategoriasPecaQuery());
+            foreach (var cat in categorias)
+                Categorias.Add(cat);
+
+            var novaCategoria = Categorias.FirstOrDefault(c => !nomeAntes.Contains(c.Nome));
+            if (novaCategoria != null)
+                CategoriaSelecionada = novaCategoria;
+        }
     }
 
     public async Task<bool> SalvarAsync()
@@ -144,6 +175,7 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
                     Descricao = Descricao,
                     Marca = Marca,
                     ValorCusto = ValorCusto,
+                    ValorVenda = ValorVenda,
                     Imposto = Imposto,
                     CodigoPeca = CodigoPeca,
                     CategoriaId = CategoriaSelecionada?.Id,
@@ -177,14 +209,40 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             var inner = ex;
             while (inner.InnerException != null)
                 inner = inner.InnerException;
-
-            MessageBox.Show(
-                $"Erro ao salvar:\n\n{inner.Message}",
-                "Erro",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
+    }
+
+    public void Limpar()
+    {
+        IdPeca = string.Empty;
+        CodigoPeca = string.Empty;
+        CodigoBarras = string.Empty;
+        Nome = string.Empty;
+        Descricao = string.Empty;
+        Marca = string.Empty;
+        ValorCusto = 0;
+        ValorVenda = 0;
+        Imposto = 0;
+        EstoqueInicial = 0;
+        EstoqueMinimo = 5;
+        CategoriaSelecionada = null;
+        FornecedorSelecionado = null;
+
+        OnPropertyChanged(nameof(IdPeca));
+        OnPropertyChanged(nameof(CodigoPeca));
+        OnPropertyChanged(nameof(CodigoBarras));
+        OnPropertyChanged(nameof(Nome));
+        OnPropertyChanged(nameof(Descricao));
+        OnPropertyChanged(nameof(Marca));
+        OnPropertyChanged(nameof(ValorCusto));
+        OnPropertyChanged(nameof(ValorVenda));
+        OnPropertyChanged(nameof(Imposto));
+        OnPropertyChanged(nameof(EstoqueInicial));
+        OnPropertyChanged(nameof(EstoqueMinimo));
+        OnPropertyChanged(nameof(CategoriaSelecionada));
+        OnPropertyChanged(nameof(FornecedorSelecionado));
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

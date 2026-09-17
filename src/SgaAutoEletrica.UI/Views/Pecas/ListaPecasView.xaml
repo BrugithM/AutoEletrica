@@ -1,68 +1,129 @@
 <UserControl x:Class="SgaAutoEletrica.UI.Views.Pecas.ListaPecasView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="15">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Peças" FontSize="24" FontWeight="Bold" Margin="0,0,0,15"/>
+        <!-- Barra de Ferramentas -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="➕ Novo" Command="{Binding NovaPecaCommand}"
+                    Width="90" Height="32" Margin="0,0,5,0" Background="#27AE60" Foreground="White"/>
+            <Button Content="✏️ Editar" Command="{Binding EditarPecaCommand}"
+                    Width="90" Height="32" Margin="0,0,5,0" Background="#3498DB" Foreground="White"/>
+            <Button Content="🗑️ Excluir" Command="{Binding ExcluirPecaCommand}"
+                    Width="90" Height="32" Margin="0,0,5,0" Background="#E74C3C" Foreground="White"/>
+            <Button Content="📦 Mov. Estoque" Command="{Binding MovimentarEstoqueCommand}"
+                    Width="130" Height="32" Margin="0,0,5,0" Background="#9B59B6" Foreground="White"/>
+            <Button Content="🔄 Atualizar" Command="{Binding AtualizarCommand}"
+                    Width="100" Height="32" Margin="0,0,20,0"/>
+        </StackPanel>
 
-        <Grid Grid.Row="1" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <!-- Filtros -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Pesquisar:" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding TermoBusca, UpdateSourceTrigger=PropertyChanged}"
+                     Width="220" Height="30" VerticalContentAlignment="Center" Padding="5"
+                     Margin="0,0,5,0"/>
+            <Button Content="🔍" Command="{Binding BuscarCommand}" Width="40" Height="30" Margin="0,0,20,0"/>
 
-            <TextBox Grid.Column="0" 
-                     Text="{Binding TermoBusca, UpdateSourceTrigger=PropertyChanged}"
-                     Height="30" FontSize="14" Padding="5" Margin="0,0,10,0"
-                     ToolTip="Busca por nome, ID da peça ou código"/>
+            <TextBlock Text="Categoria:" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="SemiBold"/>
+            <ComboBox ItemsSource="{Binding Categorias}"
+                      SelectedItem="{Binding CategoriaFiltro}"
+                      DisplayMemberPath="Nome"
+                      Width="180" Height="30" Margin="0,0,20,0"
+                      IsEditable="False"/>
 
-            <Button Grid.Column="1" Content="Buscar" Command="{Binding BuscarCommand}"
-                    Width="80" Height="30" Margin="0,0,10,0"/>
+            <CheckBox Content="Apenas estoque baixo" 
+                      IsChecked="{Binding ApenasEstoqueBaixo}"
+                      VerticalAlignment="Center" FontWeight="SemiBold"/>
 
-            <Button Grid.Column="2" Content="Limpar" Command="{Binding LimparCommand}"
-                    Width="80" Height="30" Margin="0,0,10,0"/>
+        </StackPanel>
 
-            <Button Grid.Column="3" Content="+ Nova Peça" Command="{Binding NovaPecaCommand}"
-                    Width="120" Height="30" Background="#27AE60" Foreground="White"/>
-        </Grid>
+        <TextBlock Grid.Row="2" Text="Peças Cadastradas:" FontWeight="Bold" FontSize="14" 
+                   Margin="0,0,0,5" VerticalAlignment="Top"/>
 
-        <DataGrid Grid.Row="2" 
+        <!-- Grid de Peças -->
+        <DataGrid Grid.Row="2"
                   ItemsSource="{Binding Pecas}"
                   SelectedItem="{Binding PecaSelecionada}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  CanUserAddRows="False"
+                  RowStyle="{StaticResource EstoqueBaixoRowStyle}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID Peça" Binding="{Binding IdPeca}" Width="90"/>
+                <DataGridTextColumn Header="ID Peça" Binding="{Binding IdPeca}" Width="80"/>
                 <DataGridTextColumn Header="Código" Binding="{Binding CodigoPeca}" Width="80"/>
+                <DataGridTextColumn Header="Cód. Barras" Binding="{Binding CodigoBarras}" Width="120"/>
                 <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="200"/>
-                <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="250"/>
+                <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="200"/>
                 <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" Width="100"/>
                 <DataGridTextColumn Header="Categoria" Binding="{Binding CategoriaNome}" Width="100"/>
-                <DataGridTextColumn Header="Fornecedor" Binding="{Binding FornecedorNome}" Width="150"/>
+                <DataGridTextColumn Header="Est." Binding="{Binding Estoque}" Width="50"/>
                 <DataGridTextColumn Header="Custo" Binding="{Binding ValorCusto, StringFormat=C2}" Width="80"/>
                 <DataGridTextColumn Header="Venda" Binding="{Binding ValorVenda, StringFormat=C2}" Width="80"/>
-                <DataGridTextColumn Header="Imposto %" Binding="{Binding Imposto, StringFormat=F1}" Width="80"/>
-                <DataGridTextColumn Header="Estoque" Binding="{Binding Estoque}" Width="70"/>
-                <DataGridTextColumn Header="Mín." Binding="{Binding EstoqueMinimo}" Width="50"/>
+                <DataGridTextColumn Header="Margem" Binding="{Binding MargemLucro, StringFormat={}{0:F1}%}" Width="70"/>
+                <DataGridTextColumn Header="Imposto" Binding="{Binding Imposto, StringFormat={}{0:F1}%}" Width="70"/>
+                <DataGridTextColumn Header="Fornecedor" Binding="{Binding FornecedorNome}" Width="150"/>
+                <DataGridTextColumn Header="Est. Mín" Binding="{Binding EstoqueMinimo}" Width="60"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="Editar" Command="{Binding EditarPecaCommand}" 
-                    Width="80" Height="30" Margin="0,0,10,0"/>
-            <Button Content="Mov. Estoque" Command="{Binding MovimentarEstoqueCommand}" 
-                    Width="100" Height="30" Margin="0,0,10,0"/>
-            <Button Content="Excluir" Command="{Binding ExcluirPecaCommand}" 
-                    Width="80" Height="30" Background="#C0392B" Foreground="White"/>
-        </StackPanel>
+        <!-- Painel do Fornecedor (só se peça selecionada) -->
+        <Border Grid.Row="3" Background="#F5F5F5" Padding="10" Margin="0,10,0,0"
+                Visibility="{Binding TemPecaSelecionada, Converter={StaticResource BoolParaVisibilidade}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Fornecedor da Peça:" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock>
+                        <Run Text="Nome: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding FornecedorNomeExibir, Mode=OneWay}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="CNPJ: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding FornecedorCnpjExibir, Mode=OneWay}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Telefone: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding FornecedorTelefoneExibir, Mode=OneWay}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Contato: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding FornecedorContatoExibir, Mode=OneWay}"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <Button Grid.Column="1" Content="🔗 Abrir Fornecedor" 
+                        Command="{Binding AbrirFornecedorCommand}"
+                        Width="160" Height="35" VerticalAlignment="Center"
+                        Background="#3498DB" Foreground="White" FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+
+        <!-- Rodapé de Totais -->
+        <Border Grid.Row="5" Background="#DCE7F5" Padding="10,5" Margin="0,10,0,0">
+            <Grid>
+                <TextBlock Foreground="Black">
+                    <Run Text="Total Itens Cadastrados: " FontWeight="SemiBold"/>
+                    <Run Text="{Binding TotalItens, Mode=OneWay}"/>
+                </TextBlock>
+                <TextBlock Foreground="#E74C3C" HorizontalAlignment="Right" FontWeight="Bold">
+                    <Run Text="Itens Críticos (Reposição): "/>
+                    <Run Text="{Binding TotalCriticos, Mode=OneWay}"/>
+                </TextBlock>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

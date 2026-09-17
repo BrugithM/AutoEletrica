@@ -6,6 +6,7 @@
         <Application.Resources>
                 <conv:BoolParaVisibilidadeConverter x:Key="BoolParaVisibilidade"/>
                 <conv:InverterBoolConverter x:Key="InverterBoolConverter"/>
+                <conv:DecimalConverter x:Key="DecimalConverter"/>
                 <Style x:Key="AtalhoButtonStyle"
                        TargetType="Button">
                         <Setter Property="Width"
@@ -66,6 +67,18 @@
 
                         </Style.Triggers>
 
+                </Style>
+                <Style x:Key="EstoqueBaixoRowStyle"
+                       TargetType="DataGridRow">
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding EstoqueBaixo}"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                Value="#FFE5E5"/>
+                                        <Setter Property="Foreground"
+                                                Value="#C0392B"/>
+                                </DataTrigger>
+                        </Style.Triggers>
                 </Style>
         </Application.Resources>
 </Application>
