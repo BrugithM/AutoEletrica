@@ -18,14 +18,21 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, List<PecaDTO
     public async Task<List<PecaDTO>> Handle(ListarPecasQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Pecas
-            .AsNoTracking()
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
+            .AsNoTracking()
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
-            query = query.Where(p => p.Nome.Contains(request.TermoBusca) || 
-                                     p.IdPeca.Contains(request.TermoBusca));
+        {
+            var termo = request.TermoBusca.Trim().ToLower();
+            query = query.Where(p =>
+                p.Nome.ToLower().Contains(termo) ||
+                p.IdPeca.ToLower().Contains(termo) ||
+                (p.CodigoPeca != null && p.CodigoPeca.ToLower().Contains(termo)) ||
+                (p.CodigoBarras != null && p.CodigoBarras.Valor.Contains(termo)) ||
+                p.Marca.ToLower().Contains(termo));
+        }
 
         if (request.CategoriaId.HasValue)
             query = query.Where(p => p.CategoriaId == request.CategoriaId.Value);
@@ -45,7 +52,12 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, List<PecaDTO
                 Descricao = p.Descricao,
                 Marca = p.Marca,
                 CategoriaNome = p.CategoriaPeca != null ? p.CategoriaPeca.Nome : null,
+                FornecedorId = p.FornecedorId,
                 FornecedorNome = p.Fornecedor != null ? p.Fornecedor.NomeEmpresa : null,
+                FornecedorCnpj = p.Fornecedor != null ? p.Fornecedor.Cnpj.Formatado() : null,
+                FornecedorTelefone = p.Fornecedor != null && p.Fornecedor.Telefone != null 
+                    ? p.Fornecedor.Telefone.Formatado() : null,
+                FornecedorContato = p.Fornecedor != null ? p.Fornecedor.Contato : null,
                 ValorCusto = p.ValorCusto,
                 ValorVenda = p.ValorVenda,
                 Imposto = p.Imposto,
@@ -54,7 +66,7 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, List<PecaDTO
                 Ativo = p.Ativo,
                 MargemLucro = p.CalcularMargemLucroPercentual(),
                 PrecoComImposto = p.CalcularPrecoComImposto(),
-                EstoqueBaixo = p.EstaComEstoqueBaixo()
+                EstoqueBaixo = p.Estoque <= p.EstoqueMinimo
             })
             .ToListAsync(cancellationToken);
     }

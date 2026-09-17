@@ -30,6 +30,8 @@ public class AtualizarPecaHandler : IRequestHandler<AtualizarPecaCommand>
             request.CategoriaId,
             request.EstoqueMinimo);
 
+        peca.AtualizarValorVenda(request.ValorVenda);  // ← NOVO
+
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
