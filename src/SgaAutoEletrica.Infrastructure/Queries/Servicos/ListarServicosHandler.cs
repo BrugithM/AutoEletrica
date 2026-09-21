@@ -21,10 +21,12 @@ public class ListarServicosHandler : IRequestHandler<ListarServicosQuery, List<S
 
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
-            query = query.Where(s => s.Nome.Contains(request.TermoBusca));
+            var termo = request.TermoBusca.Trim().ToLower();
+            query = query.Where(s => s.Nome.ToLower().Contains(termo));
         }
 
         return await query
+            .AsNoTracking()
             .OrderBy(s => s.Nome)
             .Select(s => new ServicoDTO
             {

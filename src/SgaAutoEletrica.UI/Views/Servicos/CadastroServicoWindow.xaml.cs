@@ -22,8 +22,8 @@ public partial class CadastroServicoWindow : Window
             DialogResult = true;
     }
 
-    private void BtnCancelar_Click(object sender, RoutedEventArgs e)
+    private void BtnLimpar_Click(object sender, RoutedEventArgs e)
     {
-        DialogResult = false;
+        _viewModel.Limpar();
     }
 }

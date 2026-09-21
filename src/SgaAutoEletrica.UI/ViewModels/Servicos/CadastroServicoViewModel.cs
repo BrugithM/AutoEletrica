@@ -12,11 +12,28 @@ public class CadastroServicoViewModel : INotifyPropertyChanged
     private readonly IMediator _mediator;
     private readonly Guid? _servicoId;
 
-    public string Nome { get; set; } = string.Empty;
-    public string Descricao { get; set; } = string.Empty;
-    public decimal PrecoPadrao { get; set; }
+    private string _nome = string.Empty;
+    public string Nome
+    {
+        get => _nome;
+        set { _nome = value; OnPropertyChanged(); }
+    }
 
-    private string _titulo = "Novo Serviço";
+    private string _descricao = string.Empty;
+    public string Descricao
+    {
+        get => _descricao;
+        set { _descricao = value; OnPropertyChanged(); }
+    }
+
+    private decimal _precoPadrao;
+    public decimal PrecoPadrao
+    {
+        get => _precoPadrao;
+        set { _precoPadrao = value; OnPropertyChanged(); }
+    }
+
+    private string _titulo = "Cadastro de Serviços";
     public string Titulo
     {
         get => _titulo;
@@ -43,9 +60,6 @@ public class CadastroServicoViewModel : INotifyPropertyChanged
             Nome = servico.Nome;
             Descricao = servico.Descricao ?? "";
             PrecoPadrao = servico.PrecoPadrao;
-            OnPropertyChanged(nameof(Nome));
-            OnPropertyChanged(nameof(Descricao));
-            OnPropertyChanged(nameof(PrecoPadrao));
         }
     }
 
@@ -62,27 +76,45 @@ public class CadastroServicoViewModel : INotifyPropertyChanged
             return false;
         }
 
-        if (_servicoId.HasValue)
+        try
         {
-            await _mediator.Send(new AtualizarServicoCommand
+            if (_servicoId.HasValue)
             {
-                Id = _servicoId.Value,
-                Nome = Nome,
-                Descricao = Descricao,
-                PrecoPadrao = PrecoPadrao
-            });
-        }
-        else
-        {
-            await _mediator.Send(new CriarServicoCommand
+                await _mediator.Send(new AtualizarServicoCommand
+                {
+                    Id = _servicoId.Value,
+                    Nome = Nome,
+                    Descricao = Descricao,
+                    PrecoPadrao = PrecoPadrao
+                });
+            }
+            else
             {
-                Nome = Nome,
-                Descricao = Descricao,
-                PrecoPadrao = PrecoPadrao
-            });
-        }
+                await _mediator.Send(new CriarServicoCommand
+                {
+                    Nome = Nome,
+                    Descricao = Descricao,
+                    PrecoPadrao = PrecoPadrao
+                });
+            }
 
-        return true;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            var inner = ex;
+            while (inner.InnerException != null)
+                inner = inner.InnerException;
+            MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+    }
+
+    public void Limpar()
+    {
+        Nome = string.Empty;
+        Descricao = string.Empty;
+        PrecoPadrao = 0;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
