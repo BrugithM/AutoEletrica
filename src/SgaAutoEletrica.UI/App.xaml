@@ -3,82 +3,83 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:conv="clr-namespace:SgaAutoEletrica.UI.Converters"
              ShutdownMode="OnMainWindowClose">
-        <Application.Resources>
-                <conv:BoolParaVisibilidadeConverter x:Key="BoolParaVisibilidade"/>
-                <conv:InverterBoolConverter x:Key="InverterBoolConverter"/>
-                <conv:DecimalConverter x:Key="DecimalConverter"/>
-                <Style x:Key="AtalhoButtonStyle"
-                       TargetType="Button">
-                        <Setter Property="Width"
-                                Value="80"/>
-                        <Setter Property="Height"
-                                Value="65"/>
-                        <Setter Property="Margin"
-                                Value="2,0"/>
-                        <Setter Property="Background"
-                                Value="Transparent"/>
-                        <Setter Property="BorderThickness"
-                                Value="0"/>
-                        <Setter Property="Cursor"
-                                Value="Hand"/>
-                        <Setter Property="Template">
-                                <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                                <Border Background="{TemplateBinding Background}"
-                                                        CornerRadius="5">
-                                                        <ContentPresenter HorizontalAlignment="Center"
-                                                                          VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsMouseOver"
-                                                                 Value="True">
-                                                                <Setter Property="Background"
-                                                                        Value="#D5D8DC"/>
-                                                        </Trigger>
-                                                </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                </Setter.Value>
-                        </Setter>
-                </Style>
-                <Style x:Key="SubMenuItemStyle"
-                       TargetType="MenuItem">
+    <Application.Resources>
+        <!-- Conversores -->
+        <conv:BoolParaVisibilidadeConverter x:Key="BoolParaVisibilidade"/>
+        <conv:InverterBoolConverter x:Key="InverterBoolConverter"/>
+        <conv:DecimalConverter x:Key="DecimalConverter"/>
+        <conv:BoolParaStatusConverter x:Key="BoolParaStatusConverter"/>
 
-                        <Setter Property="Foreground"
-                                Value="Black"/>
+        <!-- Estilo dos botões de atalho -->
+        <Style x:Key="AtalhoButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="65"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#D5D8DC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                        <Setter Property="Background"
-                                Value="White"/>
+        <!-- Estilo dos submenus -->
+        <Style x:Key="SubMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#D5D8DC"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-                        <Setter Property="Padding"
-                                Value="8,5"/>
+        <!-- Estilo da linha de peça: estoque baixo + inativa -->
+        <Style x:Key="PecaRowStyle" TargetType="DataGridRow">
+            <Style.Triggers>
+                <!-- Peça inativa: aparência opaca -->
+                <DataTrigger Binding="{Binding Ativo}" Value="False">
+                    <Setter Property="Background" Value="#F0F0F0"/>
+                    <Setter Property="Foreground" Value="#999999"/>
+                    <Setter Property="FontStyle" Value="Italic"/>
+                    <Setter Property="Opacity" Value="0.6"/>
+                </DataTrigger>
 
-                        <Style.Triggers>
+                <!-- Estoque baixo: linha vermelha (só se ativo) -->
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding EstoqueBaixo}" Value="True"/>
+                        <Condition Binding="{Binding Ativo}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" Value="#FFE5E5"/>
+                    <Setter Property="Foreground" Value="#C0392B"/>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
 
-                                <Trigger Property="IsHighlighted"
-                                         Value="True">
-
-                                        <Setter Property="Background"
-                                                Value="#D5D8DC"/>
-
-                                        <Setter Property="Foreground"
-                                                Value="Black"/>
-
-                                </Trigger>
-
-                        </Style.Triggers>
-
-                </Style>
-                <Style x:Key="EstoqueBaixoRowStyle"
-                       TargetType="DataGridRow">
-                        <Style.Triggers>
-                                <DataTrigger Binding="{Binding EstoqueBaixo}"
-                                             Value="True">
-                                        <Setter Property="Background"
-                                                Value="#FFE5E5"/>
-                                        <Setter Property="Foreground"
-                                                Value="#C0392B"/>
-                                </DataTrigger>
-                        </Style.Triggers>
-                </Style>
-        </Application.Resources>
+        <!-- Estilo da linha de serviço inativo -->
+        <Style x:Key="ServicoInativoRowStyle" TargetType="DataGridRow">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Ativo}" Value="False">
+                    <Setter Property="Background" Value="#F0F0F0"/>
+                    <Setter Property="Foreground" Value="#999999"/>
+                    <Setter Property="FontStyle" Value="Italic"/>
+                    <Setter Property="Opacity" Value="0.6"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
 </Application>

@@ -38,6 +38,7 @@ public class ListaPecasViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(FornecedorCnpjExibir));
             OnPropertyChanged(nameof(FornecedorTelefoneExibir));
             OnPropertyChanged(nameof(FornecedorContatoExibir));
+            OnPropertyChanged(nameof(TextoBotaoDesativar));
         }
     }
 
@@ -49,8 +50,10 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     public string FornecedorTelefoneExibir => PecaSelecionada?.FornecedorTelefone ?? "";
     public string FornecedorContatoExibir => PecaSelecionada?.FornecedorContato ?? "";
 
-    // ─── Filtros ───
+    public string TextoBotaoDesativar =>
+        PecaSelecionada?.Ativo == false ? "▶️ Reativar" : "⏸️ Desativar";
 
+    // Filtros
     private string _termoBusca = string.Empty;
     public string TermoBusca
     {
@@ -82,18 +85,25 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         }
     }
 
-    // ─── Totais ───
+    private bool _mostrarInativos = false;
+    public bool MostrarInativos
+    {
+        get => _mostrarInativos;
+        set
+        {
+            _mostrarInativos = value;
+            OnPropertyChanged();
+            _ = BuscarAsync();
+        }
+    }
 
     public int TotalItens => Pecas.Count;
     public int TotalCriticos => Pecas.Count(p => p.EstoqueBaixo);
 
-    // ─── Comandos ───
-
     public ICommand BuscarCommand { get; }
-    public ICommand LimparCommand { get; }
     public ICommand NovaPecaCommand { get; }
     public ICommand EditarPecaCommand { get; }
-    public ICommand ExcluirPecaCommand { get; }
+    public ICommand DesativarPecaCommand { get; }
     public ICommand MovimentarEstoqueCommand { get; }
     public ICommand AtualizarCommand { get; }
     public ICommand AbrirFornecedorCommand { get; }
@@ -103,16 +113,9 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         _mediator = mediator;
 
         BuscarCommand = new RelayCommand(async _ => await BuscarAsync());
-        LimparCommand = new RelayCommand(async _ =>
-        {
-            TermoBusca = string.Empty;
-            ApenasEstoqueBaixo = false;
-            CategoriaFiltro = Categorias.FirstOrDefault();
-            await BuscarAsync();
-        });
         NovaPecaCommand = new RelayCommand(async _ => await NovaPecaAsync());
         EditarPecaCommand = new RelayCommand(async _ => await EditarPecaAsync(), _ => TemPecaSelecionada);
-        ExcluirPecaCommand = new RelayCommand(async _ => await ExcluirPecaAsync(), _ => TemPecaSelecionada && EhAdministrador);
+        DesativarPecaCommand = new RelayCommand(async _ => await DesativarPecaAsync(), _ => TemPecaSelecionada && EhAdministrador);
         MovimentarEstoqueCommand = new RelayCommand(async _ => await MovimentarEstoqueAsync(), _ => TemPecaSelecionada);
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
         AbrirFornecedorCommand = new RelayCommand(_ => AbrirFornecedor(), _ => TemFornecedor);
@@ -121,15 +124,12 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     public async Task CarregarCategoriasAsync()
     {
         Categorias.Clear();
-
-        // Adiciona "Todos" como primeira opção
         Categorias.Add(new CategoriaPecaDTO { Id = Guid.Empty, Nome = "Todos" });
 
         var cats = await _mediator.Send(new ListarCategoriasPecaQuery());
         foreach (var cat in cats)
             Categorias.Add(cat);
 
-        // Seleciona "Todos" por padrão
         CategoriaFiltro = Categorias.FirstOrDefault();
     }
 
@@ -145,7 +145,7 @@ public class ListaPecasViewModel : INotifyPropertyChanged
                 CategoriaId = (CategoriaFiltro == null || CategoriaFiltro.Id == Guid.Empty)
                     ? null
                     : CategoriaFiltro.Id,
-                Ativo = true
+                Ativo = MostrarInativos ? null : true
             });
 
             var filtradas = ApenasEstoqueBaixo
@@ -179,19 +179,24 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         await BuscarAsync();
     }
 
-    private async Task ExcluirPecaAsync()
+    private async Task DesativarPecaAsync()
     {
         if (PecaSelecionada == null) return;
 
+        var acao = PecaSelecionada.Ativo ? "desativar" : "reativar";
         var confirmacao = MessageBox.Show(
-            $"Deseja realmente excluir a peça '{PecaSelecionada.Nome}'?",
-            "Confirmar exclusão",
+            $"Deseja realmente {acao} a peça '{PecaSelecionada.Nome}'?",
+            "Confirmar",
             MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            MessageBoxImage.Question);
 
         if (confirmacao == MessageBoxResult.Yes)
         {
-            await _mediator.Send(new ExcluirPecaCommand { Id = PecaSelecionada.Id });
+            if (PecaSelecionada.Ativo)
+                await _mediator.Send(new DesativarPecaCommand { Id = PecaSelecionada.Id });
+            else
+                await _mediator.Send(new ReativarPecaCommand { Id = PecaSelecionada.Id });
+
             await BuscarAsync();
         }
     }

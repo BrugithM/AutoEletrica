@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SgaAutoEletrica.Migrator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f3ccca529c12c0bab71fc5d7dd6927ae477429b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eaf1dfa7d169d1bd82b5973347a87551cfb13b17")]
 [assembly: System.Reflection.AssemblyProductAttribute("SgaAutoEletrica.Migrator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SgaAutoEletrica.Migrator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
