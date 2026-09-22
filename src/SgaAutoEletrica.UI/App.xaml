@@ -71,7 +71,7 @@
         </Style>
 
         <!-- Estilo da linha de serviço inativo -->
-        <Style x:Key="ServicoInativoRowStyle" TargetType="DataGridRow">
+        <Style x:Key="InativoRowStyle" TargetType="DataGridRow">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Ativo}" Value="False">
                     <Setter Property="Background" Value="#F0F0F0"/>

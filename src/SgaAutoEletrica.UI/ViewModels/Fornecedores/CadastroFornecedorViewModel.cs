@@ -12,12 +12,35 @@ public class CadastroFornecedorViewModel : INotifyPropertyChanged
     private readonly IMediator _mediator;
     private readonly Guid? _fornecedorId;
 
-    public string NomeEmpresa { get; set; } = string.Empty;
-    public string Cnpj { get; set; } = string.Empty;
-    public string Telefone { get; set; } = string.Empty;
-    public string Contato { get; set; } = string.Empty;
+    private string _nomeEmpresa = string.Empty;
+    public string NomeEmpresa
+    {
+        get => _nomeEmpresa;
+        set { _nomeEmpresa = value; OnPropertyChanged(); }
+    }
 
-    private string _titulo = "Novo Fornecedor";
+    private string _cnpj = string.Empty;
+    public string Cnpj
+    {
+        get => _cnpj;
+        set { _cnpj = value; OnPropertyChanged(); }
+    }
+
+    private string _telefone = string.Empty;
+    public string Telefone
+    {
+        get => _telefone;
+        set { _telefone = value; OnPropertyChanged(); }
+    }
+
+    private string _contato = string.Empty;
+    public string Contato
+    {
+        get => _contato;
+        set { _contato = value; OnPropertyChanged(); }
+    }
+
+    private string _titulo = "Cadastro de Fornecedores";
     public string Titulo
     {
         get => _titulo;
@@ -45,10 +68,6 @@ public class CadastroFornecedorViewModel : INotifyPropertyChanged
             Cnpj = fornecedor.Cnpj;
             Telefone = fornecedor.Telefone ?? "";
             Contato = fornecedor.Contato ?? "";
-            OnPropertyChanged(nameof(NomeEmpresa));
-            OnPropertyChanged(nameof(Cnpj));
-            OnPropertyChanged(nameof(Telefone));
-            OnPropertyChanged(nameof(Contato));
         }
     }
 
@@ -65,28 +84,47 @@ public class CadastroFornecedorViewModel : INotifyPropertyChanged
             return false;
         }
 
-        if (_fornecedorId.HasValue)
+        try
         {
-            await _mediator.Send(new AtualizarFornecedorCommand
+            if (_fornecedorId.HasValue)
             {
-                Id = _fornecedorId.Value,
-                NomeEmpresa = NomeEmpresa,
-                Telefone = Telefone,
-                Contato = Contato
-            });
-        }
-        else
-        {
-            await _mediator.Send(new CriarFornecedorCommand
+                await _mediator.Send(new AtualizarFornecedorCommand
+                {
+                    Id = _fornecedorId.Value,
+                    NomeEmpresa = NomeEmpresa,
+                    Telefone = Telefone,
+                    Contato = Contato
+                });
+            }
+            else
             {
-                NomeEmpresa = NomeEmpresa,
-                Cnpj = Cnpj,
-                Telefone = Telefone,
-                Contato = Contato
-            });
-        }
+                await _mediator.Send(new CriarFornecedorCommand
+                {
+                    NomeEmpresa = NomeEmpresa,
+                    Cnpj = Cnpj,
+                    Telefone = Telefone,
+                    Contato = Contato
+                });
+            }
 
-        return true;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            var inner = ex;
+            while (inner.InnerException != null)
+                inner = inner.InnerException;
+            MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+    }
+
+    public void Limpar()
+    {
+        NomeEmpresa = string.Empty;
+        Cnpj = string.Empty;
+        Telefone = string.Empty;
+        Contato = string.Empty;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

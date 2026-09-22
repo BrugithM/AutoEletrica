@@ -11,6 +11,7 @@ public class Fornecedor
     public Endereco? Endereco{get; private set;}
     public string? Contato { get; private set; }
     public DateTime DataCadastro { get; private set; }
+    public bool Ativo{get; private set;}
 
     public ICollection<Peca> Pecas { get; private set; } = new List<Peca>();
     
@@ -29,6 +30,7 @@ public class Fornecedor
         NomeEmpresa = nomeEmpresa;
         Cnpj = new Cnpj(cnpj);
         DataCadastro = DateTime.UtcNow;
+        Ativo = true;
     }
 
     public void AtualizarDados(string nomeEmpresa, string? telefone = null, string? contato = null)
@@ -46,4 +48,7 @@ public class Fornecedor
     {
         Endereco = endereco ?? throw new ArgumentNullException(nameof(endereco));
     }
+
+    public void Desativar() => Ativo = false;
+    public void Ativar() => Ativo = true;
 }

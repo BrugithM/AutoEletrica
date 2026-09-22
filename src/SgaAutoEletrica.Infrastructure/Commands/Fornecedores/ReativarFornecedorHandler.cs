@@ -5,22 +5,22 @@ using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Commands.Fornecedores;
 
-public class ExcluirFornecedorHandler : IRequestHandler<ExcluirFornecedorCommand>
+public class ReativarFornecedorHandler : IRequestHandler<ReativarFornecedorCommand>
 {
     private readonly AppDbContext _context;
 
-    public ExcluirFornecedorHandler(AppDbContext context)
+    public ReativarFornecedorHandler(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task Handle(ExcluirFornecedorCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ReativarFornecedorCommand request, CancellationToken cancellationToken)
     {
         var fornecedor = await _context.Fornecedores
             .FirstOrDefaultAsync(f => f.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Fornecedor não encontrado.");
 
-        _context.Fornecedores.Remove(fornecedor);
+        fornecedor.Ativar();
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

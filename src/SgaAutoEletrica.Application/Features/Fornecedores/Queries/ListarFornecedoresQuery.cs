@@ -6,4 +6,5 @@ namespace SgaAutoEletrica.Application.Features.Fornecedores.Queries;
 public class ListarFornecedoresQuery : IRequest<List<FornecedorDTO>>
 {
     public string? TermoBusca { get; set; }
+    public bool? Ativo { get; set; } = true;
 }

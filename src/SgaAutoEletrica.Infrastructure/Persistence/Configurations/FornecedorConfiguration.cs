@@ -14,6 +14,7 @@ public class FornecedorConfiguration : IEntityTypeConfiguration<Fornecedor>
         builder.Property(f => f.NomeEmpresa).IsRequired().HasMaxLength(200);
         builder.Property(f => f.Contato).HasMaxLength(100);
         builder.Property(f => f.DataCadastro).IsRequired();
+        builder.Property(f => f.Ativo).IsRequired();
 
          builder.OwnsOne(f => f.Cnpj, cnpj =>
         {
