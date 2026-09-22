@@ -156,6 +156,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Contato")
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");

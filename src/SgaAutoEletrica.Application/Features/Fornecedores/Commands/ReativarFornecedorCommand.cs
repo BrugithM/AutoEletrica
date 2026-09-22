@@ -2,7 +2,7 @@ using MediatR;
 
 namespace SgaAutoEletrica.Application.Features.Fornecedores.Commands;
 
-public class ExcluirFornecedorCommand : IRequest
+public class ReativarFornecedorCommand : IRequest
 {
     public Guid Id { get; set; }
 }

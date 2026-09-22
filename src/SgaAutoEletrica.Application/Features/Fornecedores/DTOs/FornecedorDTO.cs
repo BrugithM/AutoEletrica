@@ -7,4 +7,5 @@ public class FornecedorDTO
     public string Cnpj { get; set; } = string.Empty;
     public string? Telefone { get; set; }
     public string? Contato { get; set; }
+    public bool Ativo{get; set;}
 }
