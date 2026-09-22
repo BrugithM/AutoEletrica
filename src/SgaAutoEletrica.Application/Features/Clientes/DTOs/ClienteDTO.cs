@@ -9,4 +9,5 @@ public class ClienteDTO
     public string? EnderecoCompleto { get; set; }
     public DateTime DataCadastro { get; set; }
     public int QuantidadeVeiculos { get; set; }
+    public bool Ativo { get; set; }
 }

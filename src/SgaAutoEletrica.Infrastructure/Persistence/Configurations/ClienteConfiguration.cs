@@ -16,8 +16,9 @@ public class ClienteConfigueation : IEntityTypeConfiguration<Cliente>
         .IsRequired()
         .HasMaxLength(300);
 
-        builder.Property(c => c.DataCadastro)
-        .IsRequired();
+        builder.Property(c => c.DataCadastro).IsRequired();
+        
+        builder.Property(c => c.Ativo).IsRequired();
 
         builder.OwnsOne(c => c.Cpf, cpf =>
         {
