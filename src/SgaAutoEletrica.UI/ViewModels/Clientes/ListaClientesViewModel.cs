@@ -32,11 +32,15 @@ public class ListaClientesViewModel : INotifyPropertyChanged
             _clienteSelecionado = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(TemClienteSelecionado));
+            OnPropertyChanged(nameof(TextoBotaoDesativar));
             _ = CarregarVeiculosAsync();
         }
     }
 
     public bool TemClienteSelecionado => ClienteSelecionado != null;
+
+    public string TextoBotaoDesativar =>
+        ClienteSelecionado?.Ativo == false ? "▶️ Reativar" : "⏸️ Desativar";
 
     private string _termoBusca = string.Empty;
     public string TermoBusca
@@ -45,11 +49,23 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         set { _termoBusca = value; OnPropertyChanged(); }
     }
 
+    private bool _mostrarInativos;
+    public bool MostrarInativos
+    {
+        get => _mostrarInativos;
+        set
+        {
+            _mostrarInativos = value;
+            OnPropertyChanged();
+            _ = BuscarAsync();
+        }
+    }
+
     public ICommand BuscarCommand { get; }
     public ICommand LimparBuscaCommand { get; }
     public ICommand NovoClienteCommand { get; }
     public ICommand EditarClienteCommand { get; }
-    public ICommand ExcluirClienteCommand { get; }
+    public ICommand DesativarClienteCommand { get; }
     public ICommand AtualizarCommand { get; }
     public ICommand VincularVeiculoCommand { get; }
 
@@ -61,7 +77,7 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         LimparBuscaCommand = new RelayCommand(async _ => { TermoBusca = ""; await BuscarAsync(); });
         NovoClienteCommand = new RelayCommand(async _ => await NovoClienteAsync());
         EditarClienteCommand = new RelayCommand(async _ => await EditarClienteAsync(), _ => TemClienteSelecionado);
-        ExcluirClienteCommand = new RelayCommand(async _ => await ExcluirClienteAsync(), _ => TemClienteSelecionado && EhAdministrador);
+        DesativarClienteCommand = new RelayCommand(async _ => await DesativarClienteAsync(), _ => TemClienteSelecionado && EhAdministrador);
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
         VincularVeiculoCommand = new RelayCommand(async _ => await VincularVeiculoAsync(), _ => TemClienteSelecionado);
     }
@@ -72,7 +88,11 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         {
             Clientes.Clear();
             VeiculosDoCliente.Clear();
-            var resultado = await _mediator.Send(new ListarClientesQuery { TermoBusca = TermoBusca });
+            var resultado = await _mediator.Send(new ListarClientesQuery 
+            { 
+                TermoBusca = TermoBusca,
+                Ativo = MostrarInativos ? null : true
+            });
             foreach (var cliente in resultado)
                 Clientes.Add(cliente);
         }
@@ -110,19 +130,24 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         await BuscarAsync();
     }
 
-    private async Task ExcluirClienteAsync()
+    private async Task DesativarClienteAsync()
     {
         if (ClienteSelecionado == null) return;
 
+        var acao = ClienteSelecionado.Ativo ? "desativar" : "reativar";
         var confirmacao = MessageBox.Show(
-            $"Deseja realmente excluir o cliente '{ClienteSelecionado.NomeCompleto}'?",
-            "Confirmar exclusão",
+            $"Deseja realmente {acao} o cliente '{ClienteSelecionado.NomeCompleto}'?",
+            "Confirmar",
             MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            MessageBoxImage.Question);
 
         if (confirmacao == MessageBoxResult.Yes)
         {
-            await _mediator.Send(new ExcluirClienteCommand { Id = ClienteSelecionado.Id });
+            if (ClienteSelecionado.Ativo)
+                await _mediator.Send(new DesativarClienteCommand { Id = ClienteSelecionado.Id });
+            else
+                await _mediator.Send(new ReativarClienteCommand { Id = ClienteSelecionado.Id });
+
             await BuscarAsync();
         }
     }
@@ -135,6 +160,7 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         dialog.ShowDialog();
         await CarregarVeiculosAsync();
     }
+
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

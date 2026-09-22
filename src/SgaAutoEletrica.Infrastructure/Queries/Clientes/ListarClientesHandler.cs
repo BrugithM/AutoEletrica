@@ -28,6 +28,9 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, List<C
                 c.Telefone.Valor.Contains(termo));
         }
 
+        if(request.Ativo.HasValue)
+            query = query.Where(c => c.Ativo == request.Ativo.Value);
+
         return await query
             .AsNoTracking()
             .OrderBy(c => c.NomeCompleto)
@@ -39,7 +42,8 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, List<C
                 Telefone = c.Telefone.Formatado(),
                 EnderecoCompleto = c.Endereco != null ? c.Endereco.Completo() : null,
                 DataCadastro = c.DataCadastro,
-                QuantidadeVeiculos = c.Veiculos.Count
+                QuantidadeVeiculos = c.Veiculos.Count,
+                Ativo = c.Ativo
             })
             .ToListAsync(cancellationToken);
     }

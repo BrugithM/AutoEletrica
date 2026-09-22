@@ -9,6 +9,7 @@ public class Cliente
     public Telefone Telefone { get; private set; }
     public Endereco? Endereco { get; private set; }
     public DateTime DataCadastro  { get; private set; }
+    public bool Ativo{get; private set;}
 
     public ICollection<Veiculo> Veiculos { get; private set; } = new List<Veiculo>();
 
@@ -29,6 +30,7 @@ public class Cliente
         Cpf = new Cpf(cpf);
         Telefone = new Telefone (telefone);
         DataCadastro = DateTime.UtcNow;
+        Ativo = true;
     }
 
     public void AtualizarDados(string nomeCompleto, string telefone)
@@ -51,4 +53,7 @@ public class Cliente
 
         Veiculos.Add(veiculo);
     }
+
+    public void Desativar()=> Ativo = false;
+    public void Ativar()=> Ativo = true;
 }
