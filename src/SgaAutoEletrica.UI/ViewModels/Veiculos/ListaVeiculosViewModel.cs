@@ -6,7 +6,6 @@ using System.Windows.Input;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Common.Interfaces;
-using SgaAutoEletrica.Application.Features.OrdensServico.Queries;
 using SgaAutoEletrica.Application.Features.Veiculos.Commands;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.Queries;
@@ -34,6 +33,7 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(ClienteNome));
             OnPropertyChanged(nameof(ClienteCpf));
             OnPropertyChanged(nameof(ClienteTelefone));
+            OnPropertyChanged(nameof(TextoBotaoDesativar));
         }
     }
 
@@ -42,6 +42,9 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     public string ClienteCpf => VeiculoSelecionado?.CpfCliente ?? "";
     public string ClienteTelefone => VeiculoSelecionado?.TelefoneCliente ?? "";
 
+    public string TextoBotaoDesativar =>
+        VeiculoSelecionado?.Ativo == false ? "▶️ Reativar" : "⏸️ Desativar";
+
     private string _termoBusca = string.Empty;
     public string TermoBusca
     {
@@ -49,11 +52,23 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         set { _termoBusca = value; OnPropertyChanged(); }
     }
 
+    private bool _mostrarInativos;
+    public bool MostrarInativos
+    {
+        get => _mostrarInativos;
+        set
+        {
+            _mostrarInativos = value;
+            OnPropertyChanged();
+            _ = BuscarAsync();
+        }
+    }
+
     public ICommand BuscarCommand { get; }
     public ICommand LimparCommand { get; }
     public ICommand NovoVeiculoCommand { get; }
     public ICommand EditarVeiculoCommand { get; }
-    public ICommand ExcluirVeiculoCommand { get; }
+    public ICommand DesativarVeiculoCommand { get; }
     public ICommand AtualizarCommand { get; }
     public ICommand NFsVinculadasCommand { get; }
     public ICommand CriarOSCommand { get; }
@@ -66,7 +81,7 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         LimparCommand = new RelayCommand(async _ => { TermoBusca = ""; await BuscarAsync(); });
         NovoVeiculoCommand = new RelayCommand(async _ => await NovoVeiculoAsync());
         EditarVeiculoCommand = new RelayCommand(async _ => await EditarVeiculoAsync(), _ => TemVeiculoSelecionado);
-        ExcluirVeiculoCommand = new RelayCommand(async _ => await ExcluirVeiculoAsync(), _ => TemVeiculoSelecionado && EhAdministrador);
+        DesativarVeiculoCommand = new RelayCommand(async _ => await DesativarVeiculoAsync(), _ => TemVeiculoSelecionado && EhAdministrador);
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
         NFsVinculadasCommand = new RelayCommand(async _ => await NFsVinculadasAsync(), _ => TemVeiculoSelecionado);
         CriarOSCommand = new RelayCommand(async _ => await CriarOSAsync(), _ => TemVeiculoSelecionado);
@@ -78,7 +93,11 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         {
             Veiculos.Clear();
             VeiculoSelecionado = null;
-            var resultado = await _mediator.Send(new BuscarVeiculosQuery { TermoBusca = TermoBusca });
+            var resultado = await _mediator.Send(new BuscarVeiculosQuery 
+            { 
+                TermoBusca = TermoBusca,
+                Ativo = MostrarInativos ? null : true
+            });
             foreach (var veiculo in resultado)
                 Veiculos.Add(veiculo);
         }
@@ -103,19 +122,24 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         await BuscarAsync();
     }
 
-    private async Task ExcluirVeiculoAsync()
+    private async Task DesativarVeiculoAsync()
     {
         if (VeiculoSelecionado == null) return;
 
+        var acao = VeiculoSelecionado.Ativo ? "desativar" : "reativar";
         var confirmacao = MessageBox.Show(
-            $"Deseja realmente excluir o veículo '{VeiculoSelecionado.Modelo} - {VeiculoSelecionado.Placa}'?",
-            "Confirmar exclusão",
+            $"Deseja realmente {acao} o veículo '{VeiculoSelecionado.Modelo} - {VeiculoSelecionado.Placa}'?",
+            "Confirmar",
             MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            MessageBoxImage.Question);
 
         if (confirmacao == MessageBoxResult.Yes)
         {
-            await _mediator.Send(new ExcluirVeiculoCommand { Id = VeiculoSelecionado.Id });
+            if (VeiculoSelecionado.Ativo)
+                await _mediator.Send(new DesativarVeiculoCommand { Id = VeiculoSelecionado.Id });
+            else
+                await _mediator.Send(new ReativarVeiculoCommand { Id = VeiculoSelecionado.Id });
+
             await BuscarAsync();
         }
     }

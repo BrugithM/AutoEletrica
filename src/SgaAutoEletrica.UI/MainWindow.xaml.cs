@@ -54,7 +54,7 @@ public partial class MainWindow : Window
     public void CarregarUsuarioLogado()
     {
         var sessao = App.ServiceProvider.GetRequiredService<ISessaoUsuario>();
-        if( sessao.UsuarioAtual != null)
+        if (sessao.UsuarioAtual != null)
         {
             TxtUsuario.Text = $"Usuario: {sessao.UsuarioAtual.Nome} ({sessao.UsuarioAtual.Nivel})";
         }
@@ -104,12 +104,6 @@ public partial class MainWindow : Window
         MessageBox.Show("Tela de Movimentação de Estoque em breve.", "Em breve", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    private void BtnNotaEntrada_Click(object sender, RoutedEventArgs e)
-    {
-        var dialog = new SgaAutoEletrica.UI.Views.Fornecedores.CriarNotaFiscalEntradaWindow(_mediator);
-        dialog.ShowDialog();
-    }
-
     // ─── Fiscal ───
 
     private void BtnNFSaida_Click(object sender, RoutedEventArgs e)
@@ -124,10 +118,17 @@ public partial class MainWindow : Window
         NavegarPara(view);
     }
 
-    private void BtnBuscarNotasEntrada_Click(object sender, RoutedEventArgs e)
+    private void BtnNotaEntradaLista_Click(object sender, RoutedEventArgs e)
     {
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEntradaView>();
-        NavegarPara(view);
+        ContentArea.Content = view;
+    }
+
+    private void BtnNotaEntrada_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.Fornecedores.CriarNotaFiscalEntradaWindow(
+            App.ServiceProvider.GetRequiredService<MediatR.IMediator>());
+        dialog.ShowDialog();
     }
 
     private void BtnBuscarProdutos_Click(object sender, RoutedEventArgs e)
@@ -189,17 +190,17 @@ public partial class MainWindow : Window
     }
 
     private void BtnBuscarPlaca_Click(object sender, RoutedEventArgs e)
-{
-    var input = Microsoft.VisualBasic.Interaction.InputBox("Digite a placa:", "Buscar Placa", "");
-    if (!string.IsNullOrWhiteSpace(input))
     {
-        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Veiculos.ListaVeiculosView>();
-        if (view.DataContext is SgaAutoEletrica.UI.ViewModels.Veiculos.ListaVeiculosViewModel vm)
+        var input = Microsoft.VisualBasic.Interaction.InputBox("Digite a placa:", "Buscar Placa", "");
+        if (!string.IsNullOrWhiteSpace(input))
         {
-            vm.TermoBusca = input;
-            _ = vm.BuscarAsync();
+            var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Veiculos.ListaVeiculosView>();
+            if (view.DataContext is SgaAutoEletrica.UI.ViewModels.Veiculos.ListaVeiculosViewModel vm)
+            {
+                vm.TermoBusca = input;
+                _ = vm.BuscarAsync();
+            }
+            ContentArea.Content = view;
         }
-        ContentArea.Content = view;
     }
-}
 }

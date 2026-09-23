@@ -24,7 +24,7 @@ public class NotaFiscalEntrada
         Numero = string.Empty;
     }
 
-    public NotaFiscalEntrada(string numero, Guid fornecedorId, string? observacao = null)
+    public NotaFiscalEntrada(string numero, Guid fornecedorId, DateTime? dataEntrada = null, string? observacao = null)
     {
         if (string.IsNullOrWhiteSpace(numero))
             throw new ArgumentException("Número da nota é obrigatório.", nameof(numero));
@@ -33,7 +33,7 @@ public class NotaFiscalEntrada
         Numero = numero;
         FornecedorId = fornecedorId;
         Observacao = observacao;
-        DataEntrada = DateTime.UtcNow;
+        DataEntrada = dataEntrada ?? DateTime.UtcNow;
         Finalizada = false;
     }
 

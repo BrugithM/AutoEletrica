@@ -20,6 +20,7 @@ public class Veiculo
     public TipoMotor? TipoMotor { get; private set; }
     public string? Cor { get; private set; }
     public string? Observacao { get; private set; }
+    public bool Ativo { get; private set; }
 
     public Guid ClienteId { get; private set; }
     public Cliente Cliente { get; private set; } = null!;
@@ -50,6 +51,7 @@ public class Veiculo
         Modelo = modelo;
         Marca = marca;
         Ano = ano;
+        Ativo = true;
     }
 
     // Construtor para cadastro via API.
@@ -64,6 +66,7 @@ public class Veiculo
         Modelo = string.Empty;
         Marca = string.Empty;
         Ano = 0;
+        Ativo = true;
     }
 
     // Métodos de atualização 
@@ -123,4 +126,12 @@ public class Veiculo
         Cor = cor;
         Observacao = observacao;
     }
+
+    public void AdicionarObservacao(string observacao)
+    {
+        Observacao = observacao;
+    }
+
+    public void Desativar() => Ativo = false;
+    public void Ativar() => Ativo = true;
 }

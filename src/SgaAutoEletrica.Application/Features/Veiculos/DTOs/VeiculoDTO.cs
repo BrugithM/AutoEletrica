@@ -16,4 +16,5 @@ public class VeiculoDTO
     public string NomeCliente { get; set; } = string.Empty;
     public string CpfCliente { get; set; } = string.Empty;
     public string TelefoneCliente { get; set; } = string.Empty;
+    public bool Ativo { get; set; }
 }

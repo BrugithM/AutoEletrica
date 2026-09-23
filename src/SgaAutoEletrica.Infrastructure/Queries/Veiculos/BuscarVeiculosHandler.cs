@@ -31,6 +31,8 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
                 v.Marca.ToLower().Contains(termo) ||
                 v.Cliente.NomeCompleto.ToLower().Contains(termo));
         }
+        if(request.Ativo.HasValue)
+            query = query.Where(v =>v.Ativo == request.Ativo.Value);
 
         return await query
             .OrderBy(v => v.Cliente.NomeCompleto)
@@ -50,7 +52,8 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
                 ClienteId = v.ClienteId,
                 NomeCliente = v.Cliente.NomeCompleto,
                 CpfCliente = v.Cliente.Cpf.Formatado(),
-                TelefoneCliente = v.Cliente.Telefone.Formatado()
+                TelefoneCliente = v.Cliente.Telefone.Formatado(),
+                Ativo = v.Ativo
             })
             .ToListAsync(cancellationToken);
     }

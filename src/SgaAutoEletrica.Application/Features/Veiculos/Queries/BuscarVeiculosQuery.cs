@@ -10,4 +10,6 @@ namespace SgaAutoEletrica.Application.Features.Veiculos.Queries;
 public class BuscarVeiculosQuery : IRequest<List<VeiculoDTO>>
 {
     public string? TermoBusca { get; set; }
+    public bool? Ativo { get; set; } = true;
+
 }

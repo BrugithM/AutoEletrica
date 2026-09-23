@@ -21,11 +21,6 @@ public partial class CriarNotaFiscalEntradaWindow : Window
         await _viewModel.CarregarDadosAsync();
     }
 
-    private void BtnAdicionarItem_Click(object sender, RoutedEventArgs e)
-    {
-        _viewModel.AdicionarItem();
-    }
-
     private async void BtnSalvar_Click(object sender, RoutedEventArgs e)
     {
         var sucesso = await _viewModel.SalvarAsync();

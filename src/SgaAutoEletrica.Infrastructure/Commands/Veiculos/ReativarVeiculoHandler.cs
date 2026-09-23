@@ -5,22 +5,22 @@ using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Commands.Veiculos;
 
-public class ExcluirVeiculoHandler : IRequestHandler<ExcluirVeiculoCommand>
+public class ReativarVeiculoHandler : IRequestHandler<ReativarVeiculoCommand>
 {
     private readonly AppDbContext _context;
 
-    public ExcluirVeiculoHandler(AppDbContext context)
+    public ReativarVeiculoHandler(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task Handle(ExcluirVeiculoCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ReativarVeiculoCommand request, CancellationToken cancellationToken)
     {
         var veiculo = await _context.Veiculos
             .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Veículo não encontrado.");
 
-        _context.Veiculos.Remove(veiculo);
+        veiculo.Ativar();
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
