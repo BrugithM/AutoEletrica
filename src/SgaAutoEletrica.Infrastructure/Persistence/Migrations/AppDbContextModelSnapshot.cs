@@ -438,6 +438,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("DataUltimaAtualizacaoCusto")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -556,6 +559,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Ano")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("ClienteId")

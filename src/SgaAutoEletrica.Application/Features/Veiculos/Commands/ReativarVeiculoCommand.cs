@@ -2,7 +2,7 @@ using MediatR;
 
 namespace SgaAutoEletrica.Application.Features.Veiculos.Commands;
 
-public class ExcluirVeiculoCommand : IRequest
+public class ReativarVeiculoCommand : IRequest
 {
-    public Guid Id {get;set;}
+    public Guid Id { get; set; }
 }

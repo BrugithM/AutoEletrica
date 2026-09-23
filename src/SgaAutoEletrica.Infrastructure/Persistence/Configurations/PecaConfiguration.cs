@@ -25,6 +25,7 @@ public class PecaConfiguration : IEntityTypeConfiguration<Peca>
         builder.Property(p => p.EstoqueMinimo).IsRequired();
         builder.Property(p => p.Ativo).IsRequired();
         builder.Property(p => p.DataCadastro).IsRequired();
+        builder.Property(p => p.DataUltimaAtualizacaoCusto);
 
         builder.OwnsOne(p => p.CodigoBarras, cb =>
         {

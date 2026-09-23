@@ -44,23 +44,14 @@
                                           Click="BtnMovEstoque_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Nota de Entrada"
-                                          Click="BtnNotaEntrada_Click"
+                                          Click="BtnNotaEntradaLista_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Fiscal">
-                                <MenuItem Header="NF Saída"
-                                          Click="BtnNFSaida_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Buscar Notas Emitidas"
-                                          Click="BtnBuscarNotasEmitidas_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Buscar Notas Entrada"
-                                          Click="BtnBuscarNotasEntrada_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Buscar Produtos"
-                                          Click="BtnBuscarProdutos_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                        </MenuItem>
+    <MenuItem Header="Notas de Saída" Click="BtnNFSaida_Click" Style="{StaticResource SubMenuItemStyle}"/>
+    <MenuItem Header="Notas de Entrada" Click="BtnNotaEntradaLista_Click" Style="{StaticResource SubMenuItemStyle}"/>
+    <MenuItem Header="Buscar Produtos" Click="BtnBuscarProdutos_Click" Style="{StaticResource SubMenuItemStyle}"/>
+</MenuItem>
                         <MenuItem Header="Ordem de Serviço">
                                 <MenuItem Header="Criar OS"
                                           Click="BtnCriarOS_Click"
@@ -243,7 +234,7 @@
                                                                    MaxWidth="80"/>
                                                 </StackPanel>
                                         </Button>
-                                        <Button Click="BtnBuscarNotasEntrada_Click"
+                                        <Button Click="BtnNotaEntradaLista_Click"
                                                 Style="{StaticResource AtalhoButtonStyle}"
                                                 Tag="🔍">
                                                 <StackPanel>

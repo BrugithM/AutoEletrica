@@ -4,29 +4,30 @@ namespace SgaAutoEletrica.Domain.Entities;
 
 public class Peca
 {
-    public Guid Id{ get; private set; }
-    public string IdPeca{ get; private set; }
-    public string? CodigoPeca{ get; private set; }
-    public CodigoBarras? CodigoBarras{ get; private set; }
-    public string Nome{ get; private set; }
-    public string Descricao{ get; private set; }
-    public string Marca{ get; private set; }
+    public Guid Id { get; private set; }
+    public string IdPeca { get; private set; }
+    public string? CodigoPeca { get; private set; }
+    public CodigoBarras? CodigoBarras { get; private set; }
+    public string Nome { get; private set; }
+    public string Descricao { get; private set; }
+    public string Marca { get; private set; }
 
-    public Guid? CategoriaId {get; private set;}
-    public CategoriaPeca? CategoriaPeca{ get; private set; }
+    public Guid? CategoriaId { get; private set; }
+    public CategoriaPeca? CategoriaPeca { get; private set; }
 
-    public decimal ValorCusto{ get; private set; }
-    public decimal ValorVenda{ get; private set; }
-    public decimal Imposto{ get; private set; }
+    public decimal ValorCusto { get; private set; }
+    public decimal ValorVenda { get; private set; }
+    public decimal Imposto { get; private set; }
 
     public int Estoque { get; private set; }
     public int EstoqueMinimo { get; private set; }
     public bool Ativo { get; private set; }
-    public DateTime DataCadastro{ get; private set; }
+    public DateTime DataCadastro { get; private set; }
+    public DateTime? DataUltimaAtualizacaoCusto { get; private set; }
 
     public Guid? FornecedorId { get; private set; }
     public Fornecedor? Fornecedor { get; private set; }
-    
+
     private Peca()
     {
         IdPeca = string.Empty;
@@ -106,7 +107,7 @@ public class Peca
         Estoque += quantidade;
     }
 
-        public void DarBaixaEstoque(int quantidade)
+    public void DarBaixaEstoque(int quantidade)
     {
         if (quantidade <= 0)
             throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
@@ -116,12 +117,29 @@ public class Peca
         Estoque -= quantidade;
     }
 
-        public bool EstaComEstoqueBaixo() => Estoque <= EstoqueMinimo;
+    public bool EstaComEstoqueBaixo() => Estoque <= EstoqueMinimo;
     public void AtualizarValorVenda(decimal novoValor)
     {
         if (novoValor < 0)
             throw new ArgumentException("Valor de venda não pode ser negativo.", nameof(novoValor));
         ValorVenda = novoValor;
+    }
+
+    public void AtualizarValorCusto(decimal novoCusto, DateTime dataReferencia)
+    {
+        if (novoCusto < 0)
+            throw new ArgumentException("Valor de custo não pode ser negativo.", nameof(novoCusto));
+
+        if (DataUltimaAtualizacaoCusto == null || dataReferencia >= DataUltimaAtualizacaoCusto.Value)
+        {
+            ValorCusto = novoCusto;
+            DataUltimaAtualizacaoCusto = dataReferencia;
+        }
+    }
+
+    public bool PodeAtualizarCusto(DateTime dataReferencia)
+    {
+        return DataUltimaAtualizacaoCusto == null || dataReferencia >= DataUltimaAtualizacaoCusto.Value;
     }
 
     public void AtualizarDados(

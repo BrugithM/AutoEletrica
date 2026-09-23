@@ -19,6 +19,7 @@ public class VeiculoConfiguration : IEntityTypeConfiguration<Veiculo>
         builder.Property(v => v.Motor).HasMaxLength(100);
         builder.Property(v => v.Cor).HasMaxLength(50);
         builder.Property(v => v.Observacao).HasMaxLength(500);
+        builder.Property(v => v.Ativo).IsRequired();
 
         builder.Property(v => v.TipoMotor)
             .HasConversion<string>()

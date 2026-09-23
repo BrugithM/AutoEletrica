@@ -21,7 +21,7 @@ public class CriarNotaFiscalEntradaHandler : IRequestHandler<CriarNotaFiscalEntr
             .FirstOrDefaultAsync(f => f.Id == request.FornecedorId, cancellationToken)
             ?? throw new InvalidOperationException("Fornecedor não encontrado.");
 
-        var nf = new NotaFiscalEntrada(request.Numero, request.FornecedorId, request.Observacao);
+        var nf = new NotaFiscalEntrada(request.Numero, request.FornecedorId, request.DataEntrada, request.Observacao);
 
         foreach (var item in request.Itens)
         {
@@ -35,10 +35,21 @@ public class CriarNotaFiscalEntradaHandler : IRequestHandler<CriarNotaFiscalEntr
 
         await _context.NotasFiscaisEntrada.AddAsync(nf, cancellationToken);
 
+        var dataReferencia = nf.DataEntrada;
+
         foreach (var (pecaId, quantidade) in pecasParaEstoque)
         {
             var peca = await _context.Pecas.FindAsync([pecaId], cancellationToken);
-            peca?.DarEntradaEstoque(quantidade);
+            if (peca != null)
+            {
+                peca.DarEntradaEstoque(quantidade);
+
+                var itemNF = request.Itens.First(i => i.PecaId == pecaId);
+                if (peca.PodeAtualizarCusto(dataReferencia))
+                {
+                    peca.AtualizarValorCusto(itemNF.ValorUnitario, dataReferencia);
+                }
+            }
         }
 
         await _context.SaveChangesAsync(cancellationToken);
