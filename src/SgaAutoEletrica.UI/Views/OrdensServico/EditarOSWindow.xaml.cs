@@ -21,8 +21,20 @@ public partial class EditarOSWindow : Window
         await _viewModel.CarregarDadosAsync();
     }
 
-    private void BtnFechar_Click(object sender, RoutedEventArgs e)
+    private async void BtnAdicionarPeca_Click(object sender, RoutedEventArgs e)
     {
-        Close();
+        await _viewModel.AdicionarPecaAsync();
+    }
+
+    private async void BtnAdicionarServico_Click(object sender, RoutedEventArgs e)
+    {
+        await _viewModel.AdicionarServicoAsync();
+    }
+
+    private async void BtnSalvar_Click(object sender, RoutedEventArgs e)
+    {
+        var sucesso = await _viewModel.SalvarAsync();
+        if (sucesso)
+            DialogResult = true;
     }
 }

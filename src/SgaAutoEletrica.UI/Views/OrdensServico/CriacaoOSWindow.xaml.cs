@@ -31,9 +31,16 @@ public partial class CriacaoOSWindow : Window
         _viewModel.AdicionarServico();
     }
 
-    private async void BtnSalvar_Click(object sender, RoutedEventArgs e)
+    private async void BtnEmitirOrcamento_Click(object sender, RoutedEventArgs e)
     {
-        var sucesso = await _viewModel.SalvarAsync();
+        var sucesso = await _viewModel.SalvarAsync(false);
+        if (sucesso)
+            DialogResult = true;
+    }
+
+    private async void BtnAprovarIniciar_Click(object sender, RoutedEventArgs e)
+    {
+        var sucesso = await _viewModel.SalvarAsync(true);
         if (sucesso)
             DialogResult = true;
     }

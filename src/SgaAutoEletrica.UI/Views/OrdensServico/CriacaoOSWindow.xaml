@@ -1,161 +1,210 @@
 <Window x:Class="SgaAutoEletrica.UI.Views.OrdensServico.CriacaoOSWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Nova Ordem de Serviço" Height="750" Width="800"
+        Title="Criar Ordem de Serviço" Height="750" Width="1000"
         WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="20">
+    <Grid Margin="15">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Nova Ordem de Serviço" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+        <!-- Cabeçalho -->
+        <GroupBox Grid.Row="0" Header="Cabeçalho da Ordem de Serviço" Padding="10" Margin="0,0,0,10">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Margin="0,0,0,10">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Cliente Proprietário:" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Clientes}"
+                                  SelectedItem="{Binding ClienteSelecionado}"
+                                  DisplayMemberPath="NomeCompleto"
+                                  Height="28" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Veículo Vinculado:" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Veiculos}"
+                                  SelectedItem="{Binding VeiculoSelecionado}"
+                                  DisplayMemberPath="Modelo"
+                                  Height="28" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Border Background="#F5F5F5" Padding="8" Margin="0,8,0,0" CornerRadius="3">
+                    <StackPanel>
+                        <TextBlock Text="{Binding InfoCliente}" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding InfoVeiculo}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Abas -->
+        <TabControl Grid.Row="1" Margin="0,0,0,10" MaxHeight="320">
+            <!-- Aba de Serviços -->
+            <TabItem Header="Serviços Aplicados">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Text="Serviço:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox ItemsSource="{Binding ServicosDisponiveis}"
+                                      SelectedItem="{Binding ServicoSelecionado}"
+                                      DisplayMemberPath="Nome"
+                                      Width="400" Height="28"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="➕ Adicionar Serviço" Click="BtnAdicionarServico_Click"
+                                    Width="150" Height="28" Margin="0,0,5,0"
+                                    Background="#27AE60" Foreground="White"/>
+                            <Button Content="🗑️ Remover Selecionado" Command="{Binding RemoverServicoCommand}"
+                                    Width="170" Height="28"
+                                    Background="#E74C3C" Foreground="White"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding ServicosNaOS}"
+                              SelectedItem="{Binding ServicoSelecionadoParaRemover}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Serviço" Binding="{Binding Nome}" Width="*"/>
+                            <DataGridTextColumn Header="Valor Unit. (R$)" Binding="{Binding Preco, StringFormat=C2}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- Aba de Peças -->
+            <TabItem Header="Peças Utilizadas">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Text="Peça:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox ItemsSource="{Binding PecasDisponiveis}"
+                                      SelectedItem="{Binding PecaSelecionada}"
+                                      DisplayMemberPath="Nome"
+                                      Width="300" Height="28" Margin="0,0,10,0"/>
+                            <TextBlock Text="Qtd:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBox Text="{Binding QuantidadePeca, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" Height="28"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="➕ Adicionar Peça" Click="BtnAdicionarPeca_Click"
+                                    Width="140" Height="28" Margin="0,0,5,0"
+                                    Background="#27AE60" Foreground="White"/>
+                            <Button Content="🗑️ Remover Selecionado" Command="{Binding RemoverPecaCommand}"
+                                    Width="170" Height="28"
+                                    Background="#E74C3C" Foreground="White"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding PecasNaOS}"
+                              SelectedItem="{Binding PecaSelecionadaParaRemover}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Peça" Binding="{Binding Nome}" Width="*"/>
+                            <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="80"/>
+                            <DataGridTextColumn Header="Valor Unit. (R$)" Binding="{Binding PrecoUnitario, StringFormat=C2}" Width="150"/>
+                            <DataGridTextColumn Header="Subtotal (R$)" Binding="{Binding ValorTotal, StringFormat=C2}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- Aba de Observações -->
+            <TabItem Header="Observações Finais">
+                <TextBox Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="10" TextWrapping="Wrap" AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"/>
+            </TabItem>
+        </TabControl>
+
+        <!-- Resumo e Botões -->
+        <Grid Grid.Row="2" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="380"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                <TextBlock Text="Cliente:"/>
-                <ComboBox ItemsSource="{Binding Clientes}"
-                          SelectedItem="{Binding ClienteSelecionado}"
-                          DisplayMemberPath="NomeCompleto"
-                          Height="28"/>
+            <!-- Botões à esquerda -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Content="Emitir Orçamento" Click="BtnEmitirOrcamento_Click"
+                        Width="160" Height="38" Margin="0,0,10,0"
+                        Background="#3498DB" Foreground="White" FontWeight="SemiBold"/>
+                <Button Content="Aprovar &amp; Iniciar Serviços" Click="BtnAprovarIniciar_Click"
+                        Width="200" Height="38"
+                        Background="#27AE60" Foreground="White" FontWeight="SemiBold"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="1">
-                <TextBlock Text="Veículo:"/>
-                <ComboBox ItemsSource="{Binding Veiculos}"
-                          SelectedItem="{Binding VeiculoSelecionado}"
-                          DisplayMemberPath="Modelo"
-                          Height="28"/>
-            </StackPanel>
-        </Grid>
-
-        <TextBlock Grid.Row="2" Text="Observação:"/>
-        <TextBox Grid.Row="3" Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}" 
-                 Height="50" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
-
-        <TextBlock Grid.Row="4" Text="Adicionar itens:" FontWeight="Bold" Margin="0,5,0,5"/>
-
-        <Grid Grid.Row="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Coluna de Peças -->
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Text="Peças:"/>
-                <ComboBox Grid.Row="1" ItemsSource="{Binding PecasDisponiveis}"
-                          SelectedItem="{Binding PecaSelecionada}"
-                          DisplayMemberPath="Nome"
-                          Height="28" Margin="0,0,0,5"/>
-
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,5">
-                    <TextBlock Text="Qtd:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <TextBox Text="{Binding QuantidadePeca, UpdateSourceTrigger=PropertyChanged}" 
-                             Width="50" Height="25" Margin="0,0,5,0"/>
-                    <Button Content="Adicionar" Click="BtnAdicionarPeca_Click" Width="80" Height="25"/>
-                </StackPanel>
-
-                <Grid Grid.Row="3">
+            <!-- Resumo à direita -->
+            <GroupBox Grid.Column="1" Header="Resumo de Valores" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <DataGrid ItemsSource="{Binding PecasNaOS}" AutoGenerateColumns="False" IsReadOnly="True"
-                              SelectedItem="{Binding PecaSelecionadaParaRemover}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Peça" Binding="{Binding Nome}" Width="150"/>
-                            <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="50"/>
-                            <DataGridTextColumn Header="Preço" Binding="{Binding PrecoUnitario, StringFormat=C2}" Width="80"/>
-                            <DataGridTextColumn Header="Total" Binding="{Binding ValorTotal, StringFormat=C2}" Width="80"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Subtotal Serviços:" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ValorTotalServicos, StringFormat=C2}" HorizontalAlignment="Right"/>
 
-                    <Button Grid.Column="1" Content="Remover" 
-                            Command="{Binding RemoverPecaCommand}" 
-                            CommandParameter="{Binding PecaSelecionadaParaRemover}"
-                            Width="80" Height="25" Margin="5,0,0,0" VerticalAlignment="Top"
-                            Background="#E74C3C" Foreground="White"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Subtotal Peças:" FontWeight="SemiBold" Margin="0,5,0,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ValorTotalPecas, StringFormat=C2}" 
+                               HorizontalAlignment="Right" Margin="0,5,0,0"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Desconto Aplicado:" FontWeight="SemiBold" Margin="0,8,0,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" 
+                             Text="{Binding Desconto, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
+                             Width="120" Height="24" Margin="0,8,0,0" HorizontalAlignment="Left"/>
+
+                    <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="0,8,0,8"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="TOTAL DA O.S.:" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding ValorTotalGeral, StringFormat=C2}" 
+                               FontSize="18" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Right"/>
                 </Grid>
-
-                <TextBlock Grid.Row="4" Text="Total Peças:" FontWeight="Bold"/>
-                <TextBlock Grid.Row="4" Text="{Binding ValorTotalPecas, StringFormat=C2}" 
-                           HorizontalAlignment="Right" FontWeight="Bold"/>
-            </Grid>
-
-            <!-- Coluna de Serviços -->
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Text="Serviços:"/>
-                <ComboBox Grid.Row="1" ItemsSource="{Binding ServicosDisponiveis}"
-                          SelectedItem="{Binding ServicoSelecionado}"
-                          DisplayMemberPath="Nome"
-                          Height="28" Margin="0,0,0,5"/>
-
-                <Button Grid.Row="2" Content="Adicionar Serviço" Click="BtnAdicionarServico_Click" 
-                        Width="120" Height="25" Margin="0,0,0,5"/>
-
-                <Grid Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <DataGrid ItemsSource="{Binding ServicosNaOS}" AutoGenerateColumns="False" IsReadOnly="True"
-                              SelectedItem="{Binding ServicoSelecionadoParaRemover}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Serviço" Binding="{Binding Nome}" Width="150"/>
-                            <DataGridTextColumn Header="Preço" Binding="{Binding Preco, StringFormat=C2}" Width="80"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                    <Button Grid.Column="1" Content="Remover" 
-                            Command="{Binding RemoverServicoCommand}" 
-                            CommandParameter="{Binding ServicoSelecionadoParaRemover}"
-                            Width="80" Height="25" Margin="5,0,0,0" VerticalAlignment="Top"
-                            Background="#E74C3C" Foreground="White"/>
-                </Grid>
-
-                <TextBlock Grid.Row="4" Text="Total Serviços:" FontWeight="Bold"/>
-                <TextBlock Grid.Row="4" Text="{Binding ValorTotalServicos, StringFormat=C2}" 
-                           HorizontalAlignment="Right" FontWeight="Bold"/>
-            </Grid>
+            </GroupBox>
         </Grid>
-
-        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <TextBlock Text="TOTAL GERAL:" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding ValorTotalGeral, StringFormat=C2}" FontSize="18" FontWeight="Bold" 
-                       VerticalAlignment="Center" Margin="0,0,15,0"/>
-            <Button Content="Salvar OS" Width="110" Height="35" Click="BtnSalvar_Click"
-                    Background="#27AE60" Foreground="White"/>
-        </StackPanel>
     </Grid>
 </Window>

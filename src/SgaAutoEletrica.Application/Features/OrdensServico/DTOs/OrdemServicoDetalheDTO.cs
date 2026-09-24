@@ -23,6 +23,7 @@ public class OrdemServicoDetalheDTO
 
     public decimal ValorTotalPecas { get; set; }
     public decimal ValorTotalServicos { get; set; }
+    public decimal Desconto{get; set;}
     public decimal ValorTotal { get; set; }
 
     public List<ItemPecaOSDTO> ItensPeca { get; set; } = new();

@@ -17,6 +17,7 @@ public class OrdemServico
     public DateTime DataAbertura { get; private set; }
     public DateTime? DataFinalizacao { get; private set; }
     public string? Observacao { get; private set; }
+    public decimal Desconto { get; private set; }
 
     public ICollection<ItemPecaOS> ItensPeca { get; private set; } = new List<ItemPecaOS>();
     public ICollection<ItemServicoOS> ItensServico { get; private set; } = new List<ItemServicoOS>();
@@ -88,14 +89,30 @@ public class OrdemServico
     {
         ValorTotalPecas = Math.Round(ItensPeca.Sum(i => i.ValorTotal), 2);
         ValorTotalServicos = Math.Round(ItensServico.Sum(i => i.PrecoUnitario), 2);
-        ValorTotal = Math.Round(ValorTotalPecas + ValorTotalServicos, 2);
+
+        var subtotal = ValorTotalPecas + ValorTotalServicos;
+        ValorTotal = Math.Round(subtotal - Desconto, 2);
+    }
+
+    public void AplicarDesconto(decimal desconto)
+    {
+        if(desconto<0)
+            throw new ArgumentException("Desconto não pode ser negativo", nameof(desconto));
+
+        var subtotal = ValorTotalPecas + ValorTotalServicos;
+        if(desconto > subtotal)
+            throw new ArgumentException("Desconto não pode ser maior que o subtotal", nameof(desconto));
+
+        Desconto = desconto;
+        RecalcularTotais();
     }
 
     public void AtualizarTotais(decimal totalPecas, decimal totalServicos)
 {
     ValorTotalPecas = totalPecas;
     ValorTotalServicos = totalServicos;
-    ValorTotal = totalPecas + totalServicos;
+    var subtotal = totalPecas + totalServicos;
+    ValorTotal = Math.Round(subtotal-Desconto,2);
 }
 
     //Transições de status

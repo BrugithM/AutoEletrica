@@ -94,9 +94,6 @@ public partial class App : System.Windows.Application
             services.AddTransient<ViewModels.OrdensServico.ListaOSViewModel>();
             services.AddTransient<Views.OrdensServico.ListaOSView>();
 
-            services.AddTransient<ViewModels.OrdensServico.ListaNotasFiscaisViewModel>();
-            services.AddTransient<Views.OrdensServico.ListaNotasFiscaisView>();
-
             services.AddTransient<ViewModels.Fornecedores.CriarNotaFiscalEntradaViewModel>();
 
             services.AddTransient<ViewModels.Buscas.BuscarProdutosViewModel>();

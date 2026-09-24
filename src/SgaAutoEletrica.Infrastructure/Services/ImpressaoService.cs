@@ -128,6 +128,8 @@ public class ImpressaoService : IImpressaoService
         sb.AppendLine("----------------------------------------");
         sb.AppendLine($"TOTAL PEÇAS: {os.ValorTotalPecas:C2}");
         sb.AppendLine($"TOTAL SERVIÇOS: {os.ValorTotalServicos:C2}");
+        if (os.Desconto > 0)
+            sb.AppendLine($"DESCONTO: -{os.Desconto:C2}");
         sb.AppendLine($"TOTAL GERAL: {os.ValorTotal:C2}");
         sb.AppendLine("========================================");
         if (!string.IsNullOrWhiteSpace(os.Observacao))
@@ -165,20 +167,24 @@ public class ImpressaoService : IImpressaoService
         foreach (var servico in os.ItensServico)
             sb.AppendLine($"  {servico.NomeServico} = {servico.PrecoUnitario:C2}");
         sb.AppendLine("----------------------------------------");
-        sb.AppendLine($"TOTAL: {os.ValorTotal:C2}");
+        sb.AppendLine($"TOTAL PEÇAS: {os.ValorTotalPecas:C2}");
+        sb.AppendLine($"TOTAL SERVIÇOS: {os.ValorTotalServicos:C2}");
+        if (os.Desconto > 0)
+            sb.AppendLine($"DESCONTO: -{os.Desconto:C2}");
+        sb.AppendLine($"TOTAL GERAL: {os.ValorTotal:C2}");
         sb.AppendLine("========================================");
 
         return sb.ToString();
     }
 
-       private string GerarConteudoCupom(OrdemServicoDetalheDTO os)
+    private string GerarConteudoCupom(OrdemServicoDetalheDTO os)
     {
         var empresa = _context.ConfiguracoesEmpresa
             .AsNoTracking()
             .FirstOrDefault();
 
         var sb = new StringBuilder();
-        
+
         if (empresa != null)
         {
             sb.AppendLine(empresa.NomeEmpresa);
@@ -189,7 +195,7 @@ public class ImpressaoService : IImpressaoService
         {
             sb.AppendLine("        AUTO ELÉTRICA");
         }
-        
+
         sb.AppendLine("========================================");
         sb.AppendLine($"OS Nº: {os.Numero}  Data: {os.DataAbertura:dd/MM/yyyy}");
         sb.AppendLine("----------------------------------------");
