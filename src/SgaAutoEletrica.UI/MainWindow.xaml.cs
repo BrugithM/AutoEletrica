@@ -108,8 +108,8 @@ public partial class MainWindow : Window
 
     private void BtnNFSaida_Click(object sender, RoutedEventArgs e)
     {
-        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.OrdensServico.ListaNotasFiscaisView>();
-        NavegarPara(view);
+        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEmitidasView>();
+        ContentArea.Content = view;
     }
 
     private void BtnBuscarNotasEmitidas_Click(object sender, RoutedEventArgs e)

@@ -30,20 +30,6 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
     public ObservableCollection<ItemPecaTemporario> PecasNaOS { get; } = new();
     public ObservableCollection<ItemServicoTemporario> ServicosNaOS { get; } = new();
 
-    private ItemPecaTemporario? _pecaSelecionadaParaRemover;
-    public ItemPecaTemporario? PecaSelecionadaParaRemover
-    {
-        get => _pecaSelecionadaParaRemover;
-        set { _pecaSelecionadaParaRemover = value; OnPropertyChanged(); }
-    }
-
-    private ItemServicoTemporario? _servicoSelecionadoParaRemover;
-    public ItemServicoTemporario? ServicoSelecionadoParaRemover
-    {
-        get => _servicoSelecionadoParaRemover;
-        set { _servicoSelecionadoParaRemover = value; OnPropertyChanged(); }
-    }
-
     private ClienteResumoDTO? _clienteSelecionado;
     public ClienteResumoDTO? ClienteSelecionado
     {
@@ -52,16 +38,30 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         {
             _clienteSelecionado = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(InfoCliente));
             _ = CarregarVeiculosAsync();
         }
     }
+
+    public string InfoCliente => ClienteSelecionado != null 
+        ? $"{ClienteSelecionado.NomeCompleto} (Tel: {ClienteSelecionado.Telefone})" 
+        : "";
 
     private VeiculoDTO? _veiculoSelecionado;
     public VeiculoDTO? VeiculoSelecionado
     {
         get => _veiculoSelecionado;
-        set { _veiculoSelecionado = value; OnPropertyChanged(); }
+        set
+        {
+            _veiculoSelecionado = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(InfoVeiculo));
+        }
     }
+
+    public string InfoVeiculo => VeiculoSelecionado != null 
+        ? $"{VeiculoSelecionado.Marca} {VeiculoSelecionado.Modelo} - Placa: {VeiculoSelecionado.Placa}" 
+        : "";
 
     private PecaDTO? _pecaSelecionada;
     public PecaDTO? PecaSelecionada
@@ -77,6 +77,24 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         set { _servicoSelecionado = value; OnPropertyChanged(); }
     }
 
+    private ItemPecaTemporario? _pecaSelecionadaParaRemover;
+    public ItemPecaTemporario? PecaSelecionadaParaRemover
+    {
+        get => _pecaSelecionadaParaRemover;
+        set { _pecaSelecionadaParaRemover = value; OnPropertyChanged(); OnPropertyChanged(nameof(TemPecaSelecionada)); }
+    }
+
+    public bool TemPecaSelecionada => PecaSelecionadaParaRemover != null;
+
+    private ItemServicoTemporario? _servicoSelecionadoParaRemover;
+    public ItemServicoTemporario? ServicoSelecionadoParaRemover
+    {
+        get => _servicoSelecionadoParaRemover;
+        set { _servicoSelecionadoParaRemover = value; OnPropertyChanged(); OnPropertyChanged(nameof(TemServicoSelecionado)); }
+    }
+
+    public bool TemServicoSelecionado => ServicoSelecionadoParaRemover != null;
+
     private int _quantidadePeca = 1;
     public int QuantidadePeca
     {
@@ -84,11 +102,28 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         set { _quantidadePeca = value; OnPropertyChanged(); }
     }
 
-    public string Observacao { get; set; } = string.Empty;
+    private string _observacao = string.Empty;
+    public string Observacao
+    {
+        get => _observacao;
+        set { _observacao = value; OnPropertyChanged(); }
+    }
+
+    private decimal _desconto;
+    public decimal Desconto
+    {
+        get => _desconto;
+        set
+        {
+            _desconto = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ValorTotalGeral));
+        }
+    }
 
     public decimal ValorTotalPecas => PecasNaOS.Sum(p => p.ValorTotal);
     public decimal ValorTotalServicos => ServicosNaOS.Sum(s => s.Preco);
-    public decimal ValorTotalGeral => ValorTotalPecas + ValorTotalServicos;
+    public decimal ValorTotalGeral => Math.Max(0, ValorTotalPecas + ValorTotalServicos - Desconto);
 
     public ICommand RemoverPecaCommand { get; }
     public ICommand RemoverServicoCommand { get; }
@@ -99,13 +134,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         _clienteIdPreSelecionado = clienteIdPreSelecionado;
         _veiculoIdPreSelecionado = veiculoIdPreSelecionado;
 
-        RemoverPecaCommand = new RelayCommand(
-            param => RemoverPeca((ItemPecaTemporario)param!),
-            param => param is ItemPecaTemporario);
-
-        RemoverServicoCommand = new RelayCommand(
-            param => RemoverServico((ItemServicoTemporario)param!),
-            param => param is ItemServicoTemporario);
+        RemoverPecaCommand = new RelayCommand(_ => RemoverPeca(), _ => TemPecaSelecionada);
+        RemoverServicoCommand = new RelayCommand(_ => RemoverServico(), _ => TemServicoSelecionado);
     }
 
     public async Task CarregarDadosAsync()
@@ -187,23 +217,25 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ValorTotalGeral));
     }
 
-    public void RemoverPeca(ItemPecaTemporario item)
+    private void RemoverPeca()
     {
-        if (item == null) return;
-        PecasNaOS.Remove(item);
+        if (PecaSelecionadaParaRemover == null) return;
+        PecasNaOS.Remove(PecaSelecionadaParaRemover);
+        PecaSelecionadaParaRemover = null;
         OnPropertyChanged(nameof(ValorTotalPecas));
         OnPropertyChanged(nameof(ValorTotalGeral));
     }
 
-    public void RemoverServico(ItemServicoTemporario item)
+    private void RemoverServico()
     {
-        if (item == null) return;
-        ServicosNaOS.Remove(item);
+        if (ServicoSelecionadoParaRemover == null) return;
+        ServicosNaOS.Remove(ServicoSelecionadoParaRemover);
+        ServicoSelecionadoParaRemover = null;
         OnPropertyChanged(nameof(ValorTotalServicos));
         OnPropertyChanged(nameof(ValorTotalGeral));
     }
 
-    public async Task<bool> SalvarAsync()
+    public async Task<bool> SalvarAsync(bool aprovarIniciar)
     {
         if (ClienteSelecionado == null)
         {
@@ -227,7 +259,9 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
             {
                 ClienteId = ClienteSelecionado.Id,
                 VeiculoId = VeiculoSelecionado.Id,
-                Observacao = Observacao
+                Observacao = Observacao,
+                Desconto = Desconto,
+                AprovarIniciar = aprovarIniciar
             };
 
             foreach (var item in PecasNaOS)
@@ -237,6 +271,11 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
                 command.Servicos.Add(new ItemServicoOSRequest { ServicoId = item.ServicoId });
 
             await _mediator.Send(command);
+
+            var msg = aprovarIniciar 
+                ? "OS criada e iniciada com sucesso!" 
+                : "Orçamento emitido com sucesso!";
+            MessageBox.Show(msg, "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             return true;
         }
         catch (Exception ex)
@@ -254,13 +293,30 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
-public class ItemPecaTemporario
+public class ItemPecaTemporario : INotifyPropertyChanged
 {
     public Guid PecaId { get; set; }
     public string Nome { get; set; } = string.Empty;
-    public int Quantidade { get; set; }
-    public decimal PrecoUnitario { get; set; }
+
+    private int _quantidade;
+    public int Quantidade
+    {
+        get => _quantidade;
+        set { _quantidade = value; OnPropertyChanged(); OnPropertyChanged(nameof(ValorTotal)); }
+    }
+
+    private decimal _precoUnitario;
+    public decimal PrecoUnitario
+    {
+        get => _precoUnitario;
+        set { _precoUnitario = value; OnPropertyChanged(); OnPropertyChanged(nameof(ValorTotal)); }
+    }
+
     public decimal ValorTotal => Quantidade * PrecoUnitario;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
 public class ItemServicoTemporario

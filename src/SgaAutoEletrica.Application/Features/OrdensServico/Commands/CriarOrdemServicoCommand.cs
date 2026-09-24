@@ -18,6 +18,8 @@ public class CriarOrdemServicoCommand : IRequest<Guid>
     public Guid ClienteId { get; set; }
     public Guid VeiculoId { get; set; }
     public string? Observacao { get; set; }
+    public decimal Desconto { get; set; }
+    public bool AprovarIniciar { get; set; } 
     public List<ItemPecaOSRequest> Pecas { get; set; } = new();
     public List<ItemServicoOSRequest> Servicos { get; set; } = new();
 }

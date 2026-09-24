@@ -383,6 +383,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("DataFinalizacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("decimal(10,2)");
+
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 

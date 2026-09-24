@@ -17,12 +17,11 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
 
     public async Task<Guid> Handle(CriarOrdemServicoCommand request, CancellationToken cancellationToken)
     {
-        var numerosExistentes = await _context.OrdensServico
+        var ultimo = await _context.OrdensServico
             .OrderByDescending(os => os.Numero)
-            .Select(os => os.Numero)
-            .ToListAsync(cancellationToken);
+            .Select(os => (int?)os.Numero)
+            .FirstOrDefaultAsync(cancellationToken) ?? 0;
 
-        var ultimo = numerosExistentes.FirstOrDefault();
         var proximo = ultimo + 1;
 
         if (proximo <= 0)
@@ -37,6 +36,7 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
         {
             var peca = await _context.Pecas.FindAsync([item.PecaId], cancellationToken)
                 ?? throw new InvalidOperationException("Peça não encontrada.");
+
             peca.DarBaixaEstoque(item.Quantidade);
             os.AdicionarPeca(item.PecaId, item.Quantidade, peca.ValorVenda);
         }
@@ -45,8 +45,15 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
         {
             var servico = await _context.Servicos.FindAsync([item.ServicoId], cancellationToken)
                 ?? throw new InvalidOperationException("Serviço não encontrado.");
+
             os.AdicionarServico(item.ServicoId, servico.PrecoPadrao);
         }
+
+        if (request.Desconto > 0)
+            os.AplicarDesconto(request.Desconto);
+
+        if (request.AprovarIniciar)
+            os.IniciarServico();
 
         await _context.OrdensServico.AddAsync(os, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);

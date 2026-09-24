@@ -22,6 +22,7 @@ public class OrdemServicoConfiguration : IEntityTypeConfiguration<OrdemServico>
         builder.Property(os => os.ValorTotalPecas).HasColumnType("decimal(10,2)");
         builder.Property(os => os.ValorTotalServicos).HasColumnType("decimal(10,2)");
         builder.Property(os => os.ValorTotal).HasColumnType("decimal(10,2)");
+        builder.Property(os => os.Desconto).HasColumnType("decimal(10,2)");
 
         builder.HasOne(os => os.Cliente)
             .WithMany()

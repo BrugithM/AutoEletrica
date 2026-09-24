@@ -34,7 +34,7 @@ public class ObterOSPorIdHandler : IRequestHandler<ObterOSPorIdQuery, OrdemServi
                 DataFinalizacao = os.DataFinalizacao,
                 ClienteId = os.ClienteId,
                 NomeCliente = os.Cliente.NomeCompleto,
-                TelefoneCliente = os.Cliente.Telefone.Valor,
+                TelefoneCliente = os.Cliente.Telefone.Formatado(),
                 VeiculoId = os.VeiculoId,
                 PlacaVeiculo = os.Veiculo.Placa.Valor,
                 ModeloVeiculo = os.Veiculo.Modelo,
@@ -42,6 +42,7 @@ public class ObterOSPorIdHandler : IRequestHandler<ObterOSPorIdQuery, OrdemServi
                 AnoVeiculo = os.Veiculo.Ano,
                 ValorTotalPecas = os.ValorTotalPecas,
                 ValorTotalServicos = os.ValorTotalServicos,
+                Desconto = os.Desconto,
                 ValorTotal = os.ValorTotal,
                 ItensPeca = os.ItensPeca.Select(i => new ItemPecaOSDTO
                 {

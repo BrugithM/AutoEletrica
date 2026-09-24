@@ -48,10 +48,16 @@
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Fiscal">
-    <MenuItem Header="Notas de Saída" Click="BtnNFSaida_Click" Style="{StaticResource SubMenuItemStyle}"/>
-    <MenuItem Header="Notas de Entrada" Click="BtnNotaEntradaLista_Click" Style="{StaticResource SubMenuItemStyle}"/>
-    <MenuItem Header="Buscar Produtos" Click="BtnBuscarProdutos_Click" Style="{StaticResource SubMenuItemStyle}"/>
-</MenuItem>
+                                <MenuItem Header="Notas de Saída"
+                                                Click="BtnNFSaida_Click"
+                                                Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Notas de Entrada"
+                                                Click="BtnNotaEntradaLista_Click"
+                                                Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Buscar Produtos"
+                                                Click="BtnBuscarProdutos_Click"
+                                                Style="{StaticResource SubMenuItemStyle}"/>
+                        </MenuItem>
                         <MenuItem Header="Ordem de Serviço">
                                 <MenuItem Header="Criar OS"
                                           Click="BtnCriarOS_Click"
@@ -249,14 +255,14 @@
                                                 </StackPanel>
                                         </Button>
                                         <Button Click="BtnBuscarPlaca_Click"
-                                                        Style="{StaticResource AtalhoButtonStyle}">
+                                                Style="{StaticResource AtalhoButtonStyle}">
                                                 <StackPanel>
                                                         <TextBlock Text="🔍"
-                                                                        FontSize="24"
-                                                                        HorizontalAlignment="Center"/>
+                                                                   FontSize="24"
+                                                                   HorizontalAlignment="Center"/>
                                                         <TextBlock Text="Buscar Placa"
-                                                                        FontSize="11"
-                                                                        HorizontalAlignment="Center"/>
+                                                                   FontSize="11"
+                                                                   HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
                                 </StackPanel>
