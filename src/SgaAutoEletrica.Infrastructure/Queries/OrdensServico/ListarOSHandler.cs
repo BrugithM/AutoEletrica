@@ -1,12 +1,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Common.DTOs;
 using SgaAutoEletrica.Application.Features.OrdensServico.DTOs;
 using SgaAutoEletrica.Application.Features.OrdensServico.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Queries.OrdensServico;
 
-public class ListarOSHandler : IRequestHandler<ListarOSQuery, List<OrdemServicoResumoDTO>>
+public class ListarOSHandler : IRequestHandler<ListarOSQuery, ListaPaginadaDTO<OrdemServicoResumoDTO>>
 {
     private readonly AppDbContext _context;
 
@@ -15,31 +16,32 @@ public class ListarOSHandler : IRequestHandler<ListarOSQuery, List<OrdemServicoR
         _context = context;
     }
 
-    public async Task<List<OrdemServicoResumoDTO>> Handle(ListarOSQuery request, CancellationToken cancellationToken)
+    public async Task<ListaPaginadaDTO<OrdemServicoResumoDTO>> Handle(ListarOSQuery request, CancellationToken cancellationToken)
     {
         var query = _context.OrdensServico
-            .AsNoTracking()
             .Include(os => os.Cliente)
             .Include(os => os.Veiculo)
+            .AsNoTracking()
             .AsQueryable();
 
         if (request.Status.HasValue)
             query = query.Where(os => os.Status == request.Status.Value);
 
-        if (request.DataInicio.HasValue)
-            query = query.Where(os => os.DataAbertura >= request.DataInicio.Value);
-
-        if (request.DataFim.HasValue)
-            query = query.Where(os => os.DataAbertura <= request.DataFim.Value);
-
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
-            query = query.Where(os => 
-                os.Cliente.NomeCompleto.Contains(request.TermoBusca) ||
-                os.Veiculo.Placa.Valor.Contains(request.TermoBusca) ||
-                os.Numero.ToString().Contains(request.TermoBusca));
+        {
+            var termo = request.TermoBusca.Trim().ToLower();
+            query = query.Where(os =>
+                os.Cliente.NomeCompleto.ToLower().Contains(termo) ||
+                os.Veiculo.Placa.Valor.ToLower().Contains(termo) ||
+                os.Numero.ToString().Contains(termo));
+        }
 
-        return await query
+        var totalItens = await query.CountAsync(cancellationToken);
+
+        var itens = await query
             .OrderByDescending(os => os.DataAbertura)
+            .Skip((request.Pagina - 1) * request.TamanhoPagina)
+            .Take(request.TamanhoPagina)
             .Select(os => new OrdemServicoResumoDTO
             {
                 Id = os.Id,
@@ -53,5 +55,13 @@ public class ListarOSHandler : IRequestHandler<ListarOSQuery, List<OrdemServicoR
                 DataFinalizacao = os.DataFinalizacao
             })
             .ToListAsync(cancellationToken);
+
+        return new ListaPaginadaDTO<OrdemServicoResumoDTO>
+        {
+            Itens = itens,
+            PaginaAtual = request.Pagina,
+            TamanhoPagina = request.TamanhoPagina,
+            TotalItens = totalItens
+        };
     }
 }
