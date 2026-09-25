@@ -27,6 +27,10 @@ public partial class MainWindow : Window
         CarregarUsuarioLogado();
     }
 
+    private void BtnInicio_Click(object sender, RoutedEventArgs e)
+    {
+        CarregarLogo();
+    }
     private void CarregarLogo()
     {
         try
@@ -88,7 +92,8 @@ public partial class MainWindow : Window
 
     private void BtnCategorias_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("Tela de Categorias em breve.", "Em breve", MessageBoxButton.OK, MessageBoxImage.Information);
+        var dialog = new Views.CategoriasPeca.GerenciarCategoriasWindow(_mediator);
+        dialog.ShowDialog();
     }
 
     // ─── Estoque ───

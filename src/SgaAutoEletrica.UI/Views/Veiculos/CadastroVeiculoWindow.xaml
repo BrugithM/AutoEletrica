@@ -137,8 +137,8 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button Content="Salvar" Width="90" Height="30" Margin="0,0,10,0" Click="BtnSalvar_Click"/>
-            <Button Content="Limpar" Width="90" Height="30" Click="BtnLimpar_Click"/>
+            <Button Content="Salvar" Width="90" Style="{StaticResource BotaoPadraoStyle}" Margin="0,0,10,0" Click="BtnSalvar_Click"/>
+            <Button Content="Limpar" Width="90" Style="{StaticResource BotaoPadraoStyle}" Click="BtnLimpar_Click"/>
         </StackPanel>
     </Grid>
 </Window>

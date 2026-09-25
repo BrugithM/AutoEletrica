@@ -148,3 +148,5 @@ C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\ref
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\SgaAutoEletrica.UI.pdb
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\SgaAutoEletrica.UI.genruntimeconfig.cache
 C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\ref\SgaAutoEletrica.UI.dll
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\CategoriasPeca\GerenciarCategoriasWindow.baml
+C:\Projetos\SgaAutoEletrica\src\SgaAutoEletrica.UI\obj\Debug\net10.0-windows\Views\CategoriasPeca\GerenciarCategoriasWindow.g.cs

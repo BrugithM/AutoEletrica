@@ -106,7 +106,6 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     public ICommand DesativarPecaCommand { get; }
     public ICommand MovimentarEstoqueCommand { get; }
     public ICommand AtualizarCommand { get; }
-    public ICommand AbrirFornecedorCommand { get; }
 
     public ListaPecasViewModel(IMediator mediator)
     {
@@ -118,7 +117,6 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         DesativarPecaCommand = new RelayCommand(async _ => await DesativarPecaAsync(), _ => TemPecaSelecionada && EhAdministrador);
         MovimentarEstoqueCommand = new RelayCommand(async _ => await MovimentarEstoqueAsync(), _ => TemPecaSelecionada);
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
-        AbrirFornecedorCommand = new RelayCommand(_ => AbrirFornecedor(), _ => TemFornecedor);
     }
 
     public async Task CarregarCategoriasAsync()
@@ -207,12 +205,6 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         var dialog = new Views.Pecas.MovimentacaoEstoqueWindow(_mediator, PecaSelecionada);
         dialog.ShowDialog();
         await BuscarAsync();
-    }
-
-    private void AbrirFornecedor()
-    {
-        if (PecaSelecionada?.FornecedorId == null) return;
-        MessageBox.Show($"Abrir fornecedor {PecaSelecionada.FornecedorNome} — em breve", "Em breve");
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -26,7 +26,7 @@
                         <ComboBox ItemsSource="{Binding Clientes}"
                                   SelectedItem="{Binding ClienteSelecionado}"
                                   DisplayMemberPath="NomeCompleto"
-                                  Height="28" Margin="0,2,0,0"/>
+                                  Height="24" Margin="0,2,0,0"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2">
@@ -34,7 +34,7 @@
                         <ComboBox ItemsSource="{Binding Veiculos}"
                                   SelectedItem="{Binding VeiculoSelecionado}"
                                   DisplayMemberPath="Modelo"
-                                  Height="28" Margin="0,2,0,0"/>
+                                  Height="24" Margin="0,2,0,0"/>
                     </StackPanel>
                 </Grid>
 
@@ -48,7 +48,7 @@
         </GroupBox>
 
         <!-- Abas -->
-        <TabControl Grid.Row="1" Margin="0,0,0,10" MaxHeight="320">
+        <TabControl Grid.Row="1" Margin="0,0,0,5" MaxHeight="300">
             <!-- Aba de Serviços -->
             <TabItem Header="Serviços Aplicados">
                 <Grid Margin="10">
@@ -68,16 +68,15 @@
                             <ComboBox ItemsSource="{Binding ServicosDisponiveis}"
                                       SelectedItem="{Binding ServicoSelecionado}"
                                       DisplayMemberPath="Nome"
-                                      Width="400" Height="28"/>
+                                      Width="400" Height="24"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <Button Content="➕ Adicionar Serviço" Click="BtnAdicionarServico_Click"
-                                    Width="150" Height="28" Margin="0,0,5,0"
-                                    Background="#27AE60" Foreground="White"/>
-                            <Button Content="🗑️ Remover Selecionado" Command="{Binding RemoverServicoCommand}"
-                                    Width="170" Height="28"
-                                    Background="#E74C3C" Foreground="White"/>
+                                    Width="150" Margin="0,0,5,0"
+                                    Style="{StaticResource BotaoPadraoStyle}"/>
+                            <Button Content="➖ Remover Selecionado" Command="{Binding RemoverServicoCommand}"
+                                    Width="170" Style="{StaticResource BotaoPadraoStyle}"/>
                         </StackPanel>
                     </Grid>
 
@@ -114,19 +113,18 @@
                             <ComboBox ItemsSource="{Binding PecasDisponiveis}"
                                       SelectedItem="{Binding PecaSelecionada}"
                                       DisplayMemberPath="Nome"
-                                      Width="300" Height="28" Margin="0,0,10,0"/>
+                                      Width="300" Height="24" Margin="0,0,10,0"/>
                             <TextBlock Text="Qtd:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                             <TextBox Text="{Binding QuantidadePeca, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="60" Height="28"/>
+                                     Width="60" Height="24"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <Button Content="➕ Adicionar Peça" Click="BtnAdicionarPeca_Click"
-                                    Width="140" Height="28" Margin="0,0,5,0"
-                                    Background="#27AE60" Foreground="White"/>
-                            <Button Content="🗑️ Remover Selecionado" Command="{Binding RemoverPecaCommand}"
-                                    Width="170" Height="28"
-                                    Background="#E74C3C" Foreground="White"/>
+                                    Width="140" Margin="0,0,5,0"
+                                    Style="{StaticResource BotaoPadraoStyle}"/>
+                            <Button Content="➖ Remover Selecionado" Command="{Binding RemoverPecaCommand}"
+                                    Width="170" Style="{StaticResource BotaoPadraoStyle}"/>
                         </StackPanel>
                     </Grid>
 
@@ -157,22 +155,11 @@
         <!-- Resumo e Botões -->
         <Grid Grid.Row="2" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="380"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Botões à esquerda -->
-            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom">
-                <Button Content="Emitir Orçamento" Click="BtnEmitirOrcamento_Click"
-                        Width="160" Height="38" Margin="0,0,10,0"
-                        Background="#3498DB" Foreground="White" FontWeight="SemiBold"/>
-                <Button Content="Aprovar &amp; Iniciar Serviços" Click="BtnAprovarIniciar_Click"
-                        Width="200" Height="38"
-                        Background="#27AE60" Foreground="White" FontWeight="SemiBold"/>
-            </StackPanel>
-
-            <!-- Resumo à direita -->
-            <GroupBox Grid.Column="1" Header="Resumo de Valores" Padding="10">
+            <GroupBox Grid.Column="0" Header="Resumo de Valores" Padding="10">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -196,15 +183,22 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Desconto Aplicado:" FontWeight="SemiBold" Margin="0,8,0,0" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="2" Grid.Column="1" 
                              Text="{Binding Desconto, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
-                             Width="120" Height="24" Margin="0,8,0,0" HorizontalAlignment="Left"/>
+                             Width="120" Height="24" Margin="0,8,0,0" HorizontalAlignment="Right"/>
 
                     <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="0,8,0,8"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Text="TOTAL DA O.S.:" FontSize="16" FontWeight="Bold"/>
                     <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding ValorTotalGeral, StringFormat=C2}" 
-                               FontSize="18" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                               FontSize="18" FontWeight="Bold" Foreground="#0A2464" HorizontalAlignment="Right"/>
                 </Grid>
             </GroupBox>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Content="Emitir Orçamento" Click="BtnEmitirOrcamento_Click"
+                        Width="160" Margin="0,0,10,0"
+                        Style="{StaticResource BotaoPadraoStyle}"/>
+                <Button Content="Aprovar &amp; Iniciar Serviços" Click="BtnAprovarIniciar_Click"
+                        Width="200" Style="{StaticResource BotaoPadraoStyle}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

@@ -22,7 +22,7 @@
                 <Menu Grid.Row="0"
                       Background="#2C3E50"
                       Foreground="White">
-                        <MenuItem Header="Cadastro">
+                        <MenuItem Header="Gerenciamento">
                                 <MenuItem Header="Clientes"
                                           Click="BtnClientes_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
@@ -32,31 +32,20 @@
                                 <MenuItem Header="Fornecedores"
                                           Click="BtnFornecedores_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Peças"
+                                          Click="BtnPecas_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Categorias"
                                           Click="BtnCategorias_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
-                        <MenuItem Header="Estoque">
-                                <MenuItem Header="Peças"
-                                          Click="BtnPecas_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Movimentação de Estoque"
-                                          Click="BtnMovEstoque_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Nota de Entrada"
-                                          Click="BtnNotaEntradaLista_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
-                        </MenuItem>
                         <MenuItem Header="Fiscal">
                                 <MenuItem Header="Notas de Saída"
-                                                Click="BtnNFSaida_Click"
-                                                Style="{StaticResource SubMenuItemStyle}"/>
+                                          Click="BtnNFSaida_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Notas de Entrada"
-                                                Click="BtnNotaEntradaLista_Click"
-                                                Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Buscar Produtos"
-                                                Click="BtnBuscarProdutos_Click"
-                                                Style="{StaticResource SubMenuItemStyle}"/>
+                                          Click="BtnNotaEntradaLista_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Ordem de Serviço">
                                 <MenuItem Header="Criar OS"
@@ -88,6 +77,17 @@
                                       VerticalScrollBarVisibility="Disabled">
                                 <StackPanel Orientation="Horizontal"
                                             Margin="10,5">
+                                        <Button Click="BtnInicio_Click"
+                                                        Style="{StaticResource AtalhoButtonStyle}">
+                                                <StackPanel>
+                                                        <TextBlock Text="🏠"
+                                                                        FontSize="24"
+                                                                        HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="Início"
+                                                                        FontSize="11"
+                                                                        HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                        </Button>
                                         <Button Click="BtnClientes_Click"
                                                 Style="{StaticResource AtalhoButtonStyle}"
                                                 Tag="👤">
@@ -184,70 +184,14 @@
                                                                    HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
-                                        <Button Click="BtnBuscarCliente_Click"
-                                                Style="{StaticResource AtalhoButtonStyle}"
-                                                Tag="🔍">
-                                                <StackPanel>
-                                                        <TextBlock Text="🔍"
-                                                                   FontSize="24"
-                                                                   HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Buscar Cliente"
-                                                                   FontSize="11"
-                                                                   HorizontalAlignment="Center"
-                                                                   TextWrapping="Wrap"
-                                                                   MaxWidth="80"/>
-                                                </StackPanel>
-                                        </Button>
-                                        <Button Click="BtnBuscarVeiculo_Click"
-                                                Style="{StaticResource AtalhoButtonStyle}"
-                                                Tag="🔍">
-                                                <StackPanel>
-                                                        <TextBlock Text="🔍"
-                                                                   FontSize="24"
-                                                                   HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Buscar Veículo"
-                                                                   FontSize="11"
-                                                                   TextWrapping="Wrap"
-                                                                   HorizontalAlignment="Center"
-                                                                   MaxWidth="80"/>
-                                                </StackPanel>
-                                        </Button>
-                                        <Button Click="BtnBuscarProdutos_Click"
-                                                Style="{StaticResource AtalhoButtonStyle}"
-                                                Tag="🔍">
-                                                <StackPanel>
-                                                        <TextBlock Text="🔍"
-                                                                   FontSize="24"
-                                                                   HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Buscar Peça"
-                                                                   FontSize="11"
-                                                                   TextWrapping="Wrap"
-                                                                   HorizontalAlignment="Center"
-                                                                   MaxWidth="80"/>
-                                                </StackPanel>
-                                        </Button>
-                                        <Button Click="BtnBuscarNotasEmitidas_Click"
-                                                Style="{StaticResource AtalhoButtonStyle}"
-                                                Tag="🔍">
-                                                <StackPanel>
-                                                        <TextBlock Text="🔍"
-                                                                   FontSize="24"
-                                                                   HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Buscar Notas Fiscais"
-                                                                   FontSize="11"
-                                                                   TextWrapping="Wrap"
-                                                                   HorizontalAlignment="Center"
-                                                                   MaxWidth="80"/>
-                                                </StackPanel>
-                                        </Button>
                                         <Button Click="BtnNotaEntradaLista_Click"
                                                 Style="{StaticResource AtalhoButtonStyle}"
-                                                Tag="🔍">
+                                                Tag="📄">
                                                 <StackPanel>
-                                                        <TextBlock Text="🔍"
+                                                        <TextBlock Text="📄"
                                                                    FontSize="24"
                                                                    HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Buscar Notas de Entrada"
+                                                        <TextBlock Text="NF Entrada"
                                                                    FontSize="11"
                                                                    HorizontalAlignment="Center"
                                                                    TextWrapping="Wrap"
