@@ -192,16 +192,6 @@
                         <Run Text="{Binding FornecedorContatoExibir, Mode=OneWay}"/>
                     </TextBlock>
                 </StackPanel>
-
-                <Button Grid.Column="1"
-                        Content="🔗 Abrir Fornecedor"
-                        Command="{Binding AbrirFornecedorCommand}"
-                        Width="160"
-                        Height="35"
-                        VerticalAlignment="Center"
-                        Background="#3498DB"
-                        Foreground="White"
-                        FontWeight="SemiBold"/>
             </Grid>
         </Border>
 

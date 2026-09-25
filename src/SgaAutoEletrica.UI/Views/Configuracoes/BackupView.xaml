@@ -12,13 +12,13 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
             <Button Content="Realizar Backup Agora" Command="{Binding RealizarBackupCommand}"
-                    Width="170" Height="35" Background="#27AE60" Foreground="White" FontWeight="SemiBold"
+                    Width="170" Style="{StaticResource BotaoPadraoStyle}"
                     Margin="0,0,10,0"/>
             <Button Content="Restaurar Backup" Command="{Binding RestaurarCommand}"
-                    Width="140" Height="35" Background="#E67E22" Foreground="White" FontWeight="SemiBold"
+                    Width="140" Style="{StaticResource BotaoPadraoStyle}"
                     Margin="0,0,10,0"/>
-            <Button Content="Atualizar Lista" Command="{Binding AtualizarCommand}"
-                    Width="130" Height="35"/>
+            <Button Content="🔄 Atualizar Lista" Command="{Binding AtualizarCommand}"
+                    Width="130" Style="{StaticResource BotaoPadraoStyle}"/>
         </StackPanel>
 
         <DataGrid Grid.Row="2" ItemsSource="{Binding Backups}" AutoGenerateColumns="False" IsReadOnly="True">

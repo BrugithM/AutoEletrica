@@ -47,7 +47,7 @@
                                         <StackPanel Grid.Column="4">
                                                 <TextBlock Text="Status Atual:"
                                                                 FontWeight="SemiBold"/>
-                                                <Border Background="#3498DB"
+                                                <Border Background="#0A246A"
                                                                 Padding="8,4"
                                                                 CornerRadius="3"
                                                                 Margin="0,2,0,0">
@@ -109,16 +109,11 @@
                                                         <Button Content="➕ Adicionar Serviço"
                                                                         Click="BtnAdicionarServico_Click"
                                                                 Width="150"
-                                                                        Height="28"
-                                                                        Margin="0,0,5,0"
-                                                                Background="#27AE60"
-                                                                        Foreground="White"/>
-                                                        <Button Content="🗑️ Remover Selecionado"
+                                                                        Style="{StaticResource BotaoPadraoStyle}"/>
+                                                        <Button Content="➖ Remover Selecionado"
                                                                         Command="{Binding RemoverServicoCommand}"
                                                                 Width="170"
-                                                                        Height="28"
-                                                                Background="#E74C3C"
-                                                                        Foreground="White"/>
+                                                                        Style="{StaticResource BotaoPadraoStyle}"/>
                                                 </StackPanel>
                                         </Grid>
 
@@ -164,14 +159,14 @@
                                                                   SelectedItem="{Binding PecaSelecionada}"
                                                                   DisplayMemberPath="Nome"
                                                                   Width="300"
-                                                                        Height="28"
+                                                                        Height="24"
                                                                         Margin="0,0,10,0"/>
                                                         <TextBlock Text="Qtd:"
                                                                         VerticalAlignment="Center"
                                                                         Margin="0,0,5,0"/>
                                                         <TextBox Text="{Binding QuantidadePeca, UpdateSourceTrigger=PropertyChanged}"
                                                                  Width="60"
-                                                                        Height="28"/>
+                                                                        Height="24"/>
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="1"
@@ -179,16 +174,12 @@
                                                         <Button Content="➕ Adicionar Peça"
                                                                         Click="BtnAdicionarPeca_Click"
                                                                 Width="140"
-                                                                        Height="28"
                                                                         Margin="0,0,5,0"
-                                                                Background="#27AE60"
-                                                                        Foreground="White"/>
-                                                        <Button Content="🗑️ Remover Selecionado"
+                                                                Style="{StaticResource BotaoPadraoStyle}"/>
+                                                        <Button Content="➖ Remover Selecionado"
                                                                         Command="{Binding RemoverPecaCommand}"
                                                                 Width="170"
-                                                                        Height="28"
-                                                                Background="#E74C3C"
-                                                                        Foreground="White"/>
+                                                                        Style="{StaticResource BotaoPadraoStyle}"/>
                                                 </StackPanel>
                                         </Grid>
 
@@ -230,23 +221,21 @@
                 <Grid Grid.Row="2"
                                 Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="380"/>
+                                <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0"
+                        <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Right"
                                         Orientation="Horizontal"
                                         VerticalAlignment="Bottom">
                                 <Button Content="Salvar"
                                                 Click="BtnSalvar_Click"
                                         Width="160"
-                                                Height="38"
-                                        Background="#27AE60"
-                                                Foreground="White"
-                                                FontWeight="SemiBold"/>
+                                        Style="{StaticResource BotaoPadraoStyle}"/>
                         </StackPanel>
 
-                        <GroupBox Grid.Column="1"
+                        <GroupBox Grid.Column="0"
                                         Header="Resumo de Valores"
                                         Padding="10">
                                 <Grid>
@@ -310,7 +299,7 @@
                                                         Text="{Binding ValorTotalGeral, StringFormat=C2}"
                                                    FontSize="18"
                                                         FontWeight="Bold"
-                                                        Foreground="#27AE60"
+                                                        Foreground="#0A246A"
                                                         HorizontalAlignment="Right"/>
                                 </Grid>
                         </GroupBox>

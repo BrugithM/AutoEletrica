@@ -132,26 +132,17 @@
                         <Button Content="🔗 Vincular Novo Veículo"
                                 Command="{Binding NovoVeiculoCommand}"
                                 Width="200"
-                                Height="35"
                                 Margin="0,0,10,0"
-                                Background="#3498DB"
-                                Foreground="White"
-                                FontWeight="SemiBold"/>
+                                Style="{StaticResource BotaoPadraoStyle}"/>
                         <Button Content="📄 NFs Vinculadas"
                                 Command="{Binding NFsVinculadasCommand}"
                                 Width="160"
-                                Height="35"
                                 Margin="0,0,10,0"
-                                Background="#8E44AD"
-                                Foreground="White"
-                                FontWeight="SemiBold"/>
+                                Style="{StaticResource BotaoPadraoStyle}"/>
                         <Button Content="📋 Criar OS"
                                 Command="{Binding CriarOSCommand}"
                                 Width="130"
-                                Height="35"
-                                Background="#27AE60"
-                                Foreground="White"
-                                FontWeight="SemiBold"/>
+                                Style="{StaticResource BotaoPadraoStyle}"/>
                 </StackPanel>
         </Grid>
 </UserControl>

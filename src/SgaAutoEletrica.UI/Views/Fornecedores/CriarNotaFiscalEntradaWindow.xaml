@@ -94,8 +94,9 @@
 
                     <Button Grid.Column="3" Content="➕ Adicionar"
                             Command="{Binding AdicionarItemCommand}"
+                            Style="{StaticResource BotaoPadraoStyle}"
                             Width="120" Height="26" VerticalAlignment="Bottom"
-                            Background="#27AE60" Foreground="White" FontWeight="SemiBold"/>
+                            />
                 </Grid>
 
                 <DataGrid Grid.Row="1"
@@ -115,11 +116,10 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <Button Grid.Row="2" Content="🗑️ Remover Selecionado"
+                <Button Grid.Row="2" Content="➖ Remover Selecionado"
                         Command="{Binding RemoverItemCommand}"
-                        Width="180" Height="30" HorizontalAlignment="Left"
-                        Margin="0,10,0,0"
-                        Background="#E74C3C" Foreground="White"/>
+                        Width="180" HorizontalAlignment="Left"
+                        Style="{StaticResource BotaoPadraoStyle}"/>
             </Grid>
         </GroupBox>
 
@@ -127,16 +127,16 @@
             <Grid>
                 <TextBlock Text="TOTAL:" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding ValorTotal, StringFormat=C2}" 
-                           FontSize="22" FontWeight="Bold" Foreground="#27AE60"
+                           FontSize="22" FontWeight="Bold" Foreground="#0A246A"
                            HorizontalAlignment="Right"/>
             </Grid>
         </GroupBox>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Salvar NF" Click="BtnSalvar_Click"
-                    Width="130" Height="35" Margin="0,0,10,0"
-                    Background="#27AE60" Foreground="White" FontWeight="SemiBold"/>
-            <Button Content="Cancelar" Width="120" Height="35" Click="BtnCancelar_Click"/>
+                    Width="130" Margin="0,0,10,0"
+                    Style="{StaticResource BotaoPadraoStyle}"/>
+            <Button Content="Cancelar" Width="120" Style="{StaticResource BotaoPadraoStyle}" Click="BtnCancelar_Click"/>
         </StackPanel>
     </Grid>
 </Window>

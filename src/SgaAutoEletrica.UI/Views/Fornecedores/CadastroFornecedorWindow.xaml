@@ -68,12 +68,12 @@
                 Margin="0,15,0,0">
             <Button Content="Salvar"
                     Width="90"
-                    Height="30"
+                    Style="{StaticResource BotaoPadraoStyle}"
                     Margin="0,0,10,0"
                     Click="BtnSalvar_Click"/>
             <Button Content="Limpar"
                     Width="90"
-                    Height="30"
+                    Style="{StaticResource BotaoPadraoStyle}"
                     Click="BtnLimpar_Click"/>
         </StackPanel>
     </Grid>

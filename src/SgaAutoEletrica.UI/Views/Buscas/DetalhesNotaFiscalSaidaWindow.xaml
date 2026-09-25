@@ -1,7 +1,10 @@
 <Window x:Class="SgaAutoEletrica.UI.Views.Buscas.DetalhesNotaFiscalSaidaWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Detalhes da Nota Fiscal" Height="650" Width="700"
+        Title="Detalhes da Nota Fiscal"
+        SizeToContent="Height"
+        MaxHeight="650"
+        Width="500"
         WindowStartupLocation="CenterScreen">
 
     <Grid Margin="15">
@@ -10,20 +13,32 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-            <Border Background="White" Padding="20" BorderBrush="#CCC" BorderThickness="1">
-                <TextBlock x:Name="TxtConteudo" 
-                           FontFamily="Consolas" 
+        <ScrollViewer Grid.Row="0"
+                VerticalScrollBarVisibility="Auto">
+            <Border Background="White"
+                    Padding="20"
+                    BorderBrush="#CCC"
+                    BorderThickness="1">
+                <TextBlock x:Name="TxtConteudo"
+                           FontFamily="Consolas"
                            FontSize="12"
                            TextWrapping="NoWrap"/>
             </Border>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button Content="🖨️ Imprimir NF" Width="140" Height="35" Margin="0,0,10,0"
-                    Background="#3498DB" Foreground="White" FontWeight="SemiBold"
+        <StackPanel Grid.Row="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,15,0,0">
+            <Button Content="🖨️ Imprimir NF"
+                    Width="140"
+                    Margin="0,0,10,0"
+                    Style="{StaticResource BotaoPadraoStyle}"
                     Click="BtnImprimir_Click"/>
-            <Button Content="Fechar" Width="100" Height="35" Click="BtnFechar_Click"/>
+            <Button Content="Fechar"
+                    Width="100"
+                    Style="{StaticResource BotaoPadraoStyle}"
+                    Click="BtnFechar_Click"/>
         </StackPanel>
     </Grid>
 </Window>
