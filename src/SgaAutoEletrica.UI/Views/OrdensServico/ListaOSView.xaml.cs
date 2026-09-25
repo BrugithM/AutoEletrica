@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using SgaAutoEletrica.UI.ViewModels.OrdensServico;
@@ -17,15 +16,13 @@ public partial class ListaOSView : UserControl
         Loaded += ListaOSView_Loaded;
     }
 
-    private async void ListaOSView_Loaded(object sender, RoutedEventArgs e)
+    private async void ListaOSView_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
         await _viewModel.BuscarAsync();
     }
 
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        // Abrir detalhes com duplo clique
-        if (_viewModel.VerDetalhesCommand.CanExecute(null))
-            _viewModel.VerDetalhesCommand.Execute(null);
+        _viewModel.VerDetalhes();
     }
 }

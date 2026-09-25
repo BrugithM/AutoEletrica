@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SgaAutoEletrica.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f404bf450416be6897df70bed065c259f58facf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96f1a4ff84bf6760b7b3edeb355a08a17c58bc55")]
 [assembly: System.Reflection.AssemblyProductAttribute("SgaAutoEletrica.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SgaAutoEletrica.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
