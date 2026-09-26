@@ -23,11 +23,13 @@ public class SalvarConfiguracaoEmpresaHandler : IRequestHandler<SalvarConfigurac
         if (existente != null)
         {
             existente.Atualizar(request.NomeEmpresa, request.Cnpj, request.Telefone, request.Endereco, request.Email);
+            existente.AtualizarLogo(request.LogoPath ?? string.Empty);
         }
         else
         {
             var nova = new ConfiguracaoEmpresa(request.NomeEmpresa, request.Cnpj, request.Telefone);
             nova.Atualizar(request.NomeEmpresa, request.Cnpj, request.Telefone, request.Endereco, request.Email);
+            nova.AtualizarLogo(request.LogoPath ?? string.Empty);
             await _context.ConfiguracoesEmpresa.AddAsync(nova, cancellationToken);
         }
 

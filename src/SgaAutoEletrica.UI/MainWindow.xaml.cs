@@ -36,25 +36,38 @@ public partial class MainWindow : Window
         try
         {
             var config = _mediator.Send(new ObterConfiguracaoEmpresaQuery()).GetAwaiter().GetResult();
-            if (config != null && !string.IsNullOrWhiteSpace(config.LogoPath) && File.Exists(config.LogoPath))
+
+            if (config == null || string.IsNullOrWhiteSpace(config.LogoPath) || !File.Exists(config.LogoPath))
             {
-                var image = new Image
-                {
-                    Source = new BitmapImage(new Uri(config.LogoPath)),
-                    Stretch = Stretch.Uniform,
-                    MaxWidth = 500,
-                    MaxHeight = 500,
-                    Opacity = 0.4
-                };
-                ContentArea.Content = image;
+                ContentArea.Content = null;
+                return;
             }
+
+            var bitmap = new BitmapImage();
+            using (var stream = new FileStream(config.LogoPath, FileMode.Open, FileAccess.Read, FileShare.Read)){
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.StreamSource = stream;
+            bitmap.EndInit();
+            }
+            bitmap.Freeze();
+
+            var image = new Image
+            {
+                Source = bitmap,
+                Stretch = Stretch.Uniform,
+                Opacity = 0.8,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            ContentArea.Content = image;
         }
         catch
         {
-            // Sem logo — deixa em branco
+            ContentArea.Content = null;
         }
     }
-
     public void CarregarUsuarioLogado()
     {
         var sessao = App.ServiceProvider.GetRequiredService<ISessaoUsuario>();

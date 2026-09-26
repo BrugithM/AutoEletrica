@@ -104,7 +104,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     {
         Clientes.Clear();
         var resultado = await _mediator.Send(new ListarClientesQuery());
-        foreach (var cliente in resultado.Select(c => new ClienteResumoDTO
+        foreach (var cliente in resultado.Itens.Select(c => new ClienteResumoDTO
         {
             Id = c.Id,
             NomeCompleto = c.NomeCompleto,
