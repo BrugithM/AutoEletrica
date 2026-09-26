@@ -9,4 +9,5 @@ public class SalvarConfiguracaoEmpresaCommand : IRequest
     public string Telefone { get; set; } = string.Empty;
     public string? Endereco { get; set; }
     public string? Email { get; set; }
+    public string? LogoPath { get; set; }
 }

@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 using SgaAutoEletrica.UI.ViewModels.Clientes;
 
@@ -16,7 +15,7 @@ public partial class ListaClientesView : UserControl
         Loaded += ListaClientesView_Loaded;
     }
 
-    private async void ListaClientesView_Loaded(object sender, RoutedEventArgs e)
+    private async void ListaClientesView_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
         await _viewModel.BuscarAsync();
     }
