@@ -1,15 +1,23 @@
 using MediatR;
+using SgaAutoEletrica.Application.Common.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 
 namespace SgaAutoEletrica.Application.Features.Veiculos.Queries;
 
-/// <summary>
-/// Busca veículos por um termo único que procura em:
-/// placa, modelo, marca e nome do cliente.
-/// </summary>
-public class BuscarVeiculosQuery : IRequest<List<VeiculoDTO>>
+public class BuscarVeiculosQuery : IRequest<ListaPaginadaDTO<VeiculoDTO>>
 {
+    // Busca rápida
     public string? TermoBusca { get; set; }
-    public bool? Ativo { get; set; } = true;
 
+    // Busca avançada
+    public string? Placa { get; set; }
+    public string? Modelo { get; set; }
+    public string? Marca { get; set; }
+    public string? NomeCliente { get; set; }
+    public int? Ano { get; set; }
+
+    // Comum
+    public bool? Ativo { get; set; } = true;
+    public int Pagina { get; set; } = 1;
+    public int TamanhoPagina { get; set; } = 20;
 }

@@ -83,7 +83,34 @@ public partial class MainWindow : Window
         ContentArea.Content = view;
     }
 
-    // ─── Cadastro ───
+    // Cadastro 
+    private void BtnCadastroCliente_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.Clientes.CadastroClienteWindow(_mediator);
+        dialog.ShowDialog();
+    }
+    private void BtnCadastroVeiculos_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.Veiculos.CadastroVeiculoWindow(_mediator);
+        dialog.ShowDialog();
+    }
+    private void BtnCadastroFornecedores_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.Fornecedores.CadastroFornecedorWindow(_mediator);
+        dialog.ShowDialog();
+    }
+    private void BtnCadastroPecas_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.Pecas.CadastroPecaWindow(_mediator);
+        dialog.ShowDialog();
+    }
+    private void BtnCadastroCategorias_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.CategoriasPeca.CadastroCategoriaWindow(_mediator);
+        dialog.ShowDialog();
+    }
+
+    // ─── Gerenciamento ───
 
     private void BtnClientes_Click(object sender, RoutedEventArgs e)
     {

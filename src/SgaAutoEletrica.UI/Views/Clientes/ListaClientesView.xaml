@@ -1,6 +1,10 @@
 <UserControl x:Class="SgaAutoEletrica.UI.Views.Clientes.ListaClientesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             <UserControl.InputBindings>
+        <KeyBinding Key="F5"
+                    Command="{Binding AtualizarCommand}"/>
+    </UserControl.InputBindings>
         <Grid Margin="0">
                 <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -66,6 +70,7 @@
                                 Command="{Binding BuscarCommand}"
                                 Width="28"
                                 Margin="0,0,10,0"
+                                IsDefault="True"
                                 Style="{StaticResource BotaoToolbarStyle}"
                                 Background="Transparent"
                                 />
@@ -152,7 +157,8 @@
                                                         Margin="0,0,10,0"/>
                                                 <Button Content="⌕ Buscar"
                                                         Command="{Binding BuscarCommand}"
-                                                        Width="120"
+                                                        Width="90"
+                                                        IsDefault="True"
                                                         Style="{StaticResource BotaoPadraoStyle}"/>
                                         </StackPanel>
                                 </Grid>
