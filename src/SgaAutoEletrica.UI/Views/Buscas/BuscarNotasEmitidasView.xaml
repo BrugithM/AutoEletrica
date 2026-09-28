@@ -105,8 +105,9 @@
                             Width="80"
                             Margin="0,0,10,0"
                             Style="{StaticResource BotaoPadraoStyle}"/>
-                    <Button Content="🔍 Buscar"
+                    <Button Content="⌕ Buscar"
                             Command="{Binding BuscarCommand}"
+                            IsDefault="True"
                             Width="100"
                             Style="{StaticResource BotaoPadraoStyle}"/>
                 </StackPanel>

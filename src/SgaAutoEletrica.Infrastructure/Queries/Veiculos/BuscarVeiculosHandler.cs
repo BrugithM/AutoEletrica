@@ -1,12 +1,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SgaAutoEletrica.Application.Common.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.Queries;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Queries.Veiculos;
 
-public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<VeiculoDTO>>
+public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaPaginadaDTO<VeiculoDTO>>
 {
     private readonly AppDbContext _context;
 
@@ -15,13 +16,14 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
         _context = context;
     }
 
-    public async Task<List<VeiculoDTO>> Handle(BuscarVeiculosQuery request, CancellationToken cancellationToken)
+    public async Task<ListaPaginadaDTO<VeiculoDTO>> Handle(BuscarVeiculosQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Veiculos
             .Include(v => v.Cliente)
             .AsNoTracking()
             .AsQueryable();
 
+        // Busca rápida
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
             var termo = request.TermoBusca.Trim().ToLower();
@@ -31,12 +33,48 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
                 v.Marca.ToLower().Contains(termo) ||
                 v.Cliente.NomeCompleto.ToLower().Contains(termo));
         }
-        if(request.Ativo.HasValue)
-            query = query.Where(v =>v.Ativo == request.Ativo.Value);
 
-        return await query
+        // Busca avançada
+        if (!string.IsNullOrWhiteSpace(request.Placa))
+        {
+            var termo = request.Placa.Trim().ToLower();
+            query = query.Where(v => v.Placa.Valor.ToLower().Contains(termo));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Modelo))
+        {
+            var termo = request.Modelo.Trim().ToLower();
+            query = query.Where(v => v.Modelo.ToLower().Contains(termo));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Marca))
+        {
+            var termo = request.Marca.Trim().ToLower();
+            query = query.Where(v => v.Marca.ToLower().Contains(termo));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.NomeCliente))
+        {
+            var termo = request.NomeCliente.Trim().ToLower();
+            query = query.Where(v => v.Cliente.NomeCompleto.ToLower().Contains(termo));
+        }
+
+        if (request.Ano.HasValue)
+        {
+            query = query.Where(v => v.Ano == request.Ano.Value);
+        }
+
+        // Filtro de ativo
+        if (request.Ativo.HasValue)
+            query = query.Where(v => v.Ativo == request.Ativo.Value);
+
+        var totalItens = await query.CountAsync(cancellationToken);
+
+        var itens = await query
             .OrderBy(v => v.Cliente.NomeCompleto)
             .ThenBy(v => v.Modelo)
+            .Skip((request.Pagina - 1) * request.TamanhoPagina)
+            .Take(request.TamanhoPagina)
             .Select(v => new VeiculoDTO
             {
                 Id = v.Id,
@@ -56,5 +94,13 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, List<V
                 Ativo = v.Ativo
             })
             .ToListAsync(cancellationToken);
+
+        return new ListaPaginadaDTO<VeiculoDTO>
+        {
+            Itens = itens,
+            PaginaAtual = request.Pagina,
+            TamanhoPagina = request.TamanhoPagina,
+            TotalItens = totalItens
+        };
     }
 }

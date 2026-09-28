@@ -22,6 +22,23 @@
                 <Menu Grid.Row="0"
                       Background="#2C3E50"
                       Foreground="White">
+                        <MenuItem Header="Cadastros">
+                                <MenuItem Header="Cadastrar Clientes"
+                                          Click="BtnCadastroCliente_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Cadastrar Veículos"
+                                          Click="BtnCadastroVeiculos_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Cadastrar Fornecedores"
+                                          Click="BtnCadastroFornecedores_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Cadastrar Peças"
+                                          Click="BtnCadastroPecas_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Cadastrar Categorias"
+                                          Click="BtnCadastroCategorias_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                        </MenuItem>
                         <MenuItem Header="Gerenciamento">
                                 <MenuItem Header="Clientes"
                                           Click="BtnClientes_Click"
@@ -198,6 +215,17 @@
                                                                    MaxWidth="80"/>
                                                 </StackPanel>
                                         </Button>
+                                        <Button Click="BtnOS_Click"
+                                                Style="{StaticResource AtalhoButtonStyle}">
+                                                <StackPanel>
+                                                        <TextBlock Text="🔍"
+                                                                   FontSize="24"
+                                                                   HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="Buscar OS"
+                                                                   FontSize="11"
+                                                                   HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                        </Button>
                                         <Button Click="BtnBuscarPlaca_Click"
                                                 Style="{StaticResource AtalhoButtonStyle}">
                                                 <StackPanel>
@@ -205,7 +233,7 @@
                                                                    FontSize="24"
                                                                    HorizontalAlignment="Center"/>
                                                         <TextBlock Text="Buscar Placa"
-                                                                   FontSize="11"
+                                                                   FontSize  ="11"
                                                                    HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
