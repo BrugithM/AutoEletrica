@@ -1,0 +1,63 @@
+<Window x:Class="SgaAutoEletrica.UI.Views.Veiculos.NFsVinculadasWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Titulo}" Height="550" Width="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{Binding Titulo}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Barra de ações -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="👁️ Ver Detalhes" Command="{Binding VerDetalhesCommand}"
+                    Width="120" Style="{StaticResource BotaoPadraoStyle}"/>
+            <Button Content="🖨️ Imprimir NF" Command="{Binding ImprimirNFCommand}"
+                    Width="120"
+                    Style="{StaticResource BotaoPadraoStyle}"/>
+        </StackPanel>
+
+        <!-- Grid de NFs -->
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding Notas}"
+                  SelectedItem="{Binding NotaSelecionada}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  CanUserAddRows="False"
+                  MouseDoubleClick="DataGrid_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Número" Binding="{Binding Numero}" Width="130"/>
+                <DataGridTextColumn Header="Data" Binding="{Binding DataEmissao, StringFormat=dd/MM/yyyy}" Width="110"/>
+                <DataGridTextColumn Header="Cliente" Binding="{Binding NomeCliente}" Width="250"/>
+                <DataGridTextColumn Header="Placa" Binding="{Binding PlacaVeiculo}" Width="100"/>
+                <DataGridTextColumn Header="Valor" Binding="{Binding ValorTotal, StringFormat=C2}" Width="120"/>
+                <DataGridTextColumn Header="Observação" Binding="{Binding Observacao}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Rodapé -->
+        <Grid Grid.Row="3" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Total de NFs: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding TotalNotas}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="Valor Total: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding TotalGeral, StringFormat=C2}" FontWeight="Bold" 
+                           Foreground="#27AE60" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <Button Grid.Column="1" Content="Fechar" Width="80" Style="{StaticResource BotaoPadraoStyle}" Click="BtnFechar_Click"/>
+        </Grid>
+    </Grid>
+</Window>

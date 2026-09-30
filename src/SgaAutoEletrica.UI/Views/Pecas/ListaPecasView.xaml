@@ -37,6 +37,10 @@
                                         Command="{Binding MovimentarEstoqueCommand}"
                                         Width="120"
                                         Style="{StaticResource BotaoToolbarStyle}"/>
+                                <Button Content="🏷️ Etiqueta"
+                                                Click="BtnImprimirEtiqueta_Click"
+                                        Width="100"
+                                                Style="{StaticResource BotaoToolbarStyle}"/>
                                 <Button Content="⟳ Atualizar"
                                         Command="{Binding AtualizarCommand}"
                                         Width="85"

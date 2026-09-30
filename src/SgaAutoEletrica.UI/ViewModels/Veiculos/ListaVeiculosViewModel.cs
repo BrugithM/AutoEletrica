@@ -264,7 +264,11 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     private void NFsVinculadas()
     {
         if (VeiculoSelecionado == null) return;
-        MessageBox.Show($"Lista de NFs do veículo {VeiculoSelecionado.Placa} - em breve", "Em breve");
+        var dialog = new Views.Veiculos.NFsVinculadasWindow(
+            _mediator,
+            VeiculoSelecionado.Id,
+            VeiculoSelecionado.Placa);
+        dialog.ShowDialog();
     }
 
     private void CriarOS()
