@@ -176,12 +176,6 @@ public partial class MainWindow : Window
         dialog.ShowDialog();
     }
 
-    private void BtnBuscarProdutos_Click(object sender, RoutedEventArgs e)
-    {
-        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarProdutosView>();
-        NavegarPara(view);
-    }
-
     // ─── Ordem de Serviço ───
 
     private void BtnCriarOS_Click(object sender, RoutedEventArgs e)

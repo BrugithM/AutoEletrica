@@ -43,8 +43,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         }
     }
 
-    public string InfoCliente => ClienteSelecionado != null
-        ? $"{ClienteSelecionado.NomeCompleto} (Tel: {ClienteSelecionado.Telefone})"
+    public string InfoCliente => ClienteSelecionado != null 
+        ? $"{ClienteSelecionado.NomeCompleto} (Tel: {ClienteSelecionado.Telefone})" 
         : "";
 
     private VeiculoDTO? _veiculoSelecionado;
@@ -59,8 +59,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         }
     }
 
-    public string InfoVeiculo => VeiculoSelecionado != null
-        ? $"{VeiculoSelecionado.Marca} {VeiculoSelecionado.Modelo} - Placa: {VeiculoSelecionado.Placa}"
+    public string InfoVeiculo => VeiculoSelecionado != null 
+        ? $"{VeiculoSelecionado.Marca} {VeiculoSelecionado.Modelo} - Placa: {VeiculoSelecionado.Placa}" 
         : "";
 
     private PecaDTO? _pecaSelecionada;
@@ -140,12 +140,12 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
     public async Task CarregarDadosAsync()
     {
-        var resultado = await _mediator.Send(new ListarClientesQuery());
-        foreach (var c in resultado.Itens)
+        var clientes = await _mediator.Send(new ListarClientesQuery { TamanhoPagina = 1000 });
+        foreach (var c in clientes.Itens)
             Clientes.Add(new ClienteResumoDTO { Id = c.Id, NomeCompleto = c.NomeCompleto, Telefone = c.Telefone });
 
-        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true });
-        foreach (var p in pecas)
+        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
+        foreach (var p in pecas.Itens)
             PecasDisponiveis.Add(p);
 
         var servicos = await _mediator.Send(new ListarServicosQuery());
@@ -272,8 +272,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
             await _mediator.Send(command);
 
-            var msg = aprovarIniciar
-                ? "OS criada e iniciada com sucesso!"
+            var msg = aprovarIniciar 
+                ? "OS criada e iniciada com sucesso!" 
                 : "Orçamento emitido com sucesso!";
             MessageBox.Show(msg, "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             return true;

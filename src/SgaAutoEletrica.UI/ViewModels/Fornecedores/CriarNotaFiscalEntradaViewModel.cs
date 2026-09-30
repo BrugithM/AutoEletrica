@@ -109,8 +109,8 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         foreach (var f in fornecedores)
             Fornecedores.Add(f);
 
-        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true });
-        foreach (var p in pecas)
+        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
+        foreach (var p in pecas.Itens)
             PecasDisponiveis.Add(p);
     }
 
@@ -182,7 +182,6 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 
         try
         {
-            // Verifica duplicidade
             var jaExiste = await _mediator.Send(new VerificarNFExistenteQuery
             {
                 Numero = Numero,

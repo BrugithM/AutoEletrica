@@ -17,7 +17,7 @@
             <Button Content="Restaurar Backup" Command="{Binding RestaurarCommand}"
                     Width="140" Style="{StaticResource BotaoPadraoStyle}"
                     Margin="0,0,10,0"/>
-            <Button Content="🔄 Atualizar Lista" Command="{Binding AtualizarCommand}"
+            <Button Content="⟳ Atualizar Lista" Command="{Binding AtualizarCommand}"
                     Width="130" Style="{StaticResource BotaoPadraoStyle}"/>
         </StackPanel>
 

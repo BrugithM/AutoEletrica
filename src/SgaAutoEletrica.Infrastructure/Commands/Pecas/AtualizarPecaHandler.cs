@@ -20,17 +20,20 @@ public class AtualizarPecaHandler : IRequestHandler<AtualizarPecaCommand>
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Peça não encontrada.");
 
+        peca.AtualizarIdPeca(request.IdPeca);
+
         peca.AtualizarDados(
             request.Nome,
             request.Descricao,
             request.Marca,
             request.ValorCusto,
-            request.Imposto,
+            0,  
             request.CodigoPeca,
             request.CategoriaId,
+            request.FornecedorId,
             request.EstoqueMinimo);
 
-        peca.AtualizarValorVenda(request.ValorVenda);  // ← NOVO
+        peca.AtualizarValorVenda(request.ValorVenda);
 
         await _context.SaveChangesAsync(cancellationToken);
     }

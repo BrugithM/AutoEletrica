@@ -81,7 +81,8 @@
                                 Style="{StaticResource BotaoPadraoStyle}"/>
                         <Button Content="➖ Remover Imagem"
                                 Command="{Binding RemoverImagemCommand}"
-                                Width="160"
+                                Width="150"
+                                Margin="10,0,0,0"
                                 Style="{StaticResource BotaoPadraoStyle}"/>
                     </StackPanel>
 
