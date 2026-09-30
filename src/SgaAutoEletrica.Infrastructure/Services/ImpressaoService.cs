@@ -1,9 +1,13 @@
 using System.Drawing.Printing;
 using System.Text;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Application.Features.OrdensServico.DTOs;
 using SgaAutoEletrica.Domain.Enums;
+using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Services;
@@ -213,5 +217,121 @@ public class ImpressaoService : IImpressaoService
         sb.AppendLine("       OBRIGADO E VOLTE SEMPRE!");
 
         return sb.ToString();
+    }
+
+    public Bitmap GerarEtiquetaBitmap(PecaDTO peca, string nomeEmpresa)
+    {
+        // 60x40mm a 300 DPI = 708 x 472 pixels
+        const int largura = 708;
+        const int altura = 472;
+
+        var bitmap = new Bitmap(largura, altura);
+        bitmap.SetResolution(300, 300);
+
+        using (var g = Graphics.FromImage(bitmap))
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            g.Clear(Color.White);
+
+            // Cabeçalho preto com nome da empresa em branco
+            var alturaCabecalho = 75f;
+            g.FillRectangle(Brushes.Black, 0, 0, largura, alturaCabecalho);
+
+            var fonteEmpresa = new Font("Arial", 14, FontStyle.Bold);
+
+            // Centraliza o nome da empresa no cabeçalho
+            var tamanhoEmpresa = g.MeasureString(nomeEmpresa, fonteEmpresa);
+            var xEmpresa = (largura - tamanhoEmpresa.Width) / 2;
+            var yEmpresa = (alturaCabecalho - tamanhoEmpresa.Height) / 2;
+
+            // Clipping: garante que o texto fica dentro do cabeçalho
+            g.SetClip(new RectangleF(0, 0, largura, alturaCabecalho));
+            g.DrawString(nomeEmpresa, fonteEmpresa, Brushes.White, xEmpresa, yEmpresa);
+            g.ResetClip();
+
+            // Corpo da etiqueta
+            var fonteCodigo = new Font("Arial", 12);
+            var fonteNome = new Font("Arial", 12, FontStyle.Bold);
+            var fonteValor = new Font("Arial", 14, FontStyle.Bold);
+            var fonteId = new Font("Arial", 12);
+
+            var centroX = largura / 2f;
+            var y = alturaCabecalho + 15f;
+
+            // Código
+            var codigo = peca.CodigoPeca ?? "-";
+            var textoCodigo = $"Código: {codigo}";
+            var tamanhoCodigo = g.MeasureString(textoCodigo, fonteCodigo);
+            g.DrawString(textoCodigo, fonteCodigo, Brushes.Black,
+                centroX - tamanhoCodigo.Width / 2, y);
+            y += fonteCodigo.GetHeight(g) + 8;
+
+            // Nome
+            var nome = peca.Nome.Length > 30 ? peca.Nome.Substring(0, 30) + "..." : peca.Nome;
+            var tamanhoNome = g.MeasureString(nome, fonteNome);
+            g.DrawString(nome, fonteNome, Brushes.Black,
+                centroX - tamanhoNome.Width / 2, y);
+            y += fonteNome.GetHeight(g) + 12;
+
+            // Valor
+            var textoValor = peca.ValorVenda.ToString("C2");
+            var tamanhoValor = g.MeasureString(textoValor, fonteValor);
+            g.DrawString(textoValor, fonteValor, Brushes.Black,
+                centroX - tamanhoValor.Width / 2, y);
+            y += fonteValor.GetHeight(g) + 10;
+
+            // ID da Peça
+            var textoId = $"ID: {peca.IdPeca}";
+            var tamanhoId = g.MeasureString(textoId, fonteId);
+            g.DrawString(textoId, fonteId, Brushes.Gray,
+                centroX - tamanhoId.Width / 2, y);
+
+            // Descarta fontes
+            fonteEmpresa.Dispose();
+            fonteCodigo.Dispose();
+            fonteNome.Dispose();
+            fonteValor.Dispose();
+            fonteId.Dispose();
+        }
+        return bitmap;
+    }
+    public void ImprimirEtiqueta(PecaDTO peca)
+    {
+        var config = _configRepo.ObterPorTipo(TipoImpressao.Etiqueta).GetAwaiter().GetResult();
+        if (config == null)
+            throw new InvalidOperationException("Nenhuma impressora configurada para Etiqueta.");
+
+        var empresa = _context.ConfiguracoesEmpresa
+            .AsNoTracking()
+            .FirstOrDefault();
+
+        var nomeEmpresa = empresa?.NomeEmpresa ?? "AUTO ELÉTRICA";
+
+        using var bitmap = GerarEtiquetaBitmap(peca, nomeEmpresa);
+
+        var printDocument = new PrintDocument
+        {
+            PrinterSettings = new PrinterSettings
+            {
+                PrinterName = config.NomeImpressora,
+                Copies = 1
+            },
+            DocumentName = "Etiqueta de Peça",
+            DefaultPageSettings = new PageSettings
+            {
+                // 60x40mm em centésimos de polegada
+                PaperSize = new PaperSize("Etiqueta 60x40", 236, 157),
+                Margins = new Margins(0, 0, 0, 0)
+            }
+        };
+
+        printDocument.PrintPage += (sender, e) =>
+        {
+            var g = e.Graphics!;
+            g.DrawImage(bitmap, e.MarginBounds);
+        };
+
+        printDocument.Print();
     }
 }

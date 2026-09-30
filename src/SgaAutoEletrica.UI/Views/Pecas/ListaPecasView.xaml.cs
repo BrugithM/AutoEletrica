@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 using SgaAutoEletrica.UI.ViewModels.Pecas;
 
@@ -19,5 +20,18 @@ public partial class ListaPecasView : UserControl
     {
         await _viewModel.CarregarDadosAuxiliaresAsync();
         await _viewModel.BuscarAsync();
+    }
+
+    private void BtnImprimirEtiqueta_Click(object sender, RoutedEventArgs e)
+    {
+        if (_viewModel.PecaSelecionada == null)
+        {
+            MessageBox.Show("Selecione uma peça para imprimir a etiqueta.", "Aviso",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var dialog = new ImprimirEtiquetaWindow(_viewModel.PecaSelecionada);
+        dialog.ShowDialog();
     }
 }

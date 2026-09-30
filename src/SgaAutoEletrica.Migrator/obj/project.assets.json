@@ -824,7 +824,7 @@
           }
         }
       },
-      "Microsoft.Win32.SystemEvents/10.0.11": {
+      "Microsoft.Win32.SystemEvents/10.0.12": {
         "type": "package",
         "compile": {
           "lib/net10.0/Microsoft.Win32.SystemEvents.dll": {
@@ -1174,10 +1174,10 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "System.Drawing.Common/10.0.11": {
+      "System.Drawing.Common/10.0.12": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Win32.SystemEvents": "10.0.11"
+          "Microsoft.Win32.SystemEvents": "10.0.12"
         },
         "compile": {
           "lib/net10.0/System.Drawing.Common.dll": {
@@ -1212,7 +1212,8 @@
           "AutoMapper": "16.2.0",
           "FluentValidation": "12.1.1",
           "MediatR": "14.2.0",
-          "SgaAutoEletrica.Domain": "1.0.0"
+          "SgaAutoEletrica.Domain": "1.0.0",
+          "System.Drawing.Common": "10.0.12"
         },
         "compile": {
           "bin/placeholder/SgaAutoEletrica.Application.dll": {}
@@ -1242,7 +1243,7 @@
           "SQLitePCLRaw.bundle_e_sqlite3": "3.0.5",
           "SgaAutoEletrica.Application": "1.0.0",
           "SgaAutoEletrica.Domain": "1.0.0",
-          "System.Drawing.Common": "10.0.11"
+          "System.Drawing.Common": "10.0.12"
         },
         "compile": {
           "bin/placeholder/SgaAutoEletrica.Infrastructure.dll": {}
@@ -3047,10 +3048,10 @@
         "microsoft.visualstudio.solutionpersistence.nuspec"
       ]
     },
-    "Microsoft.Win32.SystemEvents/10.0.11": {
-      "sha512": "WXGazuzGf3eX24z1qgiGwP2df3t2T28QeZvMjlRqdjNuewQyLfbOb6rEXmk6Xs++gOQClmw90pkjPd9j/hNWDw==",
+    "Microsoft.Win32.SystemEvents/10.0.12": {
+      "sha512": "kdj5cqOwgZCMltEhQ4+WVUoFkMHG08EJfy1MDyS9H+FBg66vTTFyX8YcNl8IQh5wRQv79P+iduQgDGY8ucBR+w==",
       "type": "package",
-      "path": "microsoft.win32.systemevents/10.0.11",
+      "path": "microsoft.win32.systemevents/10.0.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3071,7 +3072,7 @@
         "lib/net9.0/Microsoft.Win32.SystemEvents.xml",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "microsoft.win32.systemevents.10.0.11.nupkg.sha512",
+        "microsoft.win32.systemevents.10.0.12.nupkg.sha512",
         "microsoft.win32.systemevents.nuspec",
         "runtimes/win/lib/net10.0/Microsoft.Win32.SystemEvents.dll",
         "runtimes/win/lib/net10.0/Microsoft.Win32.SystemEvents.xml",
@@ -3426,10 +3427,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Drawing.Common/10.0.11": {
-      "sha512": "Schxw0FzXMAwa+If/oVxqjrmmiyUbw9KUAeqJOPnjsdAzkmUZXSZWNRLHZye2boFYlbMRkeBY6dba5hs8Mu4OQ==",
+    "System.Drawing.Common/10.0.12": {
+      "sha512": "FBUxiucg2gsnyItbpGgyXI5u8FYLcqdLKS1XJkHHTj3RK1c6kpsJr/Y9i4edUNF7LqCYFrHqpHEvpt8/lNBe9w==",
       "type": "package",
-      "path": "system.drawing.common/10.0.11",
+      "path": "system.drawing.common/10.0.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3474,7 +3475,7 @@
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "system.drawing.common.10.0.11.nupkg.sha512",
+        "system.drawing.common.10.0.12.nupkg.sha512",
         "system.drawing.common.nuspec",
         "useSharedDesignerContext.txt"
       ]
