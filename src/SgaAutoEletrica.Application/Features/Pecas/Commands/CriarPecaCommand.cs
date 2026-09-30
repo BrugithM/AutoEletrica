@@ -10,7 +10,6 @@ public class CriarPecaCommand : IRequest<Guid>
     public string Marca { get; set; } = string.Empty;
     public decimal ValorCusto { get; set; }
     public decimal ValorVenda { get; set; }
-    public decimal Imposto { get; set; }
     public int EstoqueInicial { get; set; }
     public int EstoqueMinimo { get; set; } = 5;
     public string? CodigoPeca { get; set; }

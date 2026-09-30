@@ -25,7 +25,6 @@
                   Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <!-- ID / Código / Código de Barras -->
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="130"/>
@@ -123,8 +122,6 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
@@ -134,12 +131,6 @@
                                     Margin="0,2,0,0"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Imposto (%)"/>
-                            <TextBox Text="{Binding Imposto, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
-                                     Height="26"
-                                    Margin="0,2,0,0"/>
-                        </StackPanel>
 
                         <StackPanel Grid.Column="4">
                             <TextBlock Text="Valor de Venda"/>
@@ -183,6 +174,7 @@
                     Width="90"
                     Style="{StaticResource BotaoPadraoStyle}"
                     Margin="0,0,10,0"
+                    IsDefault="True"
                     Click="BtnSalvar_Click"/>
             <Button Content="Limpar"
                     Width="90"

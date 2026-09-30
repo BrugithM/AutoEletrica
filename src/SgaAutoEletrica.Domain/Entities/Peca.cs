@@ -95,6 +95,7 @@ public class Peca
         return Math.Round((ValorVenda - ValorCusto) / ValorCusto * 100, 2);
     }
 
+    // Não utilizada por enquanto
     public decimal CalcularPrecoComImposto()
     {
         return Math.Round(ValorVenda * (1 + Imposto / 100), 2);
@@ -150,6 +151,7 @@ public class Peca
         decimal imposto,
         string? codigoPeca = null,
         Guid? categoriaId = null,
+        Guid? fornecedorId = null,
         int? estoqueMinimo = null)
     {
         if (string.IsNullOrWhiteSpace(nome))
@@ -168,8 +170,17 @@ public class Peca
         Imposto = imposto;
         CodigoPeca = codigoPeca;
         CategoriaId = categoriaId;
+        FornecedorId = fornecedorId;
         if (estoqueMinimo.HasValue)
             EstoqueMinimo = estoqueMinimo.Value;
+    }
+
+    public void AtualizarIdPeca(string idPeca)
+    {
+        if (string.IsNullOrWhiteSpace(idPeca))
+            throw new ArgumentException("ID da peça é obrigatório.", nameof(idPeca));
+
+        IdPeca = idPeca;
     }
 
     public void Desativar() => Ativo = false;

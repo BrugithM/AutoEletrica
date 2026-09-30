@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 using SgaAutoEletrica.UI.ViewModels.Pecas;
 
@@ -16,9 +15,9 @@ public partial class ListaPecasView : UserControl
         Loaded += ListaPecasView_Loaded;
     }
 
-    private async void ListaPecasView_Loaded(object sender, RoutedEventArgs e)
+    private async void ListaPecasView_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
-        await _viewModel.CarregarCategoriasAsync();
+        await _viewModel.CarregarDadosAuxiliaresAsync();
         await _viewModel.BuscarAsync();
     }
 }

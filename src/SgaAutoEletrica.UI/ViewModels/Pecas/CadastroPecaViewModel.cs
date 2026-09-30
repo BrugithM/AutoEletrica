@@ -26,7 +26,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
     public string Marca { get; set; } = string.Empty;
     public decimal ValorCusto { get; set; }
     public decimal ValorVenda { get; set; }
-    public decimal Imposto { get; set; }
     public int EstoqueInicial { get; set; }
     public int EstoqueMinimo { get; set; } = 5;
 
@@ -83,7 +82,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             Marca = peca.Marca;
             ValorCusto = peca.ValorCusto;
             ValorVenda = peca.ValorVenda;
-            Imposto = peca.Imposto;
             EstoqueInicial = peca.Estoque;
             EstoqueMinimo = peca.EstoqueMinimo;
 
@@ -98,7 +96,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Marca));
             OnPropertyChanged(nameof(ValorCusto));
             OnPropertyChanged(nameof(ValorVenda));
-            OnPropertyChanged(nameof(Imposto));
             OnPropertyChanged(nameof(EstoqueInicial));
             OnPropertyChanged(nameof(EstoqueMinimo));
         }
@@ -171,14 +168,15 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
                 await _mediator.Send(new AtualizarPecaCommand
                 {
                     Id = _pecaId.Value,
+                    IdPeca = IdPeca,
                     Nome = Nome,
                     Descricao = Descricao,
                     Marca = Marca,
                     ValorCusto = ValorCusto,
                     ValorVenda = ValorVenda,
-                    Imposto = Imposto,
                     CodigoPeca = CodigoPeca,
                     CategoriaId = CategoriaSelecionada?.Id,
+                    FornecedorId = FornecedorSelecionado?.Id,
                     EstoqueMinimo = EstoqueMinimo
                 });
             }
@@ -192,7 +190,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
                     Marca = Marca,
                     ValorCusto = ValorCusto,
                     ValorVenda = ValorVenda,
-                    Imposto = Imposto,
                     EstoqueInicial = EstoqueInicial,
                     EstoqueMinimo = EstoqueMinimo,
                     CodigoPeca = CodigoPeca,
@@ -224,7 +221,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         Marca = string.Empty;
         ValorCusto = 0;
         ValorVenda = 0;
-        Imposto = 0;
         EstoqueInicial = 0;
         EstoqueMinimo = 5;
         CategoriaSelecionada = null;
@@ -238,7 +234,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Marca));
         OnPropertyChanged(nameof(ValorCusto));
         OnPropertyChanged(nameof(ValorVenda));
-        OnPropertyChanged(nameof(Imposto));
         OnPropertyChanged(nameof(EstoqueInicial));
         OnPropertyChanged(nameof(EstoqueMinimo));
         OnPropertyChanged(nameof(CategoriaSelecionada));

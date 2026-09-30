@@ -41,12 +41,10 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
                 FornecedorContato = p.Fornecedor != null ? p.Fornecedor.Contato : null,
                 ValorCusto = p.ValorCusto,
                 ValorVenda = p.ValorVenda,
-                Imposto = p.Imposto,
                 Estoque = p.Estoque,
                 EstoqueMinimo = p.EstoqueMinimo,
                 Ativo = p.Ativo,
                 MargemLucro = p.CalcularMargemLucroPercentual(),
-                PrecoComImposto = p.CalcularPrecoComImposto(),
                 EstoqueBaixo = p.Estoque <= p.EstoqueMinimo
             })
             .FirstOrDefaultAsync(cancellationToken);

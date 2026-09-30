@@ -163,8 +163,8 @@ public class EditarOSViewModel : INotifyPropertyChanged
         foreach (var servico in os.ItensServico)
             ServicosNaOS.Add(servico);
 
-        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true });
-        foreach (var p in pecas)
+        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
+        foreach (var p in pecas.Itens)
             PecasDisponiveis.Add(p);
 
         var servicos = await _mediator.Send(new ListarServicosQuery());

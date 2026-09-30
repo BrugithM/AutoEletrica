@@ -140,6 +140,7 @@
                     Width="90"
                     Style="{StaticResource BotaoPadraoStyle}"
                     Margin="0,0,10,0"
+                    IsDefault="True"
                     Click="BtnSalvar_Click"/>
             <Button Content="Limpar"
                     Width="90"
