@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 using SgaAutoEletrica.UI.ViewModels.Dashboard;
 
@@ -16,12 +15,7 @@ public partial class DashboardView : UserControl
         Loaded += DashboardView_Loaded;
     }
 
-    private async void DashboardView_Loaded(object sender, RoutedEventArgs e)
-    {
-        await _viewModel.CarregarAsync();
-    }
-
-    private async void BtnAtualizar_Click(object sender, RoutedEventArgs e)
+    private async void DashboardView_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
         await _viewModel.CarregarAsync();
     }

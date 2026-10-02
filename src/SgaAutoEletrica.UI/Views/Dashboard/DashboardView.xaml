@@ -1,69 +1,94 @@
 <UserControl x:Class="SgaAutoEletrica.UI.Views.Dashboard.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ScrollViewer>
-        <StackPanel Margin="20">
-            <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" Margin="0,0,0,20"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="15">
+            <!-- Filtros -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                <TextBlock Text="Mês:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,5,0"/>
+                <ComboBox ItemsSource="{Binding Meses}"
+                          SelectedItem="{Binding MesSelecionado}"
+                          Width="60" Height="26" Margin="0,0,15,0"/>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                <TextBlock Text="Ano:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,5,0"/>
+                <ComboBox ItemsSource="{Binding Anos}"
+                          SelectedItem="{Binding AnoSelecionado}"
+                          Width="60" Height="26"/>
+            </StackPanel>
 
-                <Border Grid.Row="0" Grid.Column="0" Margin="5" Padding="15" 
-                        Background="#3498DB" CornerRadius="8">
-                    <StackPanel>
-                        <TextBlock Text="OS Abertas" Foreground="White" FontSize="14"/>
-                        <TextBlock Text="{Binding Resumo.TotalOSAbertas}" Foreground="White" 
-                                   FontSize="36" FontWeight="Bold" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
+            <!-- Resumo do Mês -->
+            <GroupBox Header="Resumo do Mês" Padding="10" Margin="0,0,0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="1" Margin="5" Padding="15" 
-                        Background="#E67E22" CornerRadius="8">
-                    <StackPanel>
-                        <TextBlock Text="OS Em Andamento" Foreground="White" FontSize="14"/>
-                        <TextBlock Text="{Binding Resumo.TotalOSEmAndamento}" Foreground="White" 
-                                   FontSize="36" FontWeight="Bold" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Faturamento:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ResumoMensal.FaturamentoTotal, StringFormat=C2}" 
+                               FontWeight="Bold" Foreground="#0A246A"/>
 
-                <Border Grid.Row="0" Grid.Column="2" Margin="5" Padding="15" 
-                        Background="#27AE60" CornerRadius="8">
-                    <StackPanel>
-                        <TextBlock Text="Finalizadas Hoje" Foreground="White" FontSize="14"/>
-                        <TextBlock Text="{Binding Resumo.TotalOSFinalizadasHoje}" Foreground="White" 
-                                   FontSize="36" FontWeight="Bold" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="OS Abertas:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ResumoMensal.OSAbertas}"/>
 
-                <Border Grid.Row="1" Grid.Column="0" Margin="5" Padding="15" 
-                        Background="#8E44AD" CornerRadius="8">
-                    <StackPanel>
-                        <TextBlock Text="Faturamento Hoje" Foreground="White" FontSize="14"/>
-                        <TextBlock Text="{Binding Resumo.FaturamentoHoje, StringFormat=C2}" Foreground="White" 
-                                   FontSize="36" FontWeight="Bold" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="OS Finalizadas:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ResumoMensal.OSFinalizadas}"/>
 
-                <Border Grid.Row="1" Grid.Column="1" Margin="5" Padding="15" 
-                        Background="#C0392B" CornerRadius="8">
-                    <StackPanel>
-                        <TextBlock Text="Estoque Baixo" Foreground="White" FontSize="14"/>
-                        <TextBlock Text="{Binding Resumo.ProdutosEstoqueBaixo}" Foreground="White" 
-                                   FontSize="36" FontWeight="Bold" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Ticket Médio:" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ResumoMensal.TicketMedio, StringFormat=C2}"/>
+                </Grid>
+            </GroupBox>
 
-            <Button Content="Atualizar" Width="120" HorizontalAlignment="Left" 
-                    Margin="5,20,0,0" Click="BtnAtualizar_Click"/>
+            <!-- Resumo do Ano -->
+            <GroupBox Header="Resumo do Ano" Padding="10" Margin="0,0,0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Faturamento:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ResumoAnual.FaturamentoTotal, StringFormat=C2}" 
+                               FontWeight="Bold" Foreground="#0A246A"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="OS Finalizadas:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ResumoAnual.OSFinalizadas}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ticket Médio:" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ResumoAnual.TicketMedio, StringFormat=C2}"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- Alertas -->
+            <GroupBox Header="Alertas" Padding="10">
+                <StackPanel>
+                    <TextBlock Margin="0,0,0,5">
+                        <Run Text="⚠️ Produtos com estoque baixo: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding ResumoMensal.ProdutosEstoqueBaixo, Mode=OneWay}" Foreground="#E74C3C" FontWeight="Bold"/>
+                    </TextBlock>
+
+                    <TextBlock Margin="0,0,0,5">
+                        <Run Text="📋 OS Aguardando Peças: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding ResumoMensal.OSAguardandoPecas, Mode=OneWay}" Foreground="#E67E22" FontWeight="Bold"/>
+                    </TextBlock>
+
+                    <TextBlock>
+                        <Run Text="📋 OS Abertas: " FontWeight="SemiBold"/>
+                        <Run Text="{Binding ResumoMensal.OSAbertas, Mode=OneWay}" Foreground="#0A246A" FontWeight="Bold"/>
+                    </TextBlock>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
