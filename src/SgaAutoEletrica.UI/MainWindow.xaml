@@ -95,14 +95,14 @@
                                 <StackPanel Orientation="Horizontal"
                                             Margin="10,5">
                                         <Button Click="BtnInicio_Click"
-                                                        Style="{StaticResource AtalhoButtonStyle}">
+                                                Style="{StaticResource AtalhoButtonStyle}">
                                                 <StackPanel>
                                                         <TextBlock Text="🏠"
-                                                                        FontSize="24"
-                                                                        HorizontalAlignment="Center"/>
+                                                                   FontSize="24"
+                                                                   HorizontalAlignment="Center"/>
                                                         <TextBlock Text="Início"
-                                                                        FontSize="11"
-                                                                        HorizontalAlignment="Center"/>
+                                                                   FontSize="11"
+                                                                   HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
                                         <Button Click="BtnClientes_Click"
@@ -233,7 +233,7 @@
                                                                    FontSize="24"
                                                                    HorizontalAlignment="Center"/>
                                                         <TextBlock Text="Buscar Placa"
-                                                                   FontSize  ="11"
+                                                                   FontSize="11"
                                                                    HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
@@ -242,11 +242,27 @@
                 </Border>
 
                 <!-- ÁREA DE CONTEÚDO -->
-                <Border Grid.Row="2"
-                        Background="White">
+                <Grid Grid.Row="2"
+                                Background="White">
+
                         <ContentControl x:Name="ContentArea"
                                         Margin="0"/>
-                </Border>
+
+                        <Expander x:Name="DashboardExpander"
+                                  Header="Ver Totais"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Bottom"
+                                  ExpandDirection="Up"
+                                  Width="380"
+                                  Visibility="Collapsed"
+                                  Background="#F5F5F5"
+                                  BorderBrush="#CCC"
+                                  BorderThickness="1,1,0,0"
+                                  Padding="10">
+                                <ContentControl x:Name="DashboardContent"
+                                                Width="380" VerticalAlignment="Stretch"/>
+                        </Expander>
+                </Grid>
 
                 <!-- Rodapé -->
                 <Border Grid.Row="3"

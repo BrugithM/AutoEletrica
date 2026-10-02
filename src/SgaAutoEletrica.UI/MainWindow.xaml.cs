@@ -40,28 +40,32 @@ public partial class MainWindow : Window
             if (config == null || string.IsNullOrWhiteSpace(config.LogoPath) || !File.Exists(config.LogoPath))
             {
                 ContentArea.Content = null;
-                return;
             }
-
-            var bitmap = new BitmapImage();
-            using (var stream = new FileStream(config.LogoPath, FileMode.Open, FileAccess.Read, FileShare.Read)){
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.StreamSource = stream;
-            bitmap.EndInit();
-            }
-            bitmap.Freeze();
-
-            var image = new Image
+            else
             {
-                Source = bitmap,
-                Stretch = Stretch.Uniform,
-                Opacity = 0.8,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
+                var bitmap = new BitmapImage();
+                using (var stream = new FileStream(config.LogoPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = stream;
+                    bitmap.EndInit();
+                }
+                bitmap.Freeze();
 
-            ContentArea.Content = image;
+                var image = new Image
+                {
+                    Source = bitmap,
+                    Stretch = Stretch.Uniform,
+                    Margin = new Thickness(20)
+                };
+
+                ContentArea.Content = image;
+            }
+
+            var dashboardView = App.ServiceProvider.GetRequiredService<Views.Dashboard.DashboardView>();
+            DashboardContent.Content = dashboardView;
+            DashboardExpander.Visibility = Visibility.Visible;
         }
         catch
         {
@@ -75,6 +79,12 @@ public partial class MainWindow : Window
         {
             TxtUsuario.Text = $"Usuario: {sessao.UsuarioAtual.Nome} ({sessao.UsuarioAtual.Nivel})";
         }
+    }
+
+    private void EsconderDashboard()
+    {
+        DashboardExpander.Visibility = Visibility.Collapsed;
+        DashboardContent.Content = null;
     }
     // ─── Navegação ───
 
@@ -114,24 +124,28 @@ public partial class MainWindow : Window
 
     private void BtnClientes_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Clientes.ListaClientesView>();
         NavegarPara(view);
     }
 
     private void BtnVeiculos_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Veiculos.ListaVeiculosView>();
         NavegarPara(view);
     }
 
     private void BtnFornecedores_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Fornecedores.ListaFornecedoresView>();
         NavegarPara(view);
     }
 
     private void BtnCategorias_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var dialog = new Views.CategoriasPeca.GerenciarCategoriasWindow(_mediator);
         dialog.ShowDialog();
     }
@@ -140,12 +154,14 @@ public partial class MainWindow : Window
 
     private void BtnPecas_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Pecas.ListaPecasView>();
         NavegarPara(view);
     }
 
     private void BtnMovEstoque_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         MessageBox.Show("Tela de Movimentação de Estoque em breve.", "Em breve", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -153,24 +169,28 @@ public partial class MainWindow : Window
 
     private void BtnNFSaida_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEmitidasView>();
         ContentArea.Content = view;
     }
 
     private void BtnBuscarNotasEmitidas_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEmitidasView>();
         NavegarPara(view);
     }
 
     private void BtnNotaEntradaLista_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEntradaView>();
         ContentArea.Content = view;
     }
 
     private void BtnNotaEntrada_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var dialog = new SgaAutoEletrica.UI.Views.Fornecedores.CriarNotaFiscalEntradaWindow(
             App.ServiceProvider.GetRequiredService<MediatR.IMediator>());
         dialog.ShowDialog();
@@ -180,17 +200,20 @@ public partial class MainWindow : Window
 
     private void BtnCriarOS_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var dialog = new SgaAutoEletrica.UI.Views.OrdensServico.CriacaoOSWindow(_mediator);
         dialog.ShowDialog();
     }
 
     private void BtnOS_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.OrdensServico.ListaOSView>();
         NavegarPara(view);
     }
     private void BtnServicos_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Servicos.ListaServicosView>();
         NavegarPara(view);
     }
@@ -198,18 +221,21 @@ public partial class MainWindow : Window
 
     private void BtnConfigEmpresa_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracaoEmpresaView>();
         NavegarPara(view);
     }
 
     private void BtnConfigImpressoras_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracoesImpressoraView>();
         NavegarPara(view);
     }
 
     private void BtnBackup_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.BackupView>();
         NavegarPara(view);
     }
@@ -218,18 +244,21 @@ public partial class MainWindow : Window
 
     private void BtnBuscarCliente_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Clientes.ListaClientesView>();
         NavegarPara(view);
     }
 
     private void BtnBuscarVeiculo_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Veiculos.ListaVeiculosView>();
         NavegarPara(view);
     }
 
     private void BtnBuscarPlaca_Click(object sender, RoutedEventArgs e)
     {
+        EsconderDashboard();
         var input = Microsoft.VisualBasic.Interaction.InputBox("Digite a placa:", "Buscar Placa", "");
         if (!string.IsNullOrWhiteSpace(input))
         {
