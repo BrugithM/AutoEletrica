@@ -15,9 +15,9 @@ public class Telefone
 
     public string Formatado()
     {
-        if (Valor.Length == 11) // Celular com 9 dígitos
+        if (Valor.Length == 11) 
             return Convert.ToUInt64(Valor).ToString(@"(00) 00000-0000");
-        else // Fixo
+        else 
             return Convert.ToUInt64(Valor).ToString(@"(00) 0000-0000");
     }
 

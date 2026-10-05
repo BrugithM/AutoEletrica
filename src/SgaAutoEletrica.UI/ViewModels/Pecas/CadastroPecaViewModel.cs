@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.DTOs;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.Queries;
 using SgaAutoEletrica.Application.Features.Fornecedores.DTOs;
@@ -54,13 +55,15 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         private set { _titulo = value; OnPropertyChanged(); }
     }
 
+    public bool EhAdministrador => App.ServiceProvider
+    .GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
     public ICommand NovaCategoriaCommand { get; }
 
     public CadastroPecaViewModel(IMediator mediator, Guid? pecaId = null)
     {
         _mediator = mediator;
         _pecaId = pecaId;
-        NovaCategoriaCommand = new RelayCommand(async _ => await NovaCategoriaAsync());
+        NovaCategoriaCommand = new RelayCommand(async _ => await NovaCategoriaAsync(), _ => EhAdministrador);
 
         if (pecaId.HasValue)
         {

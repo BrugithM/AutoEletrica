@@ -29,7 +29,6 @@ public partial class DetalhesNotaFiscalSaidaWindow : Window
             return;
         }
 
-        // Busca dados da empresa
         var empresa = await _mediator.Send(new SgaAutoEletrica.Application.Features.Configuracoes.Queries.ObterConfiguracaoEmpresaQuery());
 
         var sb = new StringBuilder();

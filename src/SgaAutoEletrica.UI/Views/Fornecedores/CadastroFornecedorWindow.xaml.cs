@@ -40,7 +40,6 @@ public partial class CadastroFornecedorWindow : Window
         }
         catch
         {
-            // CNPJ inválido — deixa como está
         }
     }
 
@@ -56,7 +55,6 @@ public partial class CadastroFornecedorWindow : Window
         }
         catch
         {
-            // Telefone inválido — deixa como está
         }
     }
 }

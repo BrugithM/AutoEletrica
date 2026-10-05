@@ -86,7 +86,7 @@ public partial class MainWindow : Window
         DashboardExpander.Visibility = Visibility.Collapsed;
         DashboardContent.Content = null;
     }
-    // ─── Navegação ───
+    // Navegação
 
     private void NavegarPara<T>(T view) where T : Control
     {
@@ -116,11 +116,12 @@ public partial class MainWindow : Window
     }
     private void BtnCadastroCategorias_Click(object sender, RoutedEventArgs e)
     {
+        if(!TemPermissaoAdmin()) return;
         var dialog = new SgaAutoEletrica.UI.Views.CategoriasPeca.CadastroCategoriaWindow(_mediator);
         dialog.ShowDialog();
     }
 
-    // ─── Gerenciamento ───
+    // Gerenciamento
 
     private void BtnClientes_Click(object sender, RoutedEventArgs e)
     {
@@ -145,12 +146,13 @@ public partial class MainWindow : Window
 
     private void BtnCategorias_Click(object sender, RoutedEventArgs e)
     {
+        if(!TemPermissaoAdmin()) return;
         EsconderDashboard();
         var dialog = new Views.CategoriasPeca.GerenciarCategoriasWindow(_mediator);
         dialog.ShowDialog();
     }
 
-    // ─── Estoque ───
+    // Estoque
 
     private void BtnPecas_Click(object sender, RoutedEventArgs e)
     {
@@ -165,7 +167,7 @@ public partial class MainWindow : Window
         MessageBox.Show("Tela de Movimentação de Estoque em breve.", "Em breve", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    // ─── Fiscal ───
+    // Fiscal
 
     private void BtnNFSaida_Click(object sender, RoutedEventArgs e)
     {
@@ -196,7 +198,7 @@ public partial class MainWindow : Window
         dialog.ShowDialog();
     }
 
-    // ─── Ordem de Serviço ───
+    // Ordem de Serviço
 
     private void BtnCriarOS_Click(object sender, RoutedEventArgs e)
     {
@@ -217,10 +219,12 @@ public partial class MainWindow : Window
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Servicos.ListaServicosView>();
         NavegarPara(view);
     }
-    // ─── Configurações ───
+    // Configurações
 
     private void BtnConfigEmpresa_Click(object sender, RoutedEventArgs e)
     {
+        if (!TemPermissaoAdmin()) return;
+
         EsconderDashboard();
         var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.ConfiguracaoEmpresaView>();
         NavegarPara(view);
@@ -240,7 +244,7 @@ public partial class MainWindow : Window
         NavegarPara(view);
     }
 
-    // ─── Buscas ───
+    // Buscas
 
     private void BtnBuscarCliente_Click(object sender, RoutedEventArgs e)
     {
@@ -270,5 +274,17 @@ public partial class MainWindow : Window
             }
             ContentArea.Content = view;
         }
+    }
+
+    private bool TemPermissaoAdmin()
+    {
+        var sessao = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>();
+        if (!sessao.EhAdministrador)
+        {
+            MessageBox.Show("Esta ação é restrita.",
+                "Permissão negada", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+        return true;
     }
 }

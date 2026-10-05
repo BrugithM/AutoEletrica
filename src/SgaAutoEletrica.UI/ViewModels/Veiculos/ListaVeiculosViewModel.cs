@@ -22,7 +22,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     public bool EhAdministrador => App.ServiceProvider
         .GetRequiredService<ISessaoUsuario>().EhAdministrador;
 
-    // ─── Veículo selecionado ───
     private VeiculoDTO? _veiculoSelecionado;
     public VeiculoDTO? VeiculoSelecionado
     {
@@ -47,7 +46,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     public string TextoBotaoDesativar =>
         VeiculoSelecionado?.Ativo == false ? "▶️ Reativar" : "⏸️ Desativar";
 
-    // ─── Modo de busca ───
     private bool _modoBuscaAvancada;
     public bool ModoBuscaAvancada
     {
@@ -62,7 +60,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
 
     public bool ModoBuscaRapida => !ModoBuscaAvancada;
 
-    // ─── Busca rápida ───
     private string _termoBusca = string.Empty;
     public string TermoBusca
     {
@@ -70,7 +67,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         set { _termoBusca = value; OnPropertyChanged(); }
     }
 
-    // ─── Busca avançada ───
     private string _buscaPlaca = string.Empty;
     public string BuscaPlaca
     {
@@ -106,7 +102,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         set { _buscaAno = value; OnPropertyChanged(); }
     }
 
-    // ─── Filtros comuns ───
     private bool _mostrarInativos;
     public bool MostrarInativos
     {
@@ -114,7 +109,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         set { _mostrarInativos = value; OnPropertyChanged(); _ = BuscarAsync(); }
     }
 
-    // ─── Paginação ───
     private int _paginaAtual = 1;
     public int PaginaAtual
     {
@@ -142,7 +136,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     public bool TemPaginaAnterior => PaginaAtual > 1;
     public bool TemProximaPagina => PaginaAtual < TotalPaginas;
 
-    // ─── Comandos ───
     public ICommand BuscarCommand { get; }
     public ICommand LimparCommand { get; }
     public ICommand AlternarModoBuscaCommand { get; }

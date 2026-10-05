@@ -105,7 +105,6 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         private set { _status = value; OnPropertyChanged(); }
     }
 
-    // Habilitação dos botões
     public bool PodeIniciar => Status == StatusOS.Aberta || Status == StatusOS.AguardandoPecas;
     public bool PodeAguardarPecas => Status == StatusOS.EmAndamento;
     public bool PodeFinalizar => Status != StatusOS.Finalizada && Status != StatusOS.Cancelada;
@@ -113,6 +112,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
     public bool PodeEditar => Status == StatusOS.Aberta || Status == StatusOS.EmAndamento;
     public bool PodeGerarNF => Status == StatusOS.Finalizada;
     public bool PodeImprimir => true;
+    public bool EhAdministrador => App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
 
     public ICommand ImprimirOSCommand { get; }
     public ICommand ImprimirCupomCommand { get; }
@@ -136,7 +136,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         EditarOSCommand = new RelayCommand(_ => EditarOS(), _ => PodeEditar);
         IniciarServicoCommand = new RelayCommand(async _ => await AlterarStatusAsync(StatusOS.EmAndamento), _ => PodeIniciar);
         AguardarPecasCommand = new RelayCommand(async _ => await AlterarStatusAsync(StatusOS.AguardandoPecas), _ => PodeAguardarPecas);
-        CancelarOSCommand = new RelayCommand(async _ => await CancelarAsync(), _ => PodeCancelar);
+        CancelarOSCommand = new RelayCommand(async _ => await CancelarAsync(), _ => PodeCancelar && EhAdministrador);
         FinalizarCommand = new RelayCommand(async _ => await FinalizarAsync(), _ => PodeFinalizar);
     }
 
@@ -152,7 +152,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         Titulo = $"Detalhes da OS Nº {os.Numero}";
         NumeroOS = os.Numero.ToString();
         DataAbertura = os.DataAbertura.ToString("dd/MM/yyyy HH:mm");
-        InfoCliente = $"Cliente: {os.NomeCliente} - CPF: {os.TelefoneCliente}";  // ajuste
+        InfoCliente = $"Cliente: {os.NomeCliente} - CPF: {os.TelefoneCliente}";
         InfoCliente = $"Cliente: {os.NomeCliente} (Tel: {os.TelefoneCliente})";
         InfoVeiculo = $"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - Placa: {os.PlacaVeiculo}";
         StatusAtual = os.Status.ToString();

@@ -31,7 +31,6 @@ public class MainViewModel : INotifyPropertyChanged
         NavegarOrdensServicoCommand = new RelayCommand(_ => Navegar("OrdensServico"));
         NavegarDashboardCommand = new RelayCommand(_ => Navegar("Dashboard"));
 
-        // Tela inicial
         Navegar("Dashboard");
     }
 

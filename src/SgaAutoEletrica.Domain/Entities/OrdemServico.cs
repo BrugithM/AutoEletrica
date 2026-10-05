@@ -1,7 +1,6 @@
 using SgaAutoEletrica.Domain.Enums;
 
 namespace SgaAutoEletrica.Domain.Entities;
-//conecta cliente, veiculo, pecas e servico
 public class OrdemServico
 {
     public Guid Id { get; private set; }
@@ -114,8 +113,6 @@ public class OrdemServico
     var subtotal = totalPecas + totalServicos;
     ValorTotal = Math.Round(subtotal-Desconto,2);
 }
-
-    //Transições de status
     public void IniciarServico()
     {
         if (Status != StatusOS.Aberta && Status != StatusOS.AguardandoPecas)

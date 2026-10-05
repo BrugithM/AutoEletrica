@@ -23,7 +23,6 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
             .AsNoTracking()
             .AsQueryable();
 
-        // Busca rápida (procura em vários campos)
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
             var termo = request.TermoBusca.Trim().ToLower();
@@ -33,7 +32,6 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
                 c.Telefone.Valor.Contains(termo));
         }
 
-        // Busca avançada (cada campo individual)
         if (!string.IsNullOrWhiteSpace(request.Nome))
         {
             var termo = request.Nome.Trim().ToLower();
@@ -63,7 +61,6 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
                     c.Endereco.Cep.Contains(termo)));
         }
 
-        // Filtro de ativo
         if (request.Ativo.HasValue)
             query = query.Where(c => c.Ativo == request.Ativo.Value);
 

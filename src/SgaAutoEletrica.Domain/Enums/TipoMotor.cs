@@ -1,5 +1,4 @@
 namespace SgaAutoEletrica.Domain.Enums;
-// todo: verificar se real precisa disso se conseguir uma api pra fornecer os dados do carro pela placa
 public enum TipoMotor
 {
     Gasolina = 1,

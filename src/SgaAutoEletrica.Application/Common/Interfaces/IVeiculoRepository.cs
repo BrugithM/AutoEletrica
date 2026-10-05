@@ -11,6 +11,4 @@ public interface IVeiculoRepository
     Task Adicionar(Veiculo veiculo, CancellationToken cancellationToken=default);
     void Atualizar(Veiculo veiculo);
     void Remover(Veiculo veiculo);
-
-    //ASK : n devia ter busca por modelo?
 }

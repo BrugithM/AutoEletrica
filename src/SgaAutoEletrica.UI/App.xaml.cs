@@ -116,24 +116,19 @@ public partial class App : System.Windows.Application
 
             ServiceProvider = services.BuildServiceProvider();
 
-            // Configura o banco
             using (var scope = ServiceProvider.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                // Fecha qualquer conexão pendente
                 context.Database.CloseConnection();
 
-                // Abre a conexão e aplica o PRAGMA
                 context.Database.OpenConnection();
                 context.Database.ExecuteSqlRaw("PRAGMA journal_mode=WAL;");
                 context.Database.CloseConnection();
 
-                // Aplica migrações
                 context.Database.Migrate();
             }
 
-            // Abre o login
             var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
             System.Windows.Application.Current.MainWindow = loginWindow;
             loginWindow.Show();
@@ -167,13 +162,11 @@ public partial class App : System.Windows.Application
                 }
                 catch
                 {
-                    // Silencioso
                 }
             }).Wait(2000);
         }
         catch
         {
-            // Silencioso
         }
 
         Environment.Exit(0);

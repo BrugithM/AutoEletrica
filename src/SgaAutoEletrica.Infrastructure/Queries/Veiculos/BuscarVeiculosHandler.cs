@@ -23,7 +23,6 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
             .AsNoTracking()
             .AsQueryable();
 
-        // Busca rápida
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
             var termo = request.TermoBusca.Trim().ToLower();
@@ -34,7 +33,6 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
                 v.Cliente.NomeCompleto.ToLower().Contains(termo));
         }
 
-        // Busca avançada
         if (!string.IsNullOrWhiteSpace(request.Placa))
         {
             var termo = request.Placa.Trim().ToLower();
@@ -64,7 +62,6 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
             query = query.Where(v => v.Ano == request.Ano.Value);
         }
 
-        // Filtro de ativo
         if (request.Ativo.HasValue)
             query = query.Where(v => v.Ativo == request.Ativo.Value);
 

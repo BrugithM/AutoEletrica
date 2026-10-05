@@ -1,8 +1,4 @@
 namespace SgaAutoEletrica.Domain.Entities;
-
-/// <summary>
-/// Representa um item em uma Nota Fiscal de Entrada (compra de fornecedor).
-/// </summary>
 public class ItemNotaFiscalEntrada
 {
     public Guid Id { get; private set; }

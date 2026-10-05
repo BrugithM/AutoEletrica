@@ -24,7 +24,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
     public bool EhAdministrador => App.ServiceProvider
         .GetRequiredService<ISessaoUsuario>().EhAdministrador;
 
-    // ─── Cliente selecionado ───
     private ClienteDTO? _clienteSelecionado;
     public ClienteDTO? ClienteSelecionado
     {
@@ -44,7 +43,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
     public string TextoBotaoDesativar =>
         ClienteSelecionado?.Ativo == false ? "▶️ Reativar" : "⏸️ Desativar";
 
-    // ─── Modo de busca ───
     private bool _modoBuscaAvancada;
     public bool ModoBuscaAvancada
     {
@@ -59,7 +57,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
 
     public bool ModoBuscaRapida => !ModoBuscaAvancada;
 
-    // ─── Busca rápida ───
     private string _termoBusca = string.Empty;
     public string TermoBusca
     {
@@ -67,7 +64,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         set { _termoBusca = value; OnPropertyChanged(); }
     }
 
-    // ─── Busca avançada ───
     private string _buscaNome = string.Empty;
     public string BuscaNome
     {
@@ -96,7 +92,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         set { _buscaEndereco = value; OnPropertyChanged(); }
     }
 
-    // ─── Filtros comuns ───
     private bool _mostrarInativos;
     public bool MostrarInativos
     {
@@ -104,7 +99,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
         set { _mostrarInativos = value; OnPropertyChanged(); _ = BuscarAsync(); }
     }
 
-    // ─── Paginação ───
     private int _paginaAtual = 1;
     public int PaginaAtual
     {
@@ -132,7 +126,6 @@ public class ListaClientesViewModel : INotifyPropertyChanged
     public bool TemPaginaAnterior => PaginaAtual > 1;
     public bool TemProximaPagina => PaginaAtual < TotalPaginas;
 
-    // ─── Comandos ───
     public ICommand BuscarCommand { get; }
     public ICommand LimparBuscaCommand { get; }
     public ICommand AlternarModoBuscaCommand { get; }

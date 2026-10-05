@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.IO;
 using SgaAutoEletrica.Application.Common.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SgaAutoEletrica.UI.ViewModels.Configuracoes;
 
@@ -13,6 +14,8 @@ public class BackupViewModel : INotifyPropertyChanged
     private readonly IBackupService _backupService;
 
     public ObservableCollection<string> Backups { get; } = new();
+
+    public bool EhAdministrador => App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
 
     public ICommand RealizarBackupCommand { get; }
     public ICommand RestaurarCommand { get; }
@@ -43,6 +46,12 @@ public class BackupViewModel : INotifyPropertyChanged
 
     private async Task RestaurarAsync()
     {
+        var sessao = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>();
+        if (!sessao.EhAdministrador)
+        {
+            MessageBox.Show("Esta ação é restrita a administradores.", "Permissão negada", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
             Filter = "Arquivos de banco (*.db)|*.db|Todos os arquivos (*.*)|*.*",

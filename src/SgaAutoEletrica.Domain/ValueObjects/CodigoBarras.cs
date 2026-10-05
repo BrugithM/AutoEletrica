@@ -73,5 +73,5 @@ public enum TipoCodigoBarras
     EAN8 = 1,
     EAN13 = 2,
     EAN14 = 3,
-    Outro = 99  // Code128, QR, etc.
+    Outro = 99  
 }

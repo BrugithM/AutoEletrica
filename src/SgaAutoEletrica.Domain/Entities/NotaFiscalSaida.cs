@@ -1,11 +1,6 @@
 using SgaAutoEletrica.Domain.Enums;
 
 namespace SgaAutoEletrica.Domain.Entities;
-
-/// <summary>
-/// Representa uma Nota Fiscal de Saída emitida para o cliente.
-/// Pode ser gerada a partir de uma Ordem de Serviço finalizada.
-/// </summary>
 public class NotaFiscalSaida
 {
     public Guid Id { get; private set; }

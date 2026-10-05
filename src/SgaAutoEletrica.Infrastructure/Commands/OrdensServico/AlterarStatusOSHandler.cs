@@ -38,7 +38,6 @@ public class AlterarStatusOSHandler : IRequestHandler<AlterarStatusOSCommand>
                 break;
 
             case StatusOS.Cancelada:
-                // Devolve peças ao estoque
                 foreach (var item in os.ItensPeca)
                 {
                     var peca = await _context.Pecas.FindAsync([item.PecaId], cancellationToken);

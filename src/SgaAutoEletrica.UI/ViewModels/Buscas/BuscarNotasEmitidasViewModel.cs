@@ -31,7 +31,6 @@ public class BuscarNotasEmitidasViewModel : INotifyPropertyChanged
 
     public bool TemNotaSelecionada => NotaSelecionada != null;
 
-    // Filtros
     public string Placa { get; set; } = string.Empty;
     public string NomeCliente { get; set; } = string.Empty;
     public string NomePeca { get; set; } = string.Empty;

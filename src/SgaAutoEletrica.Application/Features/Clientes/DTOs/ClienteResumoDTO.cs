@@ -1,6 +1,5 @@
 namespace SgaAutoEletrica.Application.Features.Clientes.DTOs;
 
-//DTO simplificado para listagens
 public class ClienteResumoDTO
 {
     public Guid Id {get;set;}

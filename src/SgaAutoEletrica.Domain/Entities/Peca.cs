@@ -87,7 +87,6 @@ public class Peca
         DataCadastro = DateTime.UtcNow;
     }
 
-    // Métodos de negócio
     public decimal CalcularMargemLucroPercentual()
     {
         if (ValorCusto == 0)

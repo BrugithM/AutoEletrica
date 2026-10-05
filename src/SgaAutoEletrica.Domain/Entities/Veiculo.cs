@@ -3,11 +3,6 @@ using SgaAutoEletrica.Domain.ValueObjects;
 
 namespace SgaAutoEletrica.Domain.Entities;
 
-/// <summary>
-/// Cadastro de veiculos que suporta dois modos de cadastro:
-/// - Manual: todos os dados fornecidos pelo usuário
-/// - Via API: criado com placa e preenchido depois pela consulta externa
-/// </summary>
 public class Veiculo
 {
     public Guid Id { get; private set; }
@@ -69,7 +64,6 @@ public class Veiculo
         Ativo = true;
     }
 
-    // Métodos de atualização 
     public void PreencherDadosViaApi(
         string modelo,
         string marca,

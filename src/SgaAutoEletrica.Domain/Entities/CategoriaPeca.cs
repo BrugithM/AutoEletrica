@@ -1,9 +1,4 @@
 namespace SgaAutoEletrica.Domain.Entities;
-
-/// <summary>
-/// Categoria ou grupo de peças.
-/// O usuário pode criar e gerenciar livremente.
-/// </summary>
 public class CategoriaPeca
 {
     public Guid Id { get; private set; }
@@ -17,7 +12,6 @@ public class CategoriaPeca
         Nome = string.Empty;
     }
 
-    //Cria uma nova categoria de peças.
     public CategoriaPeca(string nome, string? descricao = null)
     {
         if (string.IsNullOrWhiteSpace(nome))
@@ -28,7 +22,6 @@ public class CategoriaPeca
         Descricao = descricao;
     }
 
-    // Atualiza o nome e descrição da categoria.
     public void Atualizar(string nome, string? descricao = null)
     {
         if (string.IsNullOrWhiteSpace(nome))

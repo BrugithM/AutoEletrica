@@ -39,7 +39,6 @@ public class BuscarNotasEntradaViewModel : INotifyPropertyChanged
         ? $"Itens da Nota Fiscal Nº {NotaSelecionada.Numero}:"
         : "";
 
-    // Filtros
     public string NomeFornecedor { get; set; } = string.Empty;
     public string CnpjFornecedor { get; set; } = string.Empty;
     public string CodigoProduto { get; set; } = string.Empty;

@@ -1,9 +1,5 @@
 namespace SgaAutoEletrica.Domain.Entities;
 
-/// <summary>
-/// Representa uma Nota Fiscal de Entrada (compra de mercadoria do fornecedor).
-/// Ao ser finalizada, dá entrada no estoque das peças.
-/// </summary>
 public class NotaFiscalEntrada
 {
     public Guid Id { get; private set; }
@@ -47,10 +43,6 @@ public class NotaFiscalEntrada
         RecalcularTotal();
     }
 
-    /// <summary>
-    /// Finaliza a nota de entrada.
-    /// Retorna a lista de (PecaId, Quantidade) para dar entrada no estoque.
-    /// </summary>
     public List<(Guid PecaId, int Quantidade)> Finalizar()
     {
         if (Finalizada)

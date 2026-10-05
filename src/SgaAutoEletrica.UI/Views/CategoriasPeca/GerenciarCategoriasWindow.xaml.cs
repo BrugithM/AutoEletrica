@@ -2,6 +2,7 @@ using System.Windows;
 using MediatR;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.Commands;
 using SgaAutoEletrica.UI.ViewModels.CategoriasPeca;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SgaAutoEletrica.UI.Views.CategoriasPeca;
 
@@ -26,6 +27,16 @@ public partial class GerenciarCategoriasWindow : Window
 
     private void BtnNovaCategoria_Click(object sender, RoutedEventArgs e)
     {
+        var sessao = App.ServiceProvider
+       .GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>();
+
+        if (!sessao.EhAdministrador)
+        {
+            MessageBox.Show("Apenas administradores podem criar categorias.",
+                "Permissão negada", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
         var dialog = new CadastroCategoriaWindow(_mediator);
         if (dialog.ShowDialog() == true)
         {
