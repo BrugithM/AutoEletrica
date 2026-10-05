@@ -15,26 +15,19 @@
         </Grid.RowDefinitions>
 
         <!-- Toolbar de Impressão -->
-        <Border Padding="5" Background="#DCE7F5">
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal">
-            <Button Content="🖨️ Imprimir OS"
-                    Command="{Binding ImprimirOSCommand}"
-                    Width="130"
-                    Style="{StaticResource BotaoToolbarStyle}"/>
-            <Button Content="🧾 Imprimir Cupom"
-                    Command="{Binding ImprimirCupomCommand}"
-                    Width="140"
-                    Style="{StaticResource BotaoToolbarStyle}"/>
-            <Button Content="📄 Imprimir NF"
-                    Command="{Binding ImprimirNFCommand}"
-                    Width="120"
-                    Style="{StaticResource BotaoToolbarStyle}"/>
-            <Button Content="📋 Gerar NF"
-                    Command="{Binding GerarNFCommand}"
-                    Width="100"
-                    Style="{StaticResource BotaoToolbarStyle}"/>
-        </StackPanel>
+        <Border Padding="5"
+                Background="#DCE7F5">
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal">
+                <Button Content="🖨️ Imprimir OS"
+                        Command="{Binding ImprimirOSCommand}"
+                        Width="130"
+                        Style="{StaticResource BotaoToolbarStyle}"/>
+                <Button Content="🧾 Cupom de Orçamento"
+                        Command="{Binding ImprimirCupomOrcamentoCommand}"
+                        Width="180"
+                        Style="{StaticResource BotaoToolbarStyle}"/>
+            </StackPanel>
         </Border>
 
         <!-- Cabeçalho -->
@@ -188,8 +181,7 @@
                             Command="{Binding CancelarOSCommand}"
                             Width="130"
                             Style="{StaticResource BotaoPerigoStyle}"
-                            Margin="0,0,5,0"
-                            />
+                            Margin="0,0,5,0"/>
                     <Button Content="Finalizar"
                             Command="{Binding FinalizarCommand}"
                             Width="130"

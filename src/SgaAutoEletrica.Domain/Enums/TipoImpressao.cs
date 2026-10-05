@@ -7,7 +7,6 @@ namespace SgaAutoEletrica.Domain.Enums;
 public enum TipoImpressao
 {
     OS = 1,
-    NotaFiscal = 2,
-    CupomFiscal = 3,
-    Etiqueta = 4
+    Cupom = 2,
+    Etiqueta = 3
 }

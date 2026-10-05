@@ -29,32 +29,9 @@
                 </StackPanel>
             </GroupBox>
 
-            <!-- Nota Fiscal -->
-            <GroupBox Header="Nota Fiscal" Margin="0,0,0,15" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Impressora:"/>
-                    <ComboBox ItemsSource="{Binding ImpressorasInstaladas}"
-                              SelectedItem="{Binding ImpressoraNF}"
-                              Height="24" Margin="0,0,0,10"/>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <StackPanel Margin="0,0,15,0">
-                            <TextBlock Text="Tamanho do Papel:"/>
-                            <ComboBox ItemsSource="{Binding TamanhosPapel}"
-                                      SelectedItem="{Binding TamanhoPapelNF}"
-                                      Width="150" Height="24"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="Cópias:"/>
-                            <TextBox Text="{Binding CopiasNF, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="60" Height="24"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
-
-            <!-- Cupom Fiscal -->
-            <GroupBox Header="Cupom Fiscal" Margin="0,0,0,15" Padding="10">
+            <!-- Cupom de Orçamento -->
+            <GroupBox Header="Cupom" Margin="0,0,0,15" Padding="10">
                 <StackPanel>
                     <TextBlock Text="Impressora:"/>
                     <ComboBox ItemsSource="{Binding ImpressorasInstaladas}"

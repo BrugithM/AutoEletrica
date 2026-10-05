@@ -116,7 +116,7 @@ public partial class MainWindow : Window
     }
     private void BtnCadastroCategorias_Click(object sender, RoutedEventArgs e)
     {
-        if(!TemPermissaoAdmin()) return;
+        if (!TemPermissaoAdmin()) return;
         var dialog = new SgaAutoEletrica.UI.Views.CategoriasPeca.CadastroCategoriaWindow(_mediator);
         dialog.ShowDialog();
     }
@@ -146,7 +146,7 @@ public partial class MainWindow : Window
 
     private void BtnCategorias_Click(object sender, RoutedEventArgs e)
     {
-        if(!TemPermissaoAdmin()) return;
+        if (!TemPermissaoAdmin()) return;
         EsconderDashboard();
         var dialog = new Views.CategoriasPeca.GerenciarCategoriasWindow(_mediator);
         dialog.ShowDialog();
@@ -166,23 +166,6 @@ public partial class MainWindow : Window
         EsconderDashboard();
         MessageBox.Show("Tela de Movimentação de Estoque em breve.", "Em breve", MessageBoxButton.OK, MessageBoxImage.Information);
     }
-
-    // Fiscal
-
-    private void BtnNFSaida_Click(object sender, RoutedEventArgs e)
-    {
-        EsconderDashboard();
-        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEmitidasView>();
-        ContentArea.Content = view;
-    }
-
-    private void BtnBuscarNotasEmitidas_Click(object sender, RoutedEventArgs e)
-    {
-        EsconderDashboard();
-        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Buscas.BuscarNotasEmitidasView>();
-        NavegarPara(view);
-    }
-
     private void BtnNotaEntradaLista_Click(object sender, RoutedEventArgs e)
     {
         EsconderDashboard();

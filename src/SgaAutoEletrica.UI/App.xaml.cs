@@ -96,9 +96,6 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.Fornecedores.CriarNotaFiscalEntradaViewModel>();
 
-            services.AddTransient<ViewModels.Buscas.BuscarNotasEmitidasViewModel>();
-            services.AddTransient<Views.Buscas.BuscarNotasEmitidasView>();
-
             services.AddTransient<ViewModels.Buscas.BuscarNotasEntradaViewModel>();
             services.AddTransient<Views.Buscas.BuscarNotasEntradaView>();
 

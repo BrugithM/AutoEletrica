@@ -55,15 +55,11 @@
                                 <MenuItem Header="Categorias"
                                           Click="BtnCategorias_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
-                        </MenuItem>
-                        <MenuItem Header="Fiscal">
-                                <MenuItem Header="Notas de Saída"
-                                          Click="BtnNFSaida_Click"
-                                          Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Notas de Entrada"
                                           Click="BtnNotaEntradaLista_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
+
                         <MenuItem Header="Ordem de Serviço">
                                 <MenuItem Header="Criar OS"
                                           Click="BtnCriarOS_Click"
@@ -189,18 +185,6 @@
                                                                    HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
-                                        <Button Click="BtnNFSaida_Click"
-                                                Style="{StaticResource AtalhoButtonStyle}"
-                                                Tag="📄">
-                                                <StackPanel>
-                                                        <TextBlock Text="📄"
-                                                                   FontSize="24"
-                                                                   HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="NF Saída"
-                                                                   FontSize="11"
-                                                                   HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                        </Button>
                                         <Button Click="BtnNotaEntradaLista_Click"
                                                 Style="{StaticResource AtalhoButtonStyle}"
                                                 Tag="📄">
@@ -243,7 +227,7 @@
 
                 <!-- ÁREA DE CONTEÚDO -->
                 <Grid Grid.Row="2"
-                                Background="White">
+                      Background="White">
 
                         <ContentControl x:Name="ContentArea"
                                         Margin="0"/>
@@ -260,7 +244,8 @@
                                   BorderThickness="1,1,0,0"
                                   Padding="10">
                                 <ContentControl x:Name="DashboardContent"
-                                                Width="380" VerticalAlignment="Stretch"/>
+                                                Width="380"
+                                                VerticalAlignment="Stretch"/>
                         </Expander>
                 </Grid>
 

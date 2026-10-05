@@ -25,12 +25,7 @@ public class ConfiguracoesImpressoraViewModel : INotifyPropertyChanged
     public TamanhoPapel TamanhoPapelOS { get; set; } = TamanhoPapel.A4;
     public int CopiasOS { get; set; } = 1;
 
-    // Nota Fiscal
-    public string ImpressoraNF { get; set; } = string.Empty;
-    public TamanhoPapel TamanhoPapelNF { get; set; } = TamanhoPapel.A4;
-    public int CopiasNF { get; set; } = 1;
-
-    // Cupom Fiscal
+    // Cupom
     public string ImpressoraCupom { get; set; } = string.Empty;
     public TamanhoPapel TamanhoPapelCupom { get; set; } = TamanhoPapel.Cupom80mm;
     public int CopiasCupom { get; set; } = 1;
@@ -68,15 +63,7 @@ public class ConfiguracoesImpressoraViewModel : INotifyPropertyChanged
             CopiasOS = os.Copias ?? 1;
         }
 
-        var nf = configs.FirstOrDefault(c => c.Tipo == TipoImpressao.NotaFiscal);
-        if (nf != null)
-        {
-            ImpressoraNF = nf.NomeImpressora;
-            TamanhoPapelNF = nf.TamanhoPapel;
-            CopiasNF = nf.Copias ?? 1;
-        }
-
-        var cupom = configs.FirstOrDefault(c => c.Tipo == TipoImpressao.CupomFiscal);
+        var cupom = configs.FirstOrDefault(c => c.Tipo == TipoImpressao.Cupom);
         if (cupom != null)
         {
             ImpressoraCupom = cupom.NomeImpressora;
@@ -95,9 +82,6 @@ public class ConfiguracoesImpressoraViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ImpressoraOS));
         OnPropertyChanged(nameof(TamanhoPapelOS));
         OnPropertyChanged(nameof(CopiasOS));
-        OnPropertyChanged(nameof(ImpressoraNF));
-        OnPropertyChanged(nameof(TamanhoPapelNF));
-        OnPropertyChanged(nameof(CopiasNF));
         OnPropertyChanged(nameof(ImpressoraCupom));
         OnPropertyChanged(nameof(TamanhoPapelCupom));
         OnPropertyChanged(nameof(CopiasCupom));
@@ -117,19 +101,9 @@ public class ConfiguracoesImpressoraViewModel : INotifyPropertyChanged
             Copias = CopiasOS
         });
 
-        // Salva Nota Fiscal
         await _mediator.Send(new SalvarConfiguracaoImpressoraCommand
         {
-            Tipo = TipoImpressao.NotaFiscal,
-            NomeImpressora = ImpressoraNF,
-            TamanhoPapel = TamanhoPapelNF,
-            Copias = CopiasNF
-        });
-
-        // Salva Cupom Fiscal
-        await _mediator.Send(new SalvarConfiguracaoImpressoraCommand
-        {
-            Tipo = TipoImpressao.CupomFiscal,
+            Tipo = TipoImpressao.Cupom,
             NomeImpressora = ImpressoraCupom,
             TamanhoPapel = TamanhoPapelCupom,
             Copias = CopiasCupom

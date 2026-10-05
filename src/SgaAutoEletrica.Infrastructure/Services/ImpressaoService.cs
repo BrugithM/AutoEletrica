@@ -33,26 +33,6 @@ public class ImpressaoService : IImpressaoService
         EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
     }
 
-    public void ImprimirNotaFiscal(OrdemServicoDetalheDTO os, string numeroNota)
-    {
-        var config = _configRepo.ObterPorTipo(TipoImpressao.NotaFiscal).GetAwaiter().GetResult();
-        if (config == null)
-            throw new InvalidOperationException("Nenhuma impressora configurada para Nota Fiscal.");
-
-        var conteudo = GerarConteudoNotaFiscal(os, numeroNota);
-        EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
-    }
-
-    public void ImprimirCupomFiscal(OrdemServicoDetalheDTO os)
-    {
-        var config = _configRepo.ObterPorTipo(TipoImpressao.CupomFiscal).GetAwaiter().GetResult();
-        if (config == null)
-            throw new InvalidOperationException("Nenhuma impressora configurada para Cupom Fiscal.");
-
-        var conteudo = GerarConteudoCupom(os);
-        EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
-    }
-
     private void EnviarParaImpressora(string conteudo, string nomeImpressora, int copias)
     {
         var printDocument = new PrintDocument
@@ -147,41 +127,17 @@ public class ImpressaoService : IImpressaoService
         return sb.ToString();
     }
 
-    private string GerarConteudoNotaFiscal(OrdemServicoDetalheDTO os, string numeroNota)
+    public void ImprimirCupomOrcamento(OrdemServicoDetalheDTO os)
     {
-        var sb = new StringBuilder();
-        sb.AppendLine("========================================");
-        sb.AppendLine("           NOTA FISCAL");
-        sb.AppendLine("========================================");
-        sb.AppendLine(ObterCabecalhoEmpresa());
-        sb.AppendLine($"Número NF: {numeroNota}");
-        sb.AppendLine($"Data: {DateTime.Now:dd/MM/yyyy HH:mm}");
-        sb.AppendLine("----------------------------------------");
-        sb.AppendLine("CLIENTE:");
-        sb.AppendLine($"  Nome: {os.NomeCliente}");
-        sb.AppendLine($"  Telefone: {os.TelefoneCliente}");
-        sb.AppendLine("----------------------------------------");
-        sb.AppendLine("VEÍCULO:");
-        sb.AppendLine($"  Modelo: {os.MarcaVeiculo} {os.ModeloVeiculo}");
-        sb.AppendLine($"  Placa: {os.PlacaVeiculo}");
-        sb.AppendLine("----------------------------------------");
-        sb.AppendLine("ITENS:");
-        foreach (var peca in os.ItensPeca)
-            sb.AppendLine($"  {peca.NomePeca} x{peca.Quantidade} = {peca.ValorTotal:C2}");
-        foreach (var servico in os.ItensServico)
-            sb.AppendLine($"  {servico.NomeServico} = {servico.PrecoUnitario:C2}");
-        sb.AppendLine("----------------------------------------");
-        sb.AppendLine($"TOTAL PEÇAS: {os.ValorTotalPecas:C2}");
-        sb.AppendLine($"TOTAL SERVIÇOS: {os.ValorTotalServicos:C2}");
-        if (os.Desconto > 0)
-            sb.AppendLine($"DESCONTO: -{os.Desconto:C2}");
-        sb.AppendLine($"TOTAL GERAL: {os.ValorTotal:C2}");
-        sb.AppendLine("========================================");
+        var config = _configRepo.ObterPorTipo(TipoImpressao.Cupom).GetAwaiter().GetResult();
+        if (config == null)
+            throw new InvalidOperationException("Nenhuma impressora configurada para Cupom.");
 
-        return sb.ToString();
+        var conteudo = GerarConteudoCupomOrcamento(os);
+        EnviarParaImpressora(conteudo, config.NomeImpressora, config.Copias ?? 1);
     }
 
-    private string GerarConteudoCupom(OrdemServicoDetalheDTO os)
+    private string GerarConteudoCupomOrcamento(OrdemServicoDetalheDTO os)
     {
         var empresa = _context.ConfiguracoesEmpresa
             .AsNoTracking()
@@ -195,26 +151,46 @@ public class ImpressaoService : IImpressaoService
             sb.AppendLine($"CNPJ: {empresa.Cnpj}");
             sb.AppendLine($"Tel: {empresa.Telefone}");
         }
-        else
-        {
-            sb.AppendLine("        AUTO ELÉTRICA");
-        }
 
         sb.AppendLine("========================================");
-        sb.AppendLine($"OS Nº: {os.Numero}  Data: {os.DataAbertura:dd/MM/yyyy}");
+        sb.AppendLine("             ORÇAMENTO");
+        sb.AppendLine("========================================");
+        sb.AppendLine($"Nº: {os.Numero}   Data: {os.DataAbertura:dd/MM/yyyy}");
         sb.AppendLine("----------------------------------------");
-        sb.AppendLine($"CLIENTE: {os.NomeCliente}");
-        sb.AppendLine($"VEÍCULO: {os.ModeloVeiculo} {os.PlacaVeiculo}");
+        sb.AppendLine($"Cliente: {os.NomeCliente}");
+        sb.AppendLine($"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo}");
+        sb.AppendLine($"Placa: {os.PlacaVeiculo}");
         sb.AppendLine("----------------------------------------");
-        sb.AppendLine("ITENS:");
-        foreach (var peca in os.ItensPeca)
-            sb.AppendLine($" {peca.NomePeca} x{peca.Quantidade} {peca.ValorTotal:C2}");
-        foreach (var servico in os.ItensServico)
-            sb.AppendLine($" {servico.NomeServico} {servico.PrecoUnitario:C2}");
+
+        if (os.ItensPeca.Any())
+        {
+            sb.AppendLine("PEÇAS:");
+            foreach (var peca in os.ItensPeca)
+            {
+                sb.AppendLine($"  {peca.NomePeca} x{peca.Quantidade}");
+                sb.AppendLine($"    {peca.ValorTotal:C2}");
+            }
+        }
+
+        if (os.ItensServico.Any())
+        {
+            sb.AppendLine("SERVIÇOS:");
+            foreach (var servico in os.ItensServico)
+            {
+                sb.AppendLine($"  {servico.NomeServico} - {servico.PrecoUnitario:C2}");
+            }
+        }
+
         sb.AppendLine("----------------------------------------");
+        sb.AppendLine($"Subtotal: {os.ValorTotalPecas + os.ValorTotalServicos:C2}");
+        if (os.Desconto > 0)
+            sb.AppendLine($"Desconto: -{os.Desconto:C2}");
         sb.AppendLine($"TOTAL: {os.ValorTotal:C2}");
         sb.AppendLine("========================================");
-        sb.AppendLine("       OBRIGADO E VOLTE SEMPRE!");
+        sb.AppendLine("Este documento é um orçamento");
+        sb.AppendLine("e não tem valor fiscal.");
+        sb.AppendLine("Válido por 30 dias.");
+        sb.AppendLine("========================================");
 
         return sb.ToString();
     }

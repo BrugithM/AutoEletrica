@@ -143,7 +143,7 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     public ICommand EditarVeiculoCommand { get; }
     public ICommand DesativarVeiculoCommand { get; }
     public ICommand AtualizarCommand { get; }
-    public ICommand NFsVinculadasCommand { get; }
+    public ICommand OSVinculadasCommand { get; }
     public ICommand CriarOSCommand { get; }
     public ICommand PaginaAnteriorCommand { get; }
     public ICommand ProximaPaginaCommand { get; }
@@ -159,10 +159,10 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         EditarVeiculoCommand = new RelayCommand(async _ => await EditarVeiculoAsync(), _ => TemVeiculoSelecionado);
         DesativarVeiculoCommand = new RelayCommand(async _ => await DesativarVeiculoAsync(), _ => TemVeiculoSelecionado && EhAdministrador);
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
-        NFsVinculadasCommand = new RelayCommand(_ => NFsVinculadas(), _ => TemVeiculoSelecionado);
         CriarOSCommand = new RelayCommand(_ => CriarOS(), _ => TemVeiculoSelecionado);
         PaginaAnteriorCommand = new RelayCommand(async _ => await IrParaPaginaAnterior(), _ => TemPaginaAnterior);
         ProximaPaginaCommand = new RelayCommand(async _ => await IrParaProximaPagina(), _ => TemProximaPagina);
+        OSVinculadasCommand = new RelayCommand(_ => OSVinculadas(), _ => TemVeiculoSelecionado);
     }
 
     public async Task BuscarAsync()
@@ -254,16 +254,6 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         }
     }
 
-    private void NFsVinculadas()
-    {
-        if (VeiculoSelecionado == null) return;
-        var dialog = new Views.Veiculos.NFsVinculadasWindow(
-            _mediator,
-            VeiculoSelecionado.Id,
-            VeiculoSelecionado.Placa);
-        dialog.ShowDialog();
-    }
-
     private void CriarOS()
     {
         if (VeiculoSelecionado == null) return;
@@ -289,6 +279,16 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         await BuscarAsync();
     }
 
+    private void OSVinculadas()
+    {
+        if (VeiculoSelecionado == null) return;
+
+        var dialog = new Views.Veiculos.OSVinculadasWindow(
+            _mediator,
+            VeiculoSelecionado.Id,
+            VeiculoSelecionado.Placa);
+        dialog.ShowDialog();
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

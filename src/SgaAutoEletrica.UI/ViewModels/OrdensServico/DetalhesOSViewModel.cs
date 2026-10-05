@@ -110,34 +110,29 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
     public bool PodeFinalizar => Status != StatusOS.Finalizada && Status != StatusOS.Cancelada;
     public bool PodeCancelar => Status != StatusOS.Finalizada && Status != StatusOS.Cancelada;
     public bool PodeEditar => Status == StatusOS.Aberta || Status == StatusOS.EmAndamento;
-    public bool PodeGerarNF => Status == StatusOS.Finalizada;
     public bool PodeImprimir => true;
     public bool EhAdministrador => App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
 
     public ICommand ImprimirOSCommand { get; }
-    public ICommand ImprimirCupomCommand { get; }
-    public ICommand ImprimirNFCommand { get; }
-    public ICommand GerarNFCommand { get; }
     public ICommand EditarOSCommand { get; }
     public ICommand IniciarServicoCommand { get; }
     public ICommand AguardarPecasCommand { get; }
     public ICommand CancelarOSCommand { get; }
     public ICommand FinalizarCommand { get; }
-
+    public ICommand ImprimirCupomOrcamentoCommand { get; }
     public DetalhesOSViewModel(IMediator mediator, Guid osId)
     {
         _mediator = mediator;
         _osId = osId;
 
         ImprimirOSCommand = new RelayCommand(_ => ImprimirOS());
-        ImprimirCupomCommand = new RelayCommand(_ => ImprimirCupom());
-        ImprimirNFCommand = new RelayCommand(_ => ImprimirNF());
-        GerarNFCommand = new RelayCommand(_ => GerarNF(), _ => PodeGerarNF);
         EditarOSCommand = new RelayCommand(_ => EditarOS(), _ => PodeEditar);
         IniciarServicoCommand = new RelayCommand(async _ => await AlterarStatusAsync(StatusOS.EmAndamento), _ => PodeIniciar);
         AguardarPecasCommand = new RelayCommand(async _ => await AlterarStatusAsync(StatusOS.AguardandoPecas), _ => PodeAguardarPecas);
         CancelarOSCommand = new RelayCommand(async _ => await CancelarAsync(), _ => PodeCancelar && EhAdministrador);
         FinalizarCommand = new RelayCommand(async _ => await FinalizarAsync(), _ => PodeFinalizar);
+        ImprimirCupomOrcamentoCommand = new RelayCommand(_ => ImprimirCupomOrcamento(),
+    _ => Status == StatusOS.Aberta || Status == StatusOS.EmAndamento);
     }
 
     public async Task CarregarDadosAsync()
@@ -181,8 +176,8 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(PodeFinalizar));
         OnPropertyChanged(nameof(PodeCancelar));
         OnPropertyChanged(nameof(PodeEditar));
-        OnPropertyChanged(nameof(PodeGerarNF));
         OnPropertyChanged(nameof(PodeImprimir));
+        OnPropertyChanged(nameof(ImprimirCupomOrcamentoCommand));
     }
 
     private async Task AlterarStatusAsync(StatusOS novoStatus)
@@ -204,7 +199,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
 
     private async Task FinalizarAsync()
     {
-        var confirmacao = MessageBox.Show("Deseja finalizar esta OS?", "Confirmar", 
+        var confirmacao = MessageBox.Show("Deseja finalizar esta OS?", "Confirmar",
             MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (confirmacao == MessageBoxResult.Yes)
             await AlterarStatusAsync(StatusOS.Finalizada);
@@ -259,59 +254,20 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         }
     }
 
-    private void ImprimirCupom()
+    private void ImprimirCupomOrcamento()
     {
         try
         {
             var impressao = App.ServiceProvider.GetRequiredService<IImpressaoService>();
             var os = _mediator.Send(new ObterOSPorIdQuery { Id = _osId }).GetAwaiter().GetResult();
             if (os != null)
-                impressao.ImprimirCupomFiscal(os);
+                impressao.ImprimirCupomOrcamento(os);
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-
-    private void ImprimirNF()
-    {
-        try
-        {
-            var impressao = App.ServiceProvider.GetRequiredService<IImpressaoService>();
-            var os = _mediator.Send(new ObterOSPorIdQuery { Id = _osId }).GetAwaiter().GetResult();
-            if (os != null)
-                impressao.ImprimirNotaFiscal(os, "NF-" + os.Numero);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
-
-    private void GerarNF()
-    {
-        var dialog = new Views.OrdensServico.GerarNFWindow();
-        if (dialog.ShowDialog() == true)
-        {
-            try
-            {
-                _mediator.Send(new GerarNotaFiscalSaidaCommand
-                {
-                    OrdemServicoId = _osId,
-                    NumeroNota = dialog.NumeroNota
-                }).GetAwaiter().GetResult();
-
-                MessageBox.Show("Nota Fiscal gerada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                CarregarDadosAsync().GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-    }
-
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

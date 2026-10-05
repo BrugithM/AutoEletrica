@@ -257,8 +257,8 @@
                                 Command="{Binding NovoVeiculoCommand}"
                                 Width="160"
                                 Style="{StaticResource BotaoPadraoStyle}"/>
-                        <Button Content="📄 NFs Vinculadas"
-                                Command="{Binding NFsVinculadasCommand}"
+                        <Button Content="📄 OS Vinculadas"
+                                Command="{Binding OSVinculadasCommand}"
                                 Width="140"
                                 Style="{StaticResource BotaoPadraoStyle}"/>
                         <Button Content="📋 Criar OS"

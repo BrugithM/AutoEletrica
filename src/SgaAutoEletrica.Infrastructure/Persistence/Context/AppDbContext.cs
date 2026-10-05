@@ -20,8 +20,7 @@ public class AppDbContext : DbContext
     public DbSet<ItemServicoOS> ItensServicoOS => Set<ItemServicoOS>();
     public DbSet<NotaFiscalEntrada> NotasFiscaisEntrada => Set<NotaFiscalEntrada>();
     public DbSet<ItemNotaFiscalEntrada> ItensNotaFiscalEntrada  => Set<ItemNotaFiscalEntrada>();
-    public DbSet<NotaFiscalSaida> NotasFiscaisSaida => Set<NotaFiscalSaida>();
-    public DbSet<ItemNotaFiscalSaida> ItensNotaFiscalSaida => Set<ItemNotaFiscalSaida>();
+
     public DbSet<ConfiguracaoImpressora> ConfiguracoesImpressora => Set<ConfiguracaoImpressora>();
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<ConfiguracaoEmpresa> ConfiguracoesEmpresa => Set<ConfiguracaoEmpresa>();

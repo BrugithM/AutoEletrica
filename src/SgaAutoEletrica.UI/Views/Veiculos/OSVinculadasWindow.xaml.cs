@@ -5,19 +5,19 @@ using SgaAutoEletrica.UI.ViewModels.Veiculos;
 
 namespace SgaAutoEletrica.UI.Views.Veiculos;
 
-public partial class NFsVinculadasWindow : Window
+public partial class OSVinculadasWindow : Window
 {
-    private readonly NFsVinculadasViewModel _viewModel;
+    private readonly OSVinculadasViewModel _viewModel;
 
-    public NFsVinculadasWindow(IMediator mediator, Guid veiculoId, string placaVeiculo)
+    public OSVinculadasWindow(IMediator mediator, Guid veiculoId, string placaVeiculo)
     {
         InitializeComponent();
-        _viewModel = new NFsVinculadasViewModel(mediator, veiculoId, placaVeiculo);
+        _viewModel = new OSVinculadasViewModel(mediator, veiculoId, placaVeiculo);
         DataContext = _viewModel;
-        Loaded += NFsVinculadasWindow_Loaded;
+        Loaded += OSVinculadasWindow_Loaded;
     }
 
-    private async void NFsVinculadasWindow_Loaded(object sender, RoutedEventArgs e)
+    private async void OSVinculadasWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await _viewModel.CarregarAsync();
     }
