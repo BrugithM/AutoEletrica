@@ -1,0 +1,12 @@
+<Project Sdk="WixToolset.Sdk/7.0.0">
+  <PropertyGroup>
+    <OutputName>SgaAutoEletrica_Setup</OutputName>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <AcceptEula>wix7</AcceptEula>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.0" />
+  </ItemGroup>
+</Project>

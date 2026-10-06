@@ -91,7 +91,6 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
     {
         _mediator = mediator;
 
-        // Pasta para armazenar imagens da empresa
         _pastaImagens = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "SgaAutoEletrica",
