@@ -188,8 +188,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("NotaFiscalEntradaId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("PecaId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PecaId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("INTEGER");
@@ -218,8 +218,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("OrdemServicoId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("PecaId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PecaId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(10,2)");
@@ -261,6 +261,25 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.HasIndex("ServicoId");
 
                     b.ToTable("ItensServicoOS", (string)null);
+                });
+
+            modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.Marca", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marcas", (string)null);
                 });
 
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.NotaFiscalEntrada", b =>
@@ -315,12 +334,18 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("Desconto")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<decimal>("DescontoPercentual")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Observacao")
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("Quilometragem")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -353,9 +378,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.Peca", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("INTEGER");
@@ -387,18 +412,11 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("FornecedorId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("IdPeca")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("MarcaId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Imposto")
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<string>("Marca")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                    b.Property<decimal>("MarkupPercentual")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -416,6 +434,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.HasIndex("CategoriaId");
 
                     b.HasIndex("FornecedorId");
+
+                    b.HasIndex("MarcaId");
 
                     b.ToTable("Pecas", (string)null);
                 });
@@ -838,10 +858,15 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .HasForeignKey("FornecedorId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("SgaAutoEletrica.Domain.Entities.Marca", "Marca")
+                        .WithMany()
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.OwnsOne("SgaAutoEletrica.Domain.ValueObjects.CodigoBarras", "CodigoBarras", b1 =>
                         {
-                            b1.Property<Guid>("PecaId")
-                                .HasColumnType("TEXT");
+                            b1.Property<int>("PecaId")
+                                .HasColumnType("INTEGER");
 
                             b1.Property<string>("Valor")
                                 .IsRequired()
@@ -862,6 +887,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Navigation("CodigoBarras");
 
                     b.Navigation("Fornecedor");
+
+                    b.Navigation("Marca");
                 });
 
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.Veiculo", b =>

@@ -9,6 +9,8 @@ using SgaAutoEletrica.Application.Features.CategoriasPeca.DTOs;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.Queries;
 using SgaAutoEletrica.Application.Features.Fornecedores.DTOs;
 using SgaAutoEletrica.Application.Features.Fornecedores.Queries;
+using SgaAutoEletrica.Application.Features.Marcas.DTOs;
+using SgaAutoEletrica.Application.Features.Marcas.Queries;
 using SgaAutoEletrica.Application.Features.Pecas.Commands;
 using SgaAutoEletrica.Application.Features.Pecas.Queries;
 
@@ -17,23 +19,69 @@ namespace SgaAutoEletrica.UI.ViewModels.Pecas;
 public class CadastroPecaViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
-    private readonly Guid? _pecaId;
+    private readonly int? _pecaId;
 
-    public string IdPeca { get; set; } = string.Empty;
     public string CodigoPeca { get; set; } = string.Empty;
     public string CodigoBarras { get; set; } = string.Empty;
     public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
-    public string Marca { get; set; } = string.Empty;
-    public decimal ValorCusto { get; set; }
-    public decimal ValorVenda { get; set; }
     public int EstoqueInicial { get; set; }
     public int EstoqueMinimo { get; set; } = 5;
 
+    private decimal _valorCusto;
+    public decimal ValorCusto
+    {
+        get => _valorCusto;
+        set
+        {
+            _valorCusto = value;
+            OnPropertyChanged();
+            RecalcularVendaPorMargem();
+        }
+    }
+
+    private decimal _valorVenda;
+    public decimal ValorVenda
+    {
+        get => _valorVenda;
+        set
+        {
+            _valorVenda = value;
+            OnPropertyChanged();
+            RecalcularMargemPorVenda();
+        }
+    }
+
+    private decimal _margemLucro;
+    public decimal MargemLucro
+    {
+        get => _margemLucro;
+        set
+        {
+            _margemLucro = value;
+            OnPropertyChanged();
+            RecalcularVendaPorMargem();
+        }
+    }
+
+    private decimal _markup;
+    public decimal Markup
+    {
+        get => _markup;
+        set
+        {
+            _markup = value;
+            OnPropertyChanged();
+            RecalcularVendaPorMarkup();
+        }
+    }
+
+    private bool _recalculando;
+
     public ObservableCollection<CategoriaPecaDTO> Categorias { get; } = new();
     public ObservableCollection<FornecedorDTO> Fornecedores { get; } = new();
-    private Guid? _categoriaIdParaSelecionar;
-    private Guid? _fornecedorIdParaSelecionar;
+    public ObservableCollection<MarcaDTO> Marcas { get; } = new();
+
     private CategoriaPecaDTO? _categoriaSelecionada;
     public CategoriaPecaDTO? CategoriaSelecionada
     {
@@ -48,6 +96,13 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         set { _fornecedorSelecionado = value; OnPropertyChanged(); }
     }
 
+    private MarcaDTO? _marcaSelecionada;
+    public MarcaDTO? MarcaSelecionada
+    {
+        get => _marcaSelecionada;
+        set { _marcaSelecionada = value; OnPropertyChanged(); }
+    }
+
     private string _titulo = "Cadastro de Peças";
     public string Titulo
     {
@@ -56,14 +111,18 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
     }
 
     public bool EhAdministrador => App.ServiceProvider
-    .GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
-    public ICommand NovaCategoriaCommand { get; }
+        .GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
 
-    public CadastroPecaViewModel(IMediator mediator, Guid? pecaId = null)
+    public ICommand NovaCategoriaCommand { get; }
+    public ICommand NovaMarcaCommand { get; }
+
+    public CadastroPecaViewModel(IMediator mediator, int? pecaId = null)
     {
         _mediator = mediator;
         _pecaId = pecaId;
+
         NovaCategoriaCommand = new RelayCommand(async _ => await NovaCategoriaAsync(), _ => EhAdministrador);
+        NovaMarcaCommand = new RelayCommand(async _ => await NovaMarcaAsync(), _ => EhAdministrador);
 
         if (pecaId.HasValue)
         {
@@ -72,36 +131,87 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         }
     }
 
-    private async void CarregarDadosAsync(Guid pecaId)
+    private async void CarregarDadosAsync(int pecaId)
     {
         var peca = await _mediator.Send(new ObterPecaPorIdQuery { Id = pecaId });
         if (peca != null)
         {
-            IdPeca = peca.IdPeca;
+            _recalculando = true;
+
             CodigoPeca = peca.CodigoPeca ?? "";
             CodigoBarras = peca.CodigoBarras ?? "";
             Nome = peca.Nome;
             Descricao = peca.Descricao;
-            Marca = peca.Marca;
             ValorCusto = peca.ValorCusto;
             ValorVenda = peca.ValorVenda;
+            MargemLucro = peca.MargemLucro;
+            Markup = peca.MarkupPercentual;
             EstoqueInicial = peca.Estoque;
             EstoqueMinimo = peca.EstoqueMinimo;
 
+            _recalculando = false;
+
+            _marcaIdParaSelecionar = peca.MarcaId;
             _categoriaIdParaSelecionar = peca.CategoriaId;
             _fornecedorIdParaSelecionar = peca.FornecedorId;
 
-            OnPropertyChanged(nameof(IdPeca));
             OnPropertyChanged(nameof(CodigoPeca));
             OnPropertyChanged(nameof(CodigoBarras));
             OnPropertyChanged(nameof(Nome));
             OnPropertyChanged(nameof(Descricao));
-            OnPropertyChanged(nameof(Marca));
             OnPropertyChanged(nameof(ValorCusto));
             OnPropertyChanged(nameof(ValorVenda));
+            OnPropertyChanged(nameof(MargemLucro));
+            OnPropertyChanged(nameof(Markup));
             OnPropertyChanged(nameof(EstoqueInicial));
             OnPropertyChanged(nameof(EstoqueMinimo));
         }
+    }
+
+    private int? _marcaIdParaSelecionar;
+    private Guid? _categoriaIdParaSelecionar;
+    private Guid? _fornecedorIdParaSelecionar;
+
+    private void RecalcularVendaPorMargem()
+    {
+        if (_recalculando) return;
+        if (ValorCusto <= 0 || MargemLucro <= 0 || MargemLucro >= 100) return;
+
+        _recalculando = true;
+        ValorVenda = Math.Round(ValorCusto / (1 - MargemLucro / 100), 2);
+        Markup = ValorCusto > 0 ? Math.Round((ValorVenda - ValorCusto) / ValorCusto * 100, 2) : 0;
+        _recalculando = false;
+
+        OnPropertyChanged(nameof(ValorVenda));
+        OnPropertyChanged(nameof(Markup));
+    }
+
+    private void RecalcularVendaPorMarkup()
+    {
+        if (_recalculando) return;
+        if (ValorCusto <= 0 || Markup <= 0) return;
+
+        _recalculando = true;
+        ValorVenda = Math.Round(ValorCusto * (1 + Markup / 100), 2);
+        MargemLucro = ValorVenda > 0 ? Math.Round((ValorVenda - ValorCusto) / ValorVenda * 100, 2) : 0;
+        _recalculando = false;
+
+        OnPropertyChanged(nameof(ValorVenda));
+        OnPropertyChanged(nameof(MargemLucro));
+    }
+
+    private void RecalcularMargemPorVenda()
+    {
+        if (_recalculando) return;
+        if (ValorVenda <= 0) return;
+
+        _recalculando = true;
+        MargemLucro = Math.Round((ValorVenda - ValorCusto) / ValorVenda * 100, 2);
+        Markup = ValorCusto > 0 ? Math.Round((ValorVenda - ValorCusto) / ValorCusto * 100, 2) : 0;
+        _recalculando = false;
+
+        OnPropertyChanged(nameof(MargemLucro));
+        OnPropertyChanged(nameof(Markup));
     }
 
     public async Task CarregarDadosAuxiliaresAsync()
@@ -116,10 +226,18 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         foreach (var forn in fornecedores)
             Fornecedores.Add(forn);
 
-        if(_categoriaIdParaSelecionar.HasValue)
+        Marcas.Clear();
+        var marcas = await _mediator.Send(new ListarMarcasQuery());
+        foreach (var m in marcas)
+            Marcas.Add(m);
+
+        if (_marcaIdParaSelecionar.HasValue)
+            MarcaSelecionada = Marcas.FirstOrDefault(m => m.Id == _marcaIdParaSelecionar.Value);
+
+        if (_categoriaIdParaSelecionar.HasValue)
             CategoriaSelecionada = Categorias.FirstOrDefault(c => c.Id == _categoriaIdParaSelecionar.Value);
 
-        if(_fornecedorIdParaSelecionar.HasValue)
+        if (_fornecedorIdParaSelecionar.HasValue)
             FornecedorSelecionado = Fornecedores.FirstOrDefault(f => f.Id == _fornecedorIdParaSelecionar.Value);
     }
 
@@ -129,7 +247,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         if (dialog.ShowDialog() == true)
         {
             var nomeAntes = Categorias.Select(c => c.Nome).ToHashSet();
-
             Categorias.Clear();
             var categorias = await _mediator.Send(new ListarCategoriasPecaQuery());
             foreach (var cat in categorias)
@@ -141,13 +258,25 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
         }
     }
 
+    private async Task NovaMarcaAsync()
+    {
+        var dialog = new Views.Marcas.CadastroMarcaWindow(_mediator);
+        if (dialog.ShowDialog() == true)
+        {
+            var nomeAntes = Marcas.Select(m => m.Nome).ToHashSet();
+            Marcas.Clear();
+            var marcas = await _mediator.Send(new ListarMarcasQuery());
+            foreach (var m in marcas)
+                Marcas.Add(m);
+
+            var novaMarca = Marcas.FirstOrDefault(m => !nomeAntes.Contains(m.Nome));
+            if (novaMarca != null)
+                MarcaSelecionada = novaMarca;
+        }
+    }
+
     public async Task<bool> SalvarAsync()
     {
-        if (string.IsNullOrWhiteSpace(IdPeca))
-        {
-            MessageBox.Show("ID da Peça é obrigatório.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return false;
-        }
         if (string.IsNullOrWhiteSpace(Nome))
         {
             MessageBox.Show("Nome é obrigatório.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -158,11 +287,6 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             MessageBox.Show("Descrição é obrigatória.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
-        if (string.IsNullOrWhiteSpace(Marca))
-        {
-            MessageBox.Show("Marca é obrigatória.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return false;
-        }
 
         try
         {
@@ -171,13 +295,12 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
                 await _mediator.Send(new AtualizarPecaCommand
                 {
                     Id = _pecaId.Value,
-                    IdPeca = IdPeca,
                     Nome = Nome,
                     Descricao = Descricao,
-                    Marca = Marca,
                     ValorCusto = ValorCusto,
                     ValorVenda = ValorVenda,
                     CodigoPeca = CodigoPeca,
+                    MarcaId = MarcaSelecionada?.Id,
                     CategoriaId = CategoriaSelecionada?.Id,
                     FornecedorId = FornecedorSelecionado?.Id,
                     EstoqueMinimo = EstoqueMinimo
@@ -187,16 +310,15 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             {
                 await _mediator.Send(new CriarPecaCommand
                 {
-                    IdPeca = IdPeca,
                     Nome = Nome,
                     Descricao = Descricao,
-                    Marca = Marca,
                     ValorCusto = ValorCusto,
                     ValorVenda = ValorVenda,
                     EstoqueInicial = EstoqueInicial,
                     EstoqueMinimo = EstoqueMinimo,
                     CodigoPeca = CodigoPeca,
                     CodigoBarras = CodigoBarras,
+                    MarcaId = MarcaSelecionada?.Id,
                     CategoriaId = CategoriaSelecionada?.Id,
                     FornecedorId = FornecedorSelecionado?.Id
                 });
@@ -216,29 +338,31 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
 
     public void Limpar()
     {
-        IdPeca = string.Empty;
         CodigoPeca = string.Empty;
         CodigoBarras = string.Empty;
         Nome = string.Empty;
         Descricao = string.Empty;
-        Marca = string.Empty;
         ValorCusto = 0;
         ValorVenda = 0;
+        MargemLucro = 0;
+        Markup = 0;
         EstoqueInicial = 0;
         EstoqueMinimo = 5;
+        MarcaSelecionada = null;
         CategoriaSelecionada = null;
         FornecedorSelecionado = null;
 
-        OnPropertyChanged(nameof(IdPeca));
         OnPropertyChanged(nameof(CodigoPeca));
         OnPropertyChanged(nameof(CodigoBarras));
         OnPropertyChanged(nameof(Nome));
         OnPropertyChanged(nameof(Descricao));
-        OnPropertyChanged(nameof(Marca));
         OnPropertyChanged(nameof(ValorCusto));
         OnPropertyChanged(nameof(ValorVenda));
+        OnPropertyChanged(nameof(MargemLucro));
+        OnPropertyChanged(nameof(Markup));
         OnPropertyChanged(nameof(EstoqueInicial));
         OnPropertyChanged(nameof(EstoqueMinimo));
+        OnPropertyChanged(nameof(MarcaSelecionada));
         OnPropertyChanged(nameof(CategoriaSelecionada));
         OnPropertyChanged(nameof(FornecedorSelecionado));
     }

@@ -24,6 +24,8 @@ public class AppDbContext : DbContext
     public DbSet<ConfiguracaoImpressora> ConfiguracoesImpressora => Set<ConfiguracaoImpressora>();
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<ConfiguracaoEmpresa> ConfiguracoesEmpresa => Set<ConfiguracaoEmpresa>();
+    public DbSet<Marca> Marcas => Set<Marca>();
+
     
     public AppDbContext(DbContextOptions<AppDbContext>options) : base(options){}
 

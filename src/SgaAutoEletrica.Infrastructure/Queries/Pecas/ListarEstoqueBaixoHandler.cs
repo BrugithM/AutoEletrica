@@ -18,14 +18,14 @@ public class ListarEstoqueBaixoHandler : IRequestHandler<ListarEstoqueBaixoQuery
     public async Task<List<EstoqueBaixoDTO>> Handle(ListarEstoqueBaixoQuery request, CancellationToken cancellationToken)
     {
         return await _context.Pecas
+            .Include(p => p.Marca)
             .Where(p => p.Estoque <= p.EstoqueMinimo && p.Ativo)
             .OrderBy(p => p.Estoque)
             .Select(p => new EstoqueBaixoDTO
             {
                 Id = p.Id,
-                IdPeca = p.IdPeca,
                 Nome = p.Nome,
-                Marca = p.Marca,
+                MarcaNome = p.Marca != null ? p.Marca.Nome : null,
                 Estoque = p.Estoque,
                 EstoqueMinimo = p.EstoqueMinimo
             })

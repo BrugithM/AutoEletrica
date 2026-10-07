@@ -38,6 +38,9 @@
                                 <MenuItem Header="Cadastrar Categorias"
                                           Click="BtnCadastroCategorias_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Cadastrar Marcas"
+                                          Click="BtnCadastroMarcas_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Gerenciamento">
                                 <MenuItem Header="Clientes"
@@ -54,6 +57,9 @@
                                           Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Categorias"
                                           Click="BtnCategorias_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Marcas"
+                                          Click="BtnGerenciarMarcas_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Notas de Entrada"
                                           Click="BtnNotaEntradaLista_Click"

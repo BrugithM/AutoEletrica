@@ -11,8 +11,7 @@ public class ListarPecasQuery : IRequest<ListaPaginadaDTO<PecaDTO>>
     public string? Nome { get; set; }
     public string? CodigoPeca { get; set; }
     public string? CodigoBarras { get; set; }
-    public string? IdPeca { get; set; }
-    public string? Marca { get; set; }
+    public int? MarcaId { get; set; }
     public Guid? CategoriaId { get; set; }
     public Guid? FornecedorId { get; set; }
     public bool ApenasEstoqueBaixo { get; set; }

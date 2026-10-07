@@ -40,8 +40,7 @@ public class BuscarNotasEntradaHandler : IRequestHandler<BuscarNotasEntradaQuery
         {
             var termo = request.CodigoProduto.Trim().ToLower();
             query = query.Where(nf => nf.Itens.Any(i =>
-                (i.Peca.CodigoPeca != null && i.Peca.CodigoPeca.ToLower().Contains(termo)) ||
-                i.Peca.IdPeca.ToLower().Contains(termo)));
+                (i.Peca.CodigoPeca != null && i.Peca.CodigoPeca.ToLower().Contains(termo))));
         }
 
         if (!string.IsNullOrWhiteSpace(request.NomeProduto))

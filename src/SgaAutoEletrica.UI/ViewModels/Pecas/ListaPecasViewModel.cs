@@ -10,6 +10,8 @@ using SgaAutoEletrica.Application.Features.CategoriasPeca.DTOs;
 using SgaAutoEletrica.Application.Features.CategoriasPeca.Queries;
 using SgaAutoEletrica.Application.Features.Fornecedores.DTOs;
 using SgaAutoEletrica.Application.Features.Fornecedores.Queries;
+using SgaAutoEletrica.Application.Features.Marcas.DTOs;
+using SgaAutoEletrica.Application.Features.Marcas.Queries;
 using SgaAutoEletrica.Application.Features.Pecas.Commands;
 using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.Application.Features.Pecas.Queries;
@@ -24,6 +26,7 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     public ObservableCollection<PecaDTO> Pecas { get; } = new();
     public ObservableCollection<CategoriaPecaDTO> Categorias { get; } = new();
     public ObservableCollection<FornecedorDTO> Fornecedores { get; } = new();
+    public ObservableCollection<MarcaDTO> Marcas { get; } = new();
 
     public bool EhAdministrador => App.ServiceProvider
         .GetRequiredService<ISessaoUsuario>().EhAdministrador;
@@ -99,15 +102,8 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         set { _buscaCodigoBarras = value; OnPropertyChanged(); }
     }
 
-    private string _buscaIdPeca = string.Empty;
-    public string BuscaIdPeca
-    {
-        get => _buscaIdPeca;
-        set { _buscaIdPeca = value; OnPropertyChanged(); }
-    }
-
-    private string _buscaMarca = string.Empty;
-    public string BuscaMarca
+    private MarcaDTO? _buscaMarca;
+    public MarcaDTO? BuscaMarca
     {
         get => _buscaMarca;
         set { _buscaMarca = value; OnPropertyChanged(); }
@@ -133,7 +129,6 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         get => _buscaApenasEstoqueBaixo;
         set { _buscaApenasEstoqueBaixo = value; OnPropertyChanged(); }
     }
-
     private bool _mostrarInativos;
     public bool MostrarInativos
     {
@@ -211,8 +206,15 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         foreach (var forn in forns)
             Fornecedores.Add(forn);
 
+        Marcas.Clear();
+        Marcas.Add(new MarcaDTO { Id = 0, Nome = "Todas" });
+        var marcas = await _mediator.Send(new ListarMarcasQuery());
+        foreach (var m in marcas)
+            Marcas.Add(m);
+
         BuscaCategoria = Categorias.FirstOrDefault();
         BuscaFornecedor = Fornecedores.FirstOrDefault();
+        BuscaMarca = Marcas.FirstOrDefault();
     }
 
     public async Task BuscarAsync()
@@ -228,10 +230,11 @@ public class ListaPecasViewModel : INotifyPropertyChanged
                 Nome = ModoBuscaAvancada ? BuscaNome : null,
                 CodigoPeca = ModoBuscaAvancada ? BuscaCodigoPeca : null,
                 CodigoBarras = ModoBuscaAvancada ? BuscaCodigoBarras : null,
-                IdPeca = ModoBuscaAvancada ? BuscaIdPeca : null,
-                Marca = ModoBuscaAvancada ? BuscaMarca : null,
-                CategoriaId = ModoBuscaAvancada ? BuscaCategoria?.Id : null,
-                FornecedorId = ModoBuscaAvancada ? BuscaFornecedor?.Id : null,
+                MarcaId = ModoBuscaAvancada && BuscaMarca != null && BuscaMarca.Id > 0 ? BuscaMarca.Id : null,
+                CategoriaId = ModoBuscaAvancada && BuscaCategoria != null && BuscaCategoria.Id != Guid.Empty 
+                    ? BuscaCategoria.Id : null,
+                FornecedorId = ModoBuscaAvancada && BuscaFornecedor != null && BuscaFornecedor.Id != Guid.Empty 
+                    ? BuscaFornecedor.Id : null,
                 ApenasEstoqueBaixo = ModoBuscaAvancada && BuscaApenasEstoqueBaixo,
                 Ativo = MostrarInativos ? null : true,
                 Pagina = PaginaAtual,
@@ -262,11 +265,10 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         BuscaNome = string.Empty;
         BuscaCodigoPeca = string.Empty;
         BuscaCodigoBarras = string.Empty;
-        BuscaIdPeca = string.Empty;
-        BuscaMarca = string.Empty;
         BuscaApenasEstoqueBaixo = false;
         BuscaCategoria = Categorias.FirstOrDefault();
         BuscaFornecedor = Fornecedores.FirstOrDefault();
+        BuscaMarca = Marcas.FirstOrDefault();
     }
 
     private async Task NovaPecaAsync()

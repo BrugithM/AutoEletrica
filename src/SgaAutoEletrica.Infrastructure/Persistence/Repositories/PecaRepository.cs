@@ -14,11 +14,12 @@ public class PecaRepository : IPecaRepository
         _context = context;
     }
 
-    public async Task<Peca?> ObterPorId(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Peca?> ObterPorId(int id, CancellationToken cancellationToken = default)
     {
         return await _context.Pecas
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
+            .Include(p => p.Marca)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
@@ -26,12 +27,6 @@ public class PecaRepository : IPecaRepository
     {
         return await _context.Pecas
             .FirstOrDefaultAsync(p => p.CodigoPeca == codigo, cancellationToken);
-    }
-
-    public async Task<Peca?> ObterPorIdPeca(string idPeca, CancellationToken cancellationToken = default)
-    {
-        return await _context.Pecas
-            .FirstOrDefaultAsync(p => p.IdPeca == idPeca, cancellationToken);
     }
 
     public async Task<Peca?> ObterPorCodigoBarras(string codigoBarras, CancellationToken cancellationToken = default)
@@ -45,6 +40,7 @@ public class PecaRepository : IPecaRepository
         return await _context.Pecas
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
+            .Include(p => p.Marca)
             .OrderBy(p => p.Nome)
             .ToListAsync(cancellationToken);
     }
@@ -61,7 +57,8 @@ public class PecaRepository : IPecaRepository
     {
         return await _context.Pecas
             .Include(p => p.CategoriaPeca)
-            .Where(p => p.Nome.Contains(termo) || p.IdPeca.Contains(termo))
+            .Include(p => p.Marca)
+            .Where(p => p.Nome.Contains(termo))
             .OrderBy(p => p.Nome)
             .ToListAsync(cancellationToken);
     }

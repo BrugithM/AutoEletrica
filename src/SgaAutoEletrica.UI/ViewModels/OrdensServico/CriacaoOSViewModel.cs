@@ -123,7 +123,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
     public decimal ValorTotalPecas => PecasNaOS.Sum(p => p.ValorTotal);
     public decimal ValorTotalServicos => ServicosNaOS.Sum(s => s.Preco);
-    public decimal ValorTotalGeral => Math.Max(0, ValorTotalPecas + ValorTotalServicos - Desconto);
+    public decimal ValorTotalGeral => Math.Max(0, 
+    ValorTotalPecas + ValorTotalServicos - (ValorTotalPecas + ValorTotalServicos) * (Desconto / 100));
 
     public ICommand RemoverPecaCommand { get; }
     public ICommand RemoverServicoCommand { get; }
@@ -260,7 +261,7 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
                 ClienteId = ClienteSelecionado.Id,
                 VeiculoId = VeiculoSelecionado.Id,
                 Observacao = Observacao,
-                Desconto = Desconto,
+                DescontoPercentual = Desconto,
                 AprovarIniciar = aprovarIniciar
             };
 
@@ -295,7 +296,7 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
 public class ItemPecaTemporario : INotifyPropertyChanged
 {
-    public Guid PecaId { get; set; }
+    public int PecaId { get; set; }
     public string Nome { get; set; } = string.Empty;
 
     private int _quantidade;

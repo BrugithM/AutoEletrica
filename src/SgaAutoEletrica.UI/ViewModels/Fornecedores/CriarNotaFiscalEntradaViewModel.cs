@@ -240,7 +240,7 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 
 public class ItemNFEntradaTemporario : INotifyPropertyChanged
 {
-    public Guid PecaId { get; set; }
+    public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
 
     private int _quantidade;

@@ -1,6 +1,7 @@
 using SgaAutoEletrica.Domain.Enums;
 
 namespace SgaAutoEletrica.Domain.Entities;
+
 public class OrdemServico
 {
     public Guid Id { get; private set; }
@@ -16,13 +17,19 @@ public class OrdemServico
     public DateTime DataAbertura { get; private set; }
     public DateTime? DataFinalizacao { get; private set; }
     public string? Observacao { get; private set; }
-    public decimal Desconto { get; private set; }
+    public int? Quilometragem
+    {
+        get; private set;
+    }
 
     public ICollection<ItemPecaOS> ItensPeca { get; private set; } = new List<ItemPecaOS>();
     public ICollection<ItemServicoOS> ItensServico { get; private set; } = new List<ItemServicoOS>();
 
     public decimal ValorTotalPecas { get; private set; }
     public decimal ValorTotalServicos { get; private set; }
+
+    public decimal Desconto { get; private set; }
+    public decimal DescontoPercentual { get; private set; }
     public decimal ValorTotal { get; private set; }
 
     private OrdemServico() { }
@@ -41,7 +48,7 @@ public class OrdemServico
         DataAbertura = DateTime.UtcNow;
     }
 
-    public void AdicionarPeca(Guid pecaId, int quantidade, decimal precoUnitario)
+    public void AdicionarPeca(int pecaId, int quantidade, decimal precoUnitario)
     {
         if (Status == StatusOS.Finalizada || Status == StatusOS.Cancelada)
             throw new InvalidOperationException("Não é possivel adicionar peças a uma OS finalizada ou cancelada");
@@ -90,29 +97,35 @@ public class OrdemServico
         ValorTotalServicos = Math.Round(ItensServico.Sum(i => i.PrecoUnitario), 2);
 
         var subtotal = ValorTotalPecas + ValorTotalServicos;
+        Desconto = Math.Round(subtotal * (DescontoPercentual / 100), 2);
         ValorTotal = Math.Round(subtotal - Desconto, 2);
     }
 
-    public void AplicarDesconto(decimal desconto)
+    public void AplicarDescontoPercentual(decimal percentual)
     {
-        if(desconto<0)
-            throw new ArgumentException("Desconto não pode ser negativo", nameof(desconto));
+        if (percentual < 0 || percentual > 100)
+            throw new ArgumentException("Desconto deve estar entre 0 e 100.", nameof(percentual));
 
-        var subtotal = ValorTotalPecas + ValorTotalServicos;
-        if(desconto > subtotal)
-            throw new ArgumentException("Desconto não pode ser maior que o subtotal", nameof(desconto));
-
-        Desconto = desconto;
+        DescontoPercentual = percentual;
         RecalcularTotais();
     }
 
+    public void AtualizarQuilometragem(int? quilometragem)
+    {
+        if (quilometragem.HasValue && quilometragem < 0)
+            throw new ArgumentException("Quilometragem não pode ser negativa.", nameof(quilometragem));
+
+        Quilometragem = quilometragem;
+    }
+
     public void AtualizarTotais(decimal totalPecas, decimal totalServicos)
-{
-    ValorTotalPecas = totalPecas;
-    ValorTotalServicos = totalServicos;
-    var subtotal = totalPecas + totalServicos;
-    ValorTotal = Math.Round(subtotal-Desconto,2);
-}
+    {
+        ValorTotalPecas = totalPecas;
+        ValorTotalServicos = totalServicos;
+        var subtotal = totalPecas + totalServicos;
+        Desconto = Math.Round(subtotal * (DescontoPercentual / 100), 2);
+        ValorTotal = Math.Round(subtotal - Desconto, 2);
+    }
     public void IniciarServico()
     {
         if (Status != StatusOS.Aberta && Status != StatusOS.AguardandoPecas)
@@ -162,6 +175,4 @@ public class OrdemServico
     {
         Observacao = observacao;
     }
-
-    
 }

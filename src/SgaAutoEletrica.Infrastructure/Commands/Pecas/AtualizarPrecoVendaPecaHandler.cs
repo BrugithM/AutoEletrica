@@ -21,7 +21,6 @@ public class AtualizarPrecoVendaPecaHandler : IRequestHandler<AtualizarPrecoVend
             ?? throw new InvalidOperationException("Peça não encontrada.");
 
         peca.AtualizarValorVenda(request.NovoValorVenda);
-
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

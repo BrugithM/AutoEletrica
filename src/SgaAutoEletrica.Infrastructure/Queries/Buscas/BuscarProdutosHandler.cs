@@ -19,13 +19,12 @@ public class BuscarProdutosHandler : IRequestHandler<BuscarProdutosQuery, List<P
     {
         var query = _context.Pecas
             .Include(p => p.CategoriaPeca)
+            .Include(p => p.Marca)
             .AsNoTracking()
             .AsQueryable();
 
         if (request.Id.HasValue)
-        {
             query = query.Where(p => p.Id == request.Id.Value);
-        }
 
         if (!string.IsNullOrWhiteSpace(request.CodigoBarras))
         {
@@ -39,33 +38,21 @@ public class BuscarProdutosHandler : IRequestHandler<BuscarProdutosQuery, List<P
             query = query.Where(p => p.CodigoPeca != null && p.CodigoPeca.ToLower().Contains(termo));
         }
 
-        if (!string.IsNullOrWhiteSpace(request.IdPeca))
-        {
-            var termo = request.IdPeca.Trim().ToLower();
-            query = query.Where(p => p.IdPeca.ToLower().Contains(termo));
-        }
+        if (request.MarcaId.HasValue)
+            query = query.Where(p => p.MarcaId == request.MarcaId.Value);
 
-        if (!string.IsNullOrWhiteSpace(request.Marca))
-        {
-            var termo = request.Marca.Trim().ToLower();
-            query = query.Where(p => p.Marca.ToLower().Contains(termo));
-        }
-
-        if (request.CategoriaId.HasValue)
-        {
+        if (request.CategoriaId.HasValue && request.CategoriaId.Value != Guid.Empty)
             query = query.Where(p => p.CategoriaId == request.CategoriaId.Value);
-        }
 
         return await query
             .OrderBy(p => p.Nome)
             .Select(p => new PecaBuscaDTO
             {
                 Id = p.Id,
-                IdPeca = p.IdPeca,
                 CodigoPeca = p.CodigoPeca,
                 CodigoBarras = p.CodigoBarras != null ? p.CodigoBarras.Valor : null,
                 Nome = p.Nome,
-                Marca = p.Marca,
+                MarcaNome = p.Marca != null ? p.Marca.Nome : null,
                 CategoriaNome = p.CategoriaPeca != null ? p.CategoriaPeca.Nome : null,
                 ValorVenda = p.ValorVenda,
                 Estoque = p.Estoque

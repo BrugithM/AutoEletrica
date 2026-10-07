@@ -31,7 +31,7 @@ public static class DataSeeder
         context.Veiculos.Add(veiculo1);
 
         var veiculo2 = new Veiculo("DEF4G56", cliente2.Id, "Fiesta", "Ford", 2019);
-        veiculo2.AtualizarDados("DEF4G56","Fiesta", "Ford", 2019, "SE", "1.6", TipoMotor.Flex, "Preto");
+        veiculo2.AtualizarDados("DEF4G56", "Fiesta", "Ford", 2019, "SE", "1.6", TipoMotor.Flex, "Preto");
         context.Veiculos.Add(veiculo2);
 
         await context.SaveChangesAsync();
@@ -57,16 +57,30 @@ public static class DataSeeder
 
         // ─── Peças ───
         var peca1 = new Peca(
-            "P-0001", "Pastilha de Freio Dianteira", "Pastilha dianteira Gol G5",
-            "Cobreq", 45.90m, 89.90m, 18m, 20,
-            fornecedorId: fornecedor.Id, categoriaId: categoriaFreios.Id,
-            codigoPeca: "FR-001", codigoBarras: "7891234567890");
+    "Pastilha de Freio Dianteira",
+    "Pastilha dianteira Gol G5",
+    45.90m,
+    89.90m,
+    20,
+    5,
+    "FR-001",
+    "7891234567890",
+    null,
+    categoriaFreios.Id,
+    fornecedor.Id);
 
         var peca2 = new Peca(
-            "P-0002", "Filtro de Óleo", "Filtro de óleo motor AP 1.0/1.6",
-            "Mann", 12.50m, 25.00m, 18m, 50,
-            fornecedorId: fornecedor.Id, categoriaId: categoriaMotor.Id,
-            codigoPeca: "MT-002", codigoBarras: "7890987654321");
+            "Filtro de Óleo",
+            "Filtro de óleo motor AP 1.0/1.6",
+            12.50m,
+            25.00m,
+            50,
+            5,
+            "MT-002",
+            "7890987654321",
+            null,
+            categoriaMotor.Id,
+            fornecedor.Id);
 
         context.Pecas.Add(peca1);
         context.Pecas.Add(peca2);

@@ -300,7 +300,7 @@ public class EditarOSViewModel : INotifyPropertyChanged
             await _mediator.Send(new AplicarDescontoOSCommand
             {
                 OrdemServicoId = _osId,
-                Desconto = Desconto
+                DescontoPercentual = Desconto
             });
 
             MessageBox.Show("OS atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);

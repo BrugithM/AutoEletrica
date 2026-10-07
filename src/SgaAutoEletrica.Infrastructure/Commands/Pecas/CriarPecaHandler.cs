@@ -6,7 +6,7 @@ using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Commands.Pecas;
 
-public class CriarPecaHandler : IRequestHandler<CriarPecaCommand, Guid>
+public class CriarPecaHandler : IRequestHandler<CriarPecaCommand, int>
 {
     private readonly AppDbContext _context;
 
@@ -15,7 +15,7 @@ public class CriarPecaHandler : IRequestHandler<CriarPecaCommand, Guid>
         _context = context;
     }
 
-    public async Task<Guid> Handle(CriarPecaCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CriarPecaCommand request, CancellationToken cancellationToken)
     {
         if (request.CategoriaId.HasValue)
         {
@@ -33,18 +33,24 @@ public class CriarPecaHandler : IRequestHandler<CriarPecaCommand, Guid>
                 throw new InvalidOperationException("Fornecedor selecionado não existe.");
         }
 
+        if (request.MarcaId.HasValue)
+        {
+            var marcaExiste = await _context.Marcas
+                .AnyAsync(m => m.Id == request.MarcaId.Value, cancellationToken);
+            if (!marcaExiste)
+                throw new InvalidOperationException("Marca selecionada não existe.");
+        }
+
         var peca = new Peca(
-            request.IdPeca,
             request.Nome,
             request.Descricao,
-            request.Marca,
             request.ValorCusto,
             request.ValorVenda,
-            0,  
             request.EstoqueInicial,
             request.EstoqueMinimo,
             request.CodigoPeca,
             request.CodigoBarras,
+            request.MarcaId,
             request.CategoriaId,
             request.FornecedorId);
 

@@ -20,17 +20,18 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
         return await _context.Pecas
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
+            .Include(p => p.Marca)
             .AsNoTracking()
             .Where(p => p.Id == request.Id)
             .Select(p => new PecaDTO
             {
                 Id = p.Id,
-                IdPeca = p.IdPeca,
                 CodigoPeca = p.CodigoPeca,
                 CodigoBarras = p.CodigoBarras != null ? p.CodigoBarras.Valor : null,
                 Nome = p.Nome,
                 Descricao = p.Descricao,
-                Marca = p.Marca,
+                MarcaId = p.MarcaId,
+                MarcaNome = p.Marca != null ? p.Marca.Nome : null,
                 CategoriaId = p.CategoriaId,
                 CategoriaNome = p.CategoriaPeca != null ? p.CategoriaPeca.Nome : null,
                 FornecedorId = p.FornecedorId,
@@ -41,10 +42,11 @@ public class ObterPecaPorIdHandler : IRequestHandler<ObterPecaPorIdQuery, PecaDT
                 FornecedorContato = p.Fornecedor != null ? p.Fornecedor.Contato : null,
                 ValorCusto = p.ValorCusto,
                 ValorVenda = p.ValorVenda,
+                MarkupPercentual = p.MarkupPercentual,
+                MargemLucro = p.CalcularMargemLucroPercentual(),
                 Estoque = p.Estoque,
                 EstoqueMinimo = p.EstoqueMinimo,
                 Ativo = p.Ativo,
-                MargemLucro = p.CalcularMargemLucroPercentual(),
                 EstoqueBaixo = p.Estoque <= p.EstoqueMinimo
             })
             .FirstOrDefaultAsync(cancellationToken);

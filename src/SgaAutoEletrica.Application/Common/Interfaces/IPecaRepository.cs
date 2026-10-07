@@ -4,8 +4,7 @@ namespace SgaAutoEletrica.Application.Common.Interfaces;
 
 public interface IPecaRepository
 {
-    Task<Peca?> ObterPorId(Guid id, CancellationToken cancellationToken = default);
-    Task<Peca?> ObterPorIdPeca(string idPeca, CancellationToken cancellationToken = default);
+    Task<Peca?> ObterPorId(int id, CancellationToken cancellationToken = default);
     Task<Peca?> ObterPorCodigo(string codigo, CancellationToken cancellationToken = default);
     Task<Peca?> ObterPorCodigoBarras(string codigoBarras, CancellationToken cancellationToken = default);
     Task<List<Peca>> ListarTodas(CancellationToken cancellationToken = default);

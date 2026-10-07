@@ -33,7 +33,7 @@ public class OrdemServicoDetalheDTO
 public class ItemPecaOSDTO
 {
     public Guid Id { get; set; }
-    public Guid PecaId { get; set; }
+    public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
     public int Quantidade { get; set; }
     public decimal PrecoUnitario { get; set; }

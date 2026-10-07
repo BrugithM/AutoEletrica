@@ -120,6 +120,12 @@ public partial class MainWindow : Window
         var dialog = new SgaAutoEletrica.UI.Views.CategoriasPeca.CadastroCategoriaWindow(_mediator);
         dialog.ShowDialog();
     }
+    private void BtnCadastroMarcas_Click(object sender, RoutedEventArgs e)
+    {
+        if (!TemPermissaoAdmin()) return;
+        var dialog = new SgaAutoEletrica.UI.Views.Marcas.CadastroMarcaWindow(_mediator);
+        dialog.ShowDialog();
+    }
 
     // Gerenciamento
 
@@ -149,6 +155,14 @@ public partial class MainWindow : Window
         if (!TemPermissaoAdmin()) return;
         EsconderDashboard();
         var dialog = new Views.CategoriasPeca.GerenciarCategoriasWindow(_mediator);
+        dialog.ShowDialog();
+    }
+
+    private void BtnGerenciarMarcas_Click(object sender, RoutedEventArgs e)
+    {
+        if (!TemPermissaoAdmin()) return;
+
+        var dialog = new Views.Marcas.GerenciarMarcasWindow(_mediator);
         dialog.ShowDialog();
     }
 

@@ -4,7 +4,7 @@ namespace SgaAutoEletrica.Application.Features.Fornecedores.Commands;
 
 public class ItemNotaEntradaRequest
 {
-    public Guid PecaId { get; set; }
+    public int PecaId { get; set; }
     public int Quantidade { get; set; }
     public decimal ValorUnitario { get; set; }
 }

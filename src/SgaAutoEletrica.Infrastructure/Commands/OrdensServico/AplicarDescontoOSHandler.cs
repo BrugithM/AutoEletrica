@@ -22,7 +22,7 @@ public class AplicarDescontoOSHandler : IRequestHandler<AplicarDescontoOSCommand
             .FirstOrDefaultAsync(o => o.Id == request.OrdemServicoId, cancellationToken)
             ?? throw new InvalidOperationException("OS não encontrada.");
 
-        os.AplicarDesconto(request.Desconto);
+        os.AplicarDescontoPercentual(request.DescontoPercentual);
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

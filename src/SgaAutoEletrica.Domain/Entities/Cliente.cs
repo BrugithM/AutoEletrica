@@ -3,18 +3,18 @@ namespace SgaAutoEletrica.Domain.Entities;
 
 public class Cliente
 {
-    public Guid Id { get; private set; }        
-    public string NomeCompleto { get; private set; }     
-    public Cpf Cpf { get; private set; }      
+    public Guid Id { get; private set; }
+    public string NomeCompleto { get; private set; }
+    public Cpf Cpf { get; private set; }
     public Telefone Telefone { get; private set; }
     public Endereco? Endereco { get; private set; }
-    public DateTime DataCadastro  { get; private set; }
-    public bool Ativo{get; private set;}
+    public DateTime DataCadastro { get; private set; }
+    public bool Ativo { get; private set; }
 
     public ICollection<Veiculo> Veiculos { get; private set; } = new List<Veiculo>();
 
     private Cliente()
-      {
+    {
         NomeCompleto = string.Empty;
         Cpf = null!;
         Telefone = null!;
@@ -22,21 +22,21 @@ public class Cliente
 
     public Cliente(string nomeCompleto, string cpf, string telefone)
     {
-        if(string.IsNullOrWhiteSpace(nomeCompleto))
-        throw new ArgumentException("Nome é obrigatório", nameof(nomeCompleto));
+        if (string.IsNullOrWhiteSpace(nomeCompleto))
+            throw new ArgumentException("Nome é obrigatório", nameof(nomeCompleto));
 
-        Id = Guid.NewGuid(); 
+        Id = Guid.NewGuid();
         NomeCompleto = nomeCompleto;
         Cpf = new Cpf(cpf);
-        Telefone = new Telefone (telefone);
+        Telefone = new Telefone(telefone);
         DataCadastro = DateTime.UtcNow;
         Ativo = true;
     }
 
     public void AtualizarDados(string nomeCompleto, string telefone)
     {
-        if(string.IsNullOrWhiteSpace(nomeCompleto))
-    throw new ArgumentException("Nome é obrigatório", nameof(nomeCompleto));
+        if (string.IsNullOrWhiteSpace(nomeCompleto))
+            throw new ArgumentException("Nome é obrigatório", nameof(nomeCompleto));
         NomeCompleto = nomeCompleto;
         Telefone = new Telefone(telefone);
     }
@@ -49,11 +49,17 @@ public class Cliente
     public void AdicionarVeiculo(Veiculo veiculo)
     {
         if (veiculo == null)
-        throw new ArgumentNullException(nameof(veiculo));
+            throw new ArgumentNullException(nameof(veiculo));
 
         Veiculos.Add(veiculo);
     }
 
-    public void Desativar()=> Ativo = false;
-    public void Ativar()=> Ativo = true;
+    public void Desativar() => Ativo = false;
+    public void DesativarComVeiculos()
+    {
+        Ativo = false;
+        foreach (var veiculo in Veiculos)
+            veiculo.Desativar();
+    }
+    public void Ativar() => Ativo = true;
 }

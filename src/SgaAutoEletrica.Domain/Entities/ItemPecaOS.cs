@@ -4,10 +4,10 @@ public class ItemPecaOS
 {
     public Guid Id { get; private set; }
     public Guid OrdemServicoId { get; private set; }
-    public OrdemServico OrdemServico { get; private set; } = null;
+    public OrdemServico OrdemServico { get; private set; } = null!;
 
-    public Guid PecaId { get; private set; }
-    public Peca Peca { get; private set; }
+    public int PecaId { get; private set; }
+    public Peca Peca { get; private set; } = null!;
 
     public int Quantidade { get; private set; }
     public decimal PrecoUnitario { get; private set; }
@@ -15,12 +15,12 @@ public class ItemPecaOS
 
     private ItemPecaOS() { }
 
-    public ItemPecaOS(Guid pecaId, int quantidade, decimal precoUnitario)
+    public ItemPecaOS(int pecaId, int quantidade, decimal precoUnitario)
     {
         if (quantidade <= 0)
             throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
-        if (PrecoUnitario < 0)
-            throw new ArgumentException("Preco não pode ser negativo.", nameof(precoUnitario));
+        if (precoUnitario < 0)
+            throw new ArgumentException("Preço unitário não pode ser negativo.", nameof(precoUnitario));
 
         Id = Guid.NewGuid();
         PecaId = pecaId;
@@ -32,5 +32,14 @@ public class ItemPecaOS
     public void DefinirOrdemServico(Guid ordemServicoId)
     {
         OrdemServicoId = ordemServicoId;
+    }
+
+    public void AtualizarPrecoUnitario(decimal novoPreco)
+    {
+        if (novoPreco < 0)
+            throw new ArgumentException("Preço unitário não pode ser negativo.", nameof(novoPreco));
+
+        PrecoUnitario = novoPreco;
+        ValorTotal = Math.Round(Quantidade * novoPreco, 2);
     }
 }

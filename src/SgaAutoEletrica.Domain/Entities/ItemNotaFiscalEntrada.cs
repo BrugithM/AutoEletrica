@@ -6,7 +6,7 @@ public class ItemNotaFiscalEntrada
     public Guid NotaFiscalEntradaId { get; private set; }
     public NotaFiscalEntrada NotaFiscalEntrada { get; private set; } = null!;
 
-    public Guid PecaId { get; private set; }
+    public int PecaId { get; private set; }
     public Peca Peca { get; private set; } = null!;
 
     public int Quantidade { get; private set; }
@@ -15,7 +15,7 @@ public class ItemNotaFiscalEntrada
 
     private ItemNotaFiscalEntrada() { }
 
-    public ItemNotaFiscalEntrada(Guid pecaId, int quantidade, decimal valorUnitario)
+    public ItemNotaFiscalEntrada(int pecaId, int quantidade, decimal valorUnitario)
     {
         if (quantidade <= 0)
             throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));

@@ -21,6 +21,7 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, ListaPaginad
         var query = _context.Pecas
             .Include(p => p.CategoriaPeca)
             .Include(p => p.Fornecedor)
+            .Include(p => p.Marca)
             .AsNoTracking()
             .AsQueryable();
 
@@ -29,10 +30,9 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, ListaPaginad
             var termo = request.TermoBusca.Trim().ToLower();
             query = query.Where(p =>
                 p.Nome.ToLower().Contains(termo) ||
-                p.IdPeca.ToLower().Contains(termo) ||
                 (p.CodigoPeca != null && p.CodigoPeca.ToLower().Contains(termo)) ||
                 (p.CodigoBarras != null && p.CodigoBarras.Valor.Contains(termo)) ||
-                p.Marca.ToLower().Contains(termo));
+                (p.Marca != null && p.Marca.Nome.ToLower().Contains(termo)));
         }
 
         if (!string.IsNullOrWhiteSpace(request.Nome))
@@ -53,17 +53,8 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, ListaPaginad
             query = query.Where(p => p.CodigoBarras != null && p.CodigoBarras.Valor.Contains(termo));
         }
 
-        if (!string.IsNullOrWhiteSpace(request.IdPeca))
-        {
-            var termo = request.IdPeca.Trim().ToLower();
-            query = query.Where(p => p.IdPeca.ToLower().Contains(termo));
-        }
-
-        if (!string.IsNullOrWhiteSpace(request.Marca))
-        {
-            var termo = request.Marca.Trim().ToLower();
-            query = query.Where(p => p.Marca.ToLower().Contains(termo));
-        }
+        if (request.MarcaId.HasValue)
+            query = query.Where(p => p.MarcaId == request.MarcaId.Value);
 
         if (request.CategoriaId.HasValue && request.CategoriaId.Value != Guid.Empty)
             query = query.Where(p => p.CategoriaId == request.CategoriaId.Value);
@@ -86,12 +77,12 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, ListaPaginad
             .Select(p => new PecaDTO
             {
                 Id = p.Id,
-                IdPeca = p.IdPeca,
                 CodigoPeca = p.CodigoPeca,
                 CodigoBarras = p.CodigoBarras != null ? p.CodigoBarras.Valor : null,
                 Nome = p.Nome,
                 Descricao = p.Descricao,
-                Marca = p.Marca,
+                MarcaId = p.MarcaId,
+                MarcaNome = p.Marca != null ? p.Marca.Nome : null,
                 CategoriaId = p.CategoriaId,
                 CategoriaNome = p.CategoriaPeca != null ? p.CategoriaPeca.Nome : null,
                 FornecedorId = p.FornecedorId,
@@ -102,10 +93,11 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, ListaPaginad
                 FornecedorContato = p.Fornecedor != null ? p.Fornecedor.Contato : null,
                 ValorCusto = p.ValorCusto,
                 ValorVenda = p.ValorVenda,
+                MarkupPercentual = p.MarkupPercentual,
+                MargemLucro = p.CalcularMargemLucroPercentual(),
                 Estoque = p.Estoque,
                 EstoqueMinimo = p.EstoqueMinimo,
                 Ativo = p.Ativo,
-                MargemLucro = p.CalcularMargemLucroPercentual(),
                 EstoqueBaixo = p.Estoque <= p.EstoqueMinimo
             })
             .ToListAsync(cancellationToken);

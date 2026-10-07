@@ -250,7 +250,7 @@ public class ImpressaoService : IImpressaoService
                 centroX - tamanhoValor.Width / 2, y);
             y += fonteValor.GetHeight(g) + 10;
 
-            var textoId = $"ID: {peca.IdPeca}";
+            var textoId = $"ID: {peca.Id}";
             var tamanhoId = g.MeasureString(textoId, fonteId);
             g.DrawString(textoId, fonteId, Brushes.Gray,
                 centroX - tamanhoId.Width / 2, y);

@@ -5,5 +5,5 @@ namespace SgaAutoEletrica.Application.Features.Pecas.Queries;
 
 public class ObterPecaPorIdQuery : IRequest<PecaDTO?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

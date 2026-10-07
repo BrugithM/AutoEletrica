@@ -4,20 +4,21 @@ namespace SgaAutoEletrica.Domain.Entities;
 
 public class Peca
 {
-    public Guid Id { get; private set; }
-    public string IdPeca { get; private set; }
+    public int Id { get; private set; }
     public string? CodigoPeca { get; private set; }
     public CodigoBarras? CodigoBarras { get; private set; }
     public string Nome { get; private set; }
     public string Descricao { get; private set; }
-    public string Marca { get; private set; }
+
+    public int? MarcaId { get; private set; }
+    public Marca? Marca { get; private set; }
 
     public Guid? CategoriaId { get; private set; }
     public CategoriaPeca? CategoriaPeca { get; private set; }
 
     public decimal ValorCusto { get; private set; }
     public decimal ValorVenda { get; private set; }
-    public decimal Imposto { get; private set; }
+    public decimal MarkupPercentual { get; private set; }
 
     public int Estoque { get; private set; }
     public int EstoqueMinimo { get; private set; }
@@ -30,76 +31,67 @@ public class Peca
 
     private Peca()
     {
-        IdPeca = string.Empty;
         Nome = string.Empty;
         Descricao = string.Empty;
-        Marca = string.Empty;
     }
 
     public Peca(
-        string idPeca,
         string nome,
         string descricao,
-        string marca,
         decimal valorCusto,
         decimal valorVenda,
-        decimal imposto,
         int estoqueInicial,
         int estoqueMinimo = 5,
         string? codigoPeca = null,
         string? codigoBarras = null,
+        int? marcaId = null,
         Guid? categoriaId = null,
         Guid? fornecedorId = null
         )
     {
-        if (string.IsNullOrWhiteSpace(idPeca))
-            throw new ArgumentException("IdPeca é obrigatório.", nameof(idPeca));
         if (string.IsNullOrWhiteSpace(nome))
             throw new ArgumentException("Nome é obrigatório.", nameof(nome));
         if (string.IsNullOrWhiteSpace(descricao))
             throw new ArgumentException("Descrição é obrigatória.", nameof(descricao));
-        if (string.IsNullOrWhiteSpace(marca))
-            throw new ArgumentException("Marca é obrigatória.", nameof(marca));
         if (valorCusto < 0)
             throw new ArgumentException("Valor de custo não pode ser negativo.", nameof(valorCusto));
         if (valorVenda < 0)
             throw new ArgumentException("Valor de venda não pode ser negativo.", nameof(valorVenda));
-        if (imposto < 0)
-            throw new ArgumentException("Imposto não pode ser negativo.", nameof(imposto));
         if (estoqueInicial < 0)
             throw new ArgumentException("Estoque inicial não pode ser negativo.", nameof(estoqueInicial));
 
-        Id = Guid.NewGuid();
-        IdPeca = idPeca;
         Nome = nome;
         Descricao = descricao;
-        Marca = marca;
         ValorCusto = valorCusto;
         ValorVenda = valorVenda;
-        Imposto = imposto;
+        MarkupPercentual = CalcularMarkup(valorCusto, valorVenda);
         Estoque = estoqueInicial;
         EstoqueMinimo = estoqueMinimo;
         CodigoPeca = codigoPeca;
         CodigoBarras = !string.IsNullOrWhiteSpace(codigoBarras) ? new CodigoBarras(codigoBarras) : null;
+        MarcaId = marcaId;
         CategoriaId = categoriaId;
         FornecedorId = fornecedorId;
         Ativo = true;
         DataCadastro = DateTime.UtcNow;
     }
 
+    // Cálculos
     public decimal CalcularMargemLucroPercentual()
     {
         if (ValorCusto == 0)
             return 0;
-        return Math.Round((ValorVenda - ValorCusto) / ValorCusto * 100, 2);
+        return Math.Round((ValorVenda - ValorCusto) / ValorVenda * 100, 2);
     }
 
-    // Não utilizada por enquanto
-    public decimal CalcularPrecoComImposto()
+    private static decimal CalcularMarkup(decimal custo, decimal venda)
     {
-        return Math.Round(ValorVenda * (1 + Imposto / 100), 2);
+        if (custo == 0)
+            return 0;
+        return Math.Round((venda - custo) / custo * 100, 2);
     }
 
+    // Estoque
     public void DarEntradaEstoque(int quantidade)
     {
         if (quantidade <= 0)
@@ -118,11 +110,14 @@ public class Peca
     }
 
     public bool EstaComEstoqueBaixo() => Estoque <= EstoqueMinimo;
+
+    // Atualizações
     public void AtualizarValorVenda(decimal novoValor)
     {
         if (novoValor < 0)
             throw new ArgumentException("Valor de venda não pode ser negativo.", nameof(novoValor));
         ValorVenda = novoValor;
+        MarkupPercentual = CalcularMarkup(ValorCusto, ValorVenda);
     }
 
     public void AtualizarValorCusto(decimal novoCusto, DateTime dataReferencia)
@@ -134,6 +129,7 @@ public class Peca
         {
             ValorCusto = novoCusto;
             DataUltimaAtualizacaoCusto = dataReferencia;
+            MarkupPercentual = CalcularMarkup(ValorCusto, ValorVenda);
         }
     }
 
@@ -145,10 +141,10 @@ public class Peca
     public void AtualizarDados(
         string nome,
         string descricao,
-        string marca,
         decimal valorCusto,
-        decimal imposto,
+        decimal valorVenda,
         string? codigoPeca = null,
+        int? marcaId = null,
         Guid? categoriaId = null,
         Guid? fornecedorId = null,
         int? estoqueMinimo = null)
@@ -157,32 +153,22 @@ public class Peca
             throw new ArgumentException("Nome é obrigatório.", nameof(nome));
         if (string.IsNullOrWhiteSpace(descricao))
             throw new ArgumentException("Descrição é obrigatória.", nameof(descricao));
-        if (string.IsNullOrWhiteSpace(marca))
-            throw new ArgumentException("Marca é obrigatória.", nameof(marca));
         if (valorCusto < 0)
             throw new ArgumentException("Valor de custo não pode ser negativo.", nameof(valorCusto));
 
         Nome = nome;
         Descricao = descricao;
-        Marca = marca;
         ValorCusto = valorCusto;
-        Imposto = imposto;
+        ValorVenda = valorVenda;
+        MarkupPercentual = CalcularMarkup(ValorCusto, ValorVenda);
         CodigoPeca = codigoPeca;
+        MarcaId = marcaId;
         CategoriaId = categoriaId;
         FornecedorId = fornecedorId;
         if (estoqueMinimo.HasValue)
             EstoqueMinimo = estoqueMinimo.Value;
     }
 
-    public void AtualizarIdPeca(string idPeca)
-    {
-        if (string.IsNullOrWhiteSpace(idPeca))
-            throw new ArgumentException("ID da peça é obrigatório.", nameof(idPeca));
-
-        IdPeca = idPeca;
-    }
-
     public void Desativar() => Ativo = false;
-
     public void Ativar() => Ativo = true;
 }

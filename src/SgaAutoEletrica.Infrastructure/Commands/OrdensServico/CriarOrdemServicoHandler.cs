@@ -49,8 +49,8 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
             os.AdicionarServico(item.ServicoId, servico.PrecoPadrao);
         }
 
-        if (request.Desconto > 0)
-            os.AplicarDesconto(request.Desconto);
+        if (request.DescontoPercentual > 0)
+            os.AplicarDescontoPercentual(request.DescontoPercentual);
 
         if (request.AprovarIniciar)
             os.IniciarServico();
