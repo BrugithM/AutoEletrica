@@ -188,7 +188,7 @@
                                 <DataGridTextColumn Header="Endereço"
                                                     Binding="{Binding EnderecoCompleto}"
                                                     Width="*"/>
-                                <DataGridTextColumn Header="Veículos"
+                                <DataGridTextColumn Header="Qtd. Veículos"
                                                     Binding="{Binding QuantidadeVeiculos}"
                                                     Width="70"/>
                         </DataGrid.Columns>

@@ -78,7 +78,7 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
                 Telefone = c.Telefone.Formatado(),
                 EnderecoCompleto = c.Endereco != null ? c.Endereco.Completo() : null,
                 DataCadastro = c.DataCadastro,
-                QuantidadeVeiculos = c.Veiculos.Count,
+                QuantidadeVeiculos = c.Veiculos.Count(v => v.Ativo),
                 Ativo = c.Ativo
             })
             .ToListAsync(cancellationToken);

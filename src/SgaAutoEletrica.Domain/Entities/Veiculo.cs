@@ -121,6 +121,14 @@ public class Veiculo
         Observacao = observacao;
     }
 
+    public void AlterarCliente(Guid novoClienteId)
+    {
+        if (novoClienteId == Guid.Empty)
+            throw new ArgumentException("Cliente é obrigatório.", nameof(novoClienteId));
+
+        ClienteId = novoClienteId;
+    }
+
     public void AdicionarObservacao(string observacao)
     {
         Observacao = observacao;

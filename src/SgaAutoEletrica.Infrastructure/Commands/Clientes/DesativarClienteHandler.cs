@@ -17,10 +17,11 @@ public class DesativarClienteHandler : IRequestHandler<DesativarClienteCommand>
     public async Task Handle(DesativarClienteCommand request, CancellationToken cancellationToken)
     {
         var cliente = await _context.Clientes
+            .Include(c => c.Veiculos)
             .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Cliente não encontrado.");
 
-        cliente.Desativar();
+        cliente.DesativarComVeiculos();
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

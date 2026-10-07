@@ -17,8 +17,14 @@ public class ReativarVeiculoHandler : IRequestHandler<ReativarVeiculoCommand>
     public async Task Handle(ReativarVeiculoCommand request, CancellationToken cancellationToken)
     {
         var veiculo = await _context.Veiculos
+            .Include(v => v.Cliente)
             .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Veículo não encontrado.");
+
+        if (!veiculo.Cliente.Ativo)
+            throw new InvalidOperationException(
+                "Não é possível reativar um veículo cujo cliente está inativo. " +
+                "Reative o cliente ou altere o proprietário do veículo.");
 
         veiculo.Ativar();
         await _context.SaveChangesAsync(cancellationToken);

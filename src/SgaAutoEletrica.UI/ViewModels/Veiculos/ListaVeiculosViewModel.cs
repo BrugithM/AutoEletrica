@@ -245,12 +245,22 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
 
         if (confirmacao == MessageBoxResult.Yes)
         {
-            if (VeiculoSelecionado.Ativo)
-                await _mediator.Send(new DesativarVeiculoCommand { Id = VeiculoSelecionado.Id });
-            else
-                await _mediator.Send(new ReativarVeiculoCommand { Id = VeiculoSelecionado.Id });
+            try
+            {
+                if (VeiculoSelecionado.Ativo)
+                    await _mediator.Send(new DesativarVeiculoCommand { Id = VeiculoSelecionado.Id });
+                else
+                    await _mediator.Send(new ReativarVeiculoCommand { Id = VeiculoSelecionado.Id });
 
-            await BuscarAsync();
+                await BuscarAsync();
+            }
+            catch (Exception ex)
+            {
+                var inner = ex;
+                while (inner.InnerException != null)
+                    inner = inner.InnerException;
+                MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 

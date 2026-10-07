@@ -146,6 +146,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             await _mediator.Send(new AtualizarVeiculoCommand
             {
                 Id = _veiculoId.Value,
+                ClienteId = ClienteSelecionado.Id,
                 Placa = Placa,
                 Modelo = Modelo,
                 Marca = Marca,

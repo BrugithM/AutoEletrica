@@ -21,6 +21,17 @@ public class AtualizarVeiculoHandler : IRequestHandler<AtualizarVeiculoCommand>
             .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Veículo não encontrado.");
 
+        var cliente = await _context.Clientes
+            .FirstOrDefaultAsync(c => c.Id == request.ClienteId, cancellationToken)
+            ?? throw new InvalidOperationException("Cliente não encontrado.");
+
+        if (!cliente.Ativo)
+            throw new InvalidOperationException("Não é possível vincular um veículo a um cliente inativo.");
+
+        // Se mudou de cliente, altera
+        if (veiculo.ClienteId != request.ClienteId)
+            veiculo.AlterarCliente(request.ClienteId);
+
         TipoMotor? tipoMotor = null;
         if (!string.IsNullOrWhiteSpace(request.TipoMotor) &&
             Enum.TryParse<TipoMotor>(request.TipoMotor, out var parsed))
