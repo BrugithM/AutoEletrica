@@ -1,0 +1,47 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+publish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+*.vsidx
+
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# NuGet
+*.nupkg
+packages/
+!packages/build/
+
+# Banco de dados local (se por acaso estiver na pasta do projeto)
+*.db
+*.db-shm
+*.db-wal
+
+# Instalador
+*.msi
+*.wixpdb
+
+# Sistema
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Node (se usar algum dia)
+node_modules/
+
+# Outros
+.idea/
+*.tmp
