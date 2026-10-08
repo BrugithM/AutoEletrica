@@ -91,6 +91,13 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         private set { _desconto = value; OnPropertyChanged(); }
     }
 
+    private decimal _descontoPercentual;
+    public decimal DescontoPercentual
+    {
+        get => _descontoPercentual;
+        private set { _descontoPercentual = value; OnPropertyChanged(); }
+    }
+
     private decimal _valorTotal;
     public decimal ValorTotal
     {
@@ -155,7 +162,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         Observacao = os.Observacao ?? "";
         ValorTotalPecas = os.ValorTotalPecas;
         ValorTotalServicos = os.ValorTotalServicos;
-        Desconto = os.Desconto;
+        DescontoPercentual = os.DescontoPercentual;
         ValorTotal = os.ValorTotal;
 
         PecasNaOS.Clear();

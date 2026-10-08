@@ -16,9 +16,9 @@
 
         <!-- Dados da Nota Fiscal -->
         <GroupBox Grid.Row="0"
-                Header="Dados da Nota de Entrada"
-                Padding="10"
-                Margin="0,0,0,10">
+                  Header="Dados da Nota de Entrada"
+                  Padding="10"
+                  Margin="0,0,0,10">
             <StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -33,47 +33,61 @@
                         <TextBlock Text="Número da NF"/>
                         <TextBox Text="{Binding Numero, UpdateSourceTrigger=PropertyChanged}"
                                  Height="26"
-                                Margin="0,2,0,0"/>
+                                 Margin="0,2,0,0"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Fornecedor"/>
-                        <ComboBox ItemsSource="{Binding Fornecedores}"
-                                  SelectedItem="{Binding FornecedorSelecionado}"
-                                  DisplayMemberPath="NomeEmpresa"
-                                  Height="26"
-                                Margin="0,2,0,0"/>
+                        <Grid Margin="0,2,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding Fornecedores}"
+                                      SelectedItem="{Binding FornecedorSelecionado}"
+                                      DisplayMemberPath="NomeEmpresa"
+                                      Height="26"
+                                      Margin="0,2,0,0"/>
+                            <Button Grid.Column="1"
+                                    Content="➕"
+                                    Command="{Binding NovoFornecedorCommand}"
+                                    Width="30"
+                                    Style="{StaticResource BotaoPadraoStyle}"
+                                    Margin="5,0,0,0"
+                                    ToolTip="Novo Fornecedor"/>
+                        </Grid>
                     </StackPanel>
 
                     <StackPanel Grid.Column="4">
                         <TextBlock Text="Data de Entrada"/>
                         <DatePicker SelectedDate="{Binding DataEntrada}"
                                     Height="26"
-                                Margin="0,2,0,0"/>
+                                    Margin="0,2,0,0"/>
                     </StackPanel>
                 </Grid>
 
                 <TextBlock Text="CNPJ do Fornecedor"
-                        Margin="0,8,0,0"/>
+                           Margin="0,8,0,0"/>
                 <TextBlock Text="{Binding CnpjFornecedor}"
-                        FontWeight="SemiBold"
-                        Margin="0,2,0,0"/>
+                           FontWeight="SemiBold"
+                           Margin="0,2,0,0"/>
 
                 <TextBlock Text="Observação"
-                        Margin="0,8,0,0"/>
+                           Margin="0,8,0,0"/>
                 <TextBox Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}"
                          Height="50"
-                        TextWrapping="Wrap"
-                        AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
                          Margin="0,2,0,0"/>
             </StackPanel>
         </GroupBox>
 
         <!-- Itens -->
         <GroupBox Grid.Row="1"
-                Header="Itens"
-                Padding="10"
-                Margin="0,0,0,10">
+                  Header="Itens"
+                  Padding="10"
+                  Margin="0,0,0,10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -82,7 +96,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0"
-                        Margin="0,0,0,10">
+                      Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="80"/>
@@ -91,29 +105,42 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0"
-                            Margin="0,0,5,0">
+                                Margin="0,0,5,0">
                         <TextBlock Text="Produto"/>
-                        <ComboBox ItemsSource="{Binding PecasDisponiveis}"
-                                  SelectedItem="{Binding PecaSelecionada}"
-                                  DisplayMemberPath="Nome"
-                                  Height="26"
-                                Margin="0,2,0,0"/>
+                        <Grid Margin="0,2,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding PecasDisponiveis}"
+                                      SelectedItem="{Binding PecaSelecionada}"
+                                      DisplayMemberPath="Nome"
+                                      Height="26"/>
+                            <Button Grid.Column="1"
+                                    Content="➕"
+                                    Command="{Binding NovaPecaCommand}"
+                                    Width="30"
+                                    Style="{StaticResource BotaoPadraoStyle}"
+                                    Margin="5,0,0,0"
+                                    ToolTip="Nova Peça"/>
+                        </Grid>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1"
-                            Margin="0,0,5,0">
+                                Margin="0,0,5,0">
                         <TextBlock Text="Qtd"/>
                         <TextBox Text="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}"
                                  Height="26"
-                                Margin="0,2,0,0"/>
+                                 Margin="0,2,0,0"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2"
-                            Margin="0,0,5,0">
+                                Margin="0,0,5,0">
                         <TextBlock Text="Valor Unitário"/>
                         <TextBox Text="{Binding ValorUnitario, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
                                  Height="26"
-                                Margin="0,2,0,0"/>
+                                 Margin="0,2,0,0"/>
                     </StackPanel>
 
                     <Button Grid.Column="3"
@@ -133,19 +160,19 @@
                           SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Produto"
-                                Binding="{Binding NomePeca}"
-                                Width="*"
-                                IsReadOnly="True"/>
+                                            Binding="{Binding NomePeca}"
+                                            Width="*"
+                                            IsReadOnly="True"/>
                         <DataGridTextColumn Header="Qtd"
                                             Binding="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}"
-                                Width="80"/>
+                                            Width="80"/>
                         <DataGridTextColumn Header="Valor Unit. (R$)"
                                             Binding="{Binding ValorUnitario, UpdateSourceTrigger=LostFocus, StringFormat=N2}"
-                                Width="150"/>
+                                            Width="150"/>
                         <DataGridTextColumn Header="Subtotal (R$)"
                                             Binding="{Binding ValorTotal, StringFormat=C2}"
-                                Width="150"
-                                IsReadOnly="True"/>
+                                            Width="150"
+                                            IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -159,25 +186,25 @@
         </GroupBox>
 
         <GroupBox Grid.Row="2"
-                Header="Resumo de Valores"
-                Padding="10"
-                Margin="0,0,0,10">
+                  Header="Resumo de Valores"
+                  Padding="10"
+                  Margin="0,0,0,10">
             <Grid>
                 <TextBlock Text="TOTAL:"
-                        FontSize="18"
-                        FontWeight="Bold"
-                        VerticalAlignment="Center"/>
+                           FontSize="18"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding ValorTotal, StringFormat=C2}"
                            FontSize="22"
-                        FontWeight="Bold"
-                        Foreground="#0A246A"
+                           FontWeight="Bold"
+                           Foreground="#0A246A"
                            HorizontalAlignment="Right"/>
             </Grid>
         </GroupBox>
 
         <StackPanel Grid.Row="3"
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
             <Button Content="Salvar NF"
                     Click="BtnSalvar_Click"
                     Width="130"

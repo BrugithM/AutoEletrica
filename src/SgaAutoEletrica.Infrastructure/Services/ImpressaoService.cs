@@ -101,6 +101,8 @@ public class ImpressaoService : IImpressaoService
         sb.AppendLine($"  Modelo: {os.MarcaVeiculo} {os.ModeloVeiculo}");
         sb.AppendLine($"  Placa: {os.PlacaVeiculo}");
         sb.AppendLine($"  Ano: {os.AnoVeiculo}");
+        if (os.Quilometragem.HasValue)
+            sb.AppendLine($"  Quilometragem: {os.Quilometragem.Value:N0} km");
         sb.AppendLine("----------------------------------------");
         sb.AppendLine("PEÇAS:");
         foreach (var peca in os.ItensPeca)
@@ -158,8 +160,9 @@ public class ImpressaoService : IImpressaoService
         sb.AppendLine($"Nº: {os.Numero}   Data: {os.DataAbertura:dd/MM/yyyy}");
         sb.AppendLine("----------------------------------------");
         sb.AppendLine($"Cliente: {os.NomeCliente}");
-        sb.AppendLine($"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo}");
-        sb.AppendLine($"Placa: {os.PlacaVeiculo}");
+        sb.AppendLine($"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - {os.PlacaVeiculo}");
+        if (os.Quilometragem.HasValue)
+            sb.AppendLine($"Km: {os.Quilometragem.Value:N0}");
         sb.AppendLine("----------------------------------------");
 
         if (os.ItensPeca.Any())

@@ -228,12 +228,12 @@
 
                     <TextBlock Grid.Row="2"
                                Grid.Column="0"
-                               Text="Desconto Aplicado:"
+                               Text="Desconto:"
                                FontWeight="SemiBold"
                                Margin="0,8,0,0"/>
                     <TextBlock Grid.Row="2"
                                Grid.Column="1"
-                               Text="{Binding Desconto, StringFormat=C2}"
+                               Text="{Binding DescontoPercentual, StringFormat={}{0:F1}%}"
                                HorizontalAlignment="Right"
                                Margin="0,8,0,0"/>
 

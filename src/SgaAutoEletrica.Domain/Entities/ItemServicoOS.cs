@@ -2,21 +2,21 @@ namespace SgaAutoEletrica.Domain.Entities;
 
 public class ItemServicoOS
 {
-     public Guid Id{get; private set;}
-    public Guid OrdemServicoId {get; private set;}
-    public OrdemServico OrdemServico{get; private set;} = null;
+    public Guid Id { get; private set; }
+    public Guid OrdemServicoId { get; private set; }
+    public OrdemServico OrdemServico { get; private set; } = null;
 
-    public Guid ServicoId {get; private set;}
-    public Servico Servico{get; private set;}=null;
+    public Guid ServicoId { get; private set; }
+    public Servico Servico { get; private set; } = null;
 
-    public decimal PrecoUnitario{get; private set;}
+    public decimal PrecoUnitario { get; private set; }
 
-    private ItemServicoOS(){}
+    private ItemServicoOS() { }
 
     public ItemServicoOS(Guid servicoId, decimal precoUnitario)
     {
-        if(precoUnitario<0)
-        throw new ArgumentException("Preco não pode ser negativo.", nameof(precoUnitario));
+        if (precoUnitario < 0)
+            throw new ArgumentException("Preco não pode ser negativo.", nameof(precoUnitario));
 
         Id = Guid.NewGuid();
         ServicoId = servicoId;
@@ -24,7 +24,14 @@ public class ItemServicoOS
     }
 
     public void DefinirOrdemServico(Guid ordemServicoId)
-{
-    OrdemServicoId = ordemServicoId;
-}
-}
+    {
+        OrdemServicoId = ordemServicoId;
+    }
+
+    public void AtualizarPrecoUnitario(decimal novoPreco)
+    {
+        if (novoPreco < 0)
+            throw new ArgumentException("Preço unitário não pode ser negativo.", nameof(novoPreco));
+
+        PrecoUnitario = novoPreco;
+    }}

@@ -20,10 +20,12 @@ public class OrdemServicoDetalheDTO
     public string ModeloVeiculo { get; set; } = string.Empty;
     public string MarcaVeiculo { get; set; } = string.Empty;
     public int AnoVeiculo { get; set; }
+    public int? Quilometragem { get; set; }
 
     public decimal ValorTotalPecas { get; set; }
     public decimal ValorTotalServicos { get; set; }
     public decimal Desconto{get; set;}
+    public decimal DescontoPercentual{get; set;}
     public decimal ValorTotal { get; set; }
 
     public List<ItemPecaOSDTO> ItensPeca { get; set; } = new();

@@ -31,6 +31,8 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
             proximo++;
 
         var os = new OrdemServico(proximo, request.ClienteId, request.VeiculoId, request.Observacao);
+        if (request.Quilometragem.HasValue)
+            os.AtualizarQuilometragem(request.Quilometragem);
 
         foreach (var item in request.Pecas)
         {
@@ -38,7 +40,8 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
                 ?? throw new InvalidOperationException("Peça não encontrada.");
 
             peca.DarBaixaEstoque(item.Quantidade);
-            os.AdicionarPeca(item.PecaId, item.Quantidade, peca.ValorVenda);
+            var preco = item.PrecoUnitario > 0 ? item.PrecoUnitario : peca.ValorVenda;
+            os.AdicionarPeca(item.PecaId, item.Quantidade, preco);
         }
 
         foreach (var item in request.Servicos)
@@ -46,7 +49,8 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
             var servico = await _context.Servicos.FindAsync([item.ServicoId], cancellationToken)
                 ?? throw new InvalidOperationException("Serviço não encontrado.");
 
-            os.AdicionarServico(item.ServicoId, servico.PrecoPadrao);
+            var preco = item.PrecoUnitario > 0 ? item.PrecoUnitario : servico.PrecoPadrao;
+            os.AdicionarServico(item.ServicoId, preco);
         }
 
         if (request.DescontoPercentual > 0)

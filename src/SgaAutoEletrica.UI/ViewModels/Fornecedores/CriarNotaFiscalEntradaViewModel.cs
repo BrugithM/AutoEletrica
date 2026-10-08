@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Features.Fornecedores.Commands;
 using SgaAutoEletrica.Application.Features.Fornecedores.DTOs;
 using SgaAutoEletrica.Application.Features.Fornecedores.Queries;
@@ -94,6 +95,8 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 
     public ICommand AdicionarItemCommand { get; }
     public ICommand RemoverItemCommand { get; }
+    public ICommand NovoFornecedorCommand { get; }
+    public ICommand NovaPecaCommand { get; }
 
     public CriarNotaFiscalEntradaViewModel(IMediator mediator)
     {
@@ -101,6 +104,8 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 
         AdicionarItemCommand = new RelayCommand(_ => AdicionarItem());
         RemoverItemCommand = new RelayCommand(_ => RemoverItem(), _ => TemItemSelecionado);
+        NovoFornecedorCommand = new RelayCommand(async _ => await NovoFornecedorAsync());
+        NovaPecaCommand = new RelayCommand(async _ => await NovaPecaAsync());
     }
 
     public async Task CarregarDadosAsync()
@@ -160,6 +165,49 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         ItensNF.Remove(ItemSelecionado);
         ItemSelecionado = null;
         OnPropertyChanged(nameof(ValorTotal));
+    }
+
+    private async Task NovoFornecedorAsync()
+    {
+        var dialog = new Views.Fornecedores.CadastroFornecedorWindow(
+            App.ServiceProvider.GetRequiredService<IMediator>());
+
+        if (dialog.ShowDialog() == true)
+        {
+            var idsAntes = Fornecedores.Select(f => f.Id).ToHashSet();
+
+            Fornecedores.Clear();
+            var fornecedores = await _mediator.Send(new ListarFornecedoresQuery { Ativo = true });
+            foreach (var f in fornecedores)
+                Fornecedores.Add(f);
+
+            var novoFornecedor = Fornecedores.FirstOrDefault(f => !idsAntes.Contains(f.Id));
+            if (novoFornecedor != null)
+                FornecedorSelecionado = novoFornecedor;
+        }
+    }
+
+    private async Task NovaPecaAsync()
+    {
+        var dialog = new Views.Pecas.CadastroPecaWindow(
+            App.ServiceProvider.GetRequiredService<IMediator>());
+
+        if (dialog.ShowDialog() == true)
+        {
+            var idsAntes = PecasDisponiveis.Select(p => p.Id).ToHashSet();
+
+            PecasDisponiveis.Clear();
+            var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
+            foreach (var p in pecas.Itens)
+                PecasDisponiveis.Add(p);
+
+            var novaPeca = PecasDisponiveis.FirstOrDefault(p => !idsAntes.Contains(p.Id));
+            if (novaPeca != null)
+            {
+                PecaSelecionada = novaPeca;
+                ValorUnitario = novaPeca.ValorCusto;
+            }
+        }
     }
 
     public async Task<bool> SalvarAsync()

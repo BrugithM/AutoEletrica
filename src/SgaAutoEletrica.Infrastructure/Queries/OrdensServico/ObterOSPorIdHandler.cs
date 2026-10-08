@@ -40,9 +40,10 @@ public class ObterOSPorIdHandler : IRequestHandler<ObterOSPorIdQuery, OrdemServi
                 ModeloVeiculo = os.Veiculo.Modelo,
                 MarcaVeiculo = os.Veiculo.Marca,
                 AnoVeiculo = os.Veiculo.Ano,
+                Quilometragem = os.Quilometragem,
                 ValorTotalPecas = os.ValorTotalPecas,
                 ValorTotalServicos = os.ValorTotalServicos,
-                Desconto = os.Desconto,
+                DescontoPercentual = os.DescontoPercentual,
                 ValorTotal = os.ValorTotal,
                 ItensPeca = os.ItensPeca.Select(i => new ItemPecaOSDTO
                 {

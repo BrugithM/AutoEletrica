@@ -13,6 +13,7 @@ using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.Application.Features.Servicos.Queries;
 using SgaAutoEletrica.Application.Features.Servicos.DTOs;
 using SgaAutoEletrica.Application.Features.OrdensServico.Commands;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SgaAutoEletrica.UI.ViewModels.OrdensServico;
 
@@ -43,8 +44,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         }
     }
 
-    public string InfoCliente => ClienteSelecionado != null 
-        ? $"{ClienteSelecionado.NomeCompleto} (Tel: {ClienteSelecionado.Telefone})" 
+    public string InfoCliente => ClienteSelecionado != null
+        ? $"{ClienteSelecionado.NomeCompleto} (Tel: {ClienteSelecionado.Telefone})"
         : "";
 
     private VeiculoDTO? _veiculoSelecionado;
@@ -59,8 +60,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         }
     }
 
-    public string InfoVeiculo => VeiculoSelecionado != null 
-        ? $"{VeiculoSelecionado.Marca} {VeiculoSelecionado.Modelo} - Placa: {VeiculoSelecionado.Placa}" 
+    public string InfoVeiculo => VeiculoSelecionado != null
+        ? $"{VeiculoSelecionado.Marca} {VeiculoSelecionado.Modelo} - Placa: {VeiculoSelecionado.Placa}"
         : "";
 
     private PecaDTO? _pecaSelecionada;
@@ -121,13 +122,22 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         }
     }
 
+    private int? _quilometragem;
+    public int? Quilometragem
+    {
+        get => _quilometragem;
+        set { _quilometragem = value; OnPropertyChanged(); }
+    }
+
     public decimal ValorTotalPecas => PecasNaOS.Sum(p => p.ValorTotal);
     public decimal ValorTotalServicos => ServicosNaOS.Sum(s => s.Preco);
-    public decimal ValorTotalGeral => Math.Max(0, 
-    ValorTotalPecas + ValorTotalServicos - (ValorTotalPecas + ValorTotalServicos) * (Desconto / 100));
+    public decimal ValorTotalGeral => Math.Max(0,
+        ValorTotalPecas + ValorTotalServicos - (ValorTotalPecas + ValorTotalServicos) * (Desconto / 100));
 
     public ICommand RemoverPecaCommand { get; }
     public ICommand RemoverServicoCommand { get; }
+    public ICommand NovaPecaCommand { get; }
+    public ICommand NovoServicoCommand { get; }
 
     public CriacaoOSViewModel(IMediator mediator, Guid? clienteIdPreSelecionado = null, Guid? veiculoIdPreSelecionado = null)
     {
@@ -137,6 +147,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
         RemoverPecaCommand = new RelayCommand(_ => RemoverPeca(), _ => TemPecaSelecionada);
         RemoverServicoCommand = new RelayCommand(_ => RemoverServico(), _ => TemServicoSelecionado);
+        NovaPecaCommand = new RelayCommand(async _ => await NovaPecaAsync());
+        NovoServicoCommand = new RelayCommand(async _ => await NovoServicoAsync());
     }
 
     public async Task CarregarDadosAsync()
@@ -156,6 +168,46 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         if (_clienteIdPreSelecionado.HasValue)
         {
             ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == _clienteIdPreSelecionado.Value);
+        }
+    }
+
+    private async Task NovaPecaAsync()
+    {
+        var dialog = new Views.Pecas.CadastroPecaWindow(
+            App.ServiceProvider.GetRequiredService<IMediator>());
+
+        if (dialog.ShowDialog() == true)
+        {
+            var idsAntes = PecasDisponiveis.Select(p => p.Id).ToHashSet();
+
+            PecasDisponiveis.Clear();
+            var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
+            foreach (var p in pecas.Itens)
+                PecasDisponiveis.Add(p);
+
+            var novaPeca = PecasDisponiveis.FirstOrDefault(p => !idsAntes.Contains(p.Id));
+            if (novaPeca != null)
+                PecaSelecionada = novaPeca;
+        }
+    }
+
+    private async Task NovoServicoAsync()
+    {
+        var dialog = new Views.Servicos.CadastroServicoWindow(
+            App.ServiceProvider.GetRequiredService<IMediator>());
+
+        if (dialog.ShowDialog() == true)
+        {
+            var idsAntes = ServicosDisponiveis.Select(s => s.Id).ToHashSet();
+
+            ServicosDisponiveis.Clear();
+            var servicos = await _mediator.Send(new ListarServicosQuery());
+            foreach (var s in servicos)
+                ServicosDisponiveis.Add(s);
+
+            var novoServico = ServicosDisponiveis.FirstOrDefault(s => !idsAntes.Contains(s.Id));
+            if (novoServico != null)
+                ServicoSelecionado = novoServico;
         }
     }
 
@@ -190,13 +242,25 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         }
         else
         {
-            PecasNaOS.Add(new ItemPecaTemporario
+            var novo = new ItemPecaTemporario
             {
                 PecaId = PecaSelecionada.Id,
                 Nome = PecaSelecionada.Nome,
                 Quantidade = QuantidadePeca,
                 PrecoUnitario = PecaSelecionada.ValorVenda
-            });
+            };
+
+            novo.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ItemPecaTemporario.PrecoUnitario) ||
+                    e.PropertyName == nameof(ItemPecaTemporario.Quantidade))
+                {
+                    OnPropertyChanged(nameof(ValorTotalPecas));
+                    OnPropertyChanged(nameof(ValorTotalGeral));
+                }
+            };
+
+            PecasNaOS.Add(novo);
         }
 
         OnPropertyChanged(nameof(ValorTotalPecas));
@@ -207,12 +271,23 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
     {
         if (ServicoSelecionado == null) return;
 
-        ServicosNaOS.Add(new ItemServicoTemporario
+        var novo = new ItemServicoTemporario
         {
             ServicoId = ServicoSelecionado.Id,
             Nome = ServicoSelecionado.Nome,
             Preco = ServicoSelecionado.PrecoPadrao
-        });
+        };
+
+        novo.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(ItemServicoTemporario.Preco))
+            {
+                OnPropertyChanged(nameof(ValorTotalServicos));
+                OnPropertyChanged(nameof(ValorTotalGeral));
+            }
+        };
+
+        ServicosNaOS.Add(novo);
 
         OnPropertyChanged(nameof(ValorTotalServicos));
         OnPropertyChanged(nameof(ValorTotalGeral));
@@ -262,19 +337,24 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
                 VeiculoId = VeiculoSelecionado.Id,
                 Observacao = Observacao,
                 DescontoPercentual = Desconto,
+                Quilometragem = Quilometragem,
                 AprovarIniciar = aprovarIniciar
             };
 
             foreach (var item in PecasNaOS)
-                command.Pecas.Add(new ItemPecaOSRequest { PecaId = item.PecaId, Quantidade = item.Quantidade });
+                command.Pecas.Add(new ItemPecaOSRequest { 
+                    PecaId = item.PecaId, 
+                    Quantidade = item.Quantidade,
+                    PrecoUnitario = item.PrecoUnitario
+                    });
 
             foreach (var item in ServicosNaOS)
-                command.Servicos.Add(new ItemServicoOSRequest { ServicoId = item.ServicoId });
+                command.Servicos.Add(new ItemServicoOSRequest { ServicoId = item.ServicoId, PrecoUnitario = item.Preco });
 
             await _mediator.Send(command);
 
-            var msg = aprovarIniciar 
-                ? "OS criada e iniciada com sucesso!" 
+            var msg = aprovarIniciar
+                ? "OS criada e iniciada com sucesso!"
                 : "Orçamento emitido com sucesso!";
             MessageBox.Show(msg, "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             return true;
@@ -320,9 +400,23 @@ public class ItemPecaTemporario : INotifyPropertyChanged
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
-public class ItemServicoTemporario
+public class ItemServicoTemporario : INotifyPropertyChanged
 {
     public Guid ServicoId { get; set; }
     public string Nome { get; set; } = string.Empty;
-    public decimal Preco { get; set; }
+
+    private decimal _preco;
+    public decimal Preco
+    {
+        get => _preco;
+        set
+        {
+            _preco = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

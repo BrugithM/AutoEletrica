@@ -6,11 +6,13 @@ public class ItemPecaOSRequest
 {
     public int PecaId { get; set; }
     public int Quantidade { get; set; }
+    public decimal PrecoUnitario { get; set; }
 }
 
 public class ItemServicoOSRequest
 {
     public Guid ServicoId { get; set; }
+    public decimal PrecoUnitario { get; set; }
 }
 
 public class CriarOrdemServicoCommand : IRequest<Guid>

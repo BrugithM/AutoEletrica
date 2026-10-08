@@ -125,11 +125,14 @@ public class Peca
         if (novoCusto < 0)
             throw new ArgumentException("Valor de custo não pode ser negativo.", nameof(novoCusto));
 
-        if (DataUltimaAtualizacaoCusto == null || dataReferencia >= DataUltimaAtualizacaoCusto.Value)
+        var dataOk = DataUltimaAtualizacaoCusto == null || dataReferencia >= DataUltimaAtualizacaoCusto.Value;
+        var valorMaior = novoCusto > ValorCusto;
+
+        if (dataOk && valorMaior)
         {
             ValorCusto = novoCusto;
             DataUltimaAtualizacaoCusto = dataReferencia;
-            MarkupPercentual = CalcularMarkup(ValorCusto, ValorVenda);
+            MarkupPercentual = CalcularMarkup(novoCusto, ValorVenda);
         }
     }
 
