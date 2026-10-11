@@ -34,6 +34,7 @@ public class ObterOSPorIdHandler : IRequestHandler<ObterOSPorIdQuery, OrdemServi
                 DataFinalizacao = os.DataFinalizacao,
                 ClienteId = os.ClienteId,
                 NomeCliente = os.Cliente.NomeCompleto,
+                CpfCliente = os.Cliente.Cpf.Formatado(),
                 TelefoneCliente = os.Cliente.Telefone.Formatado(),
                 VeiculoId = os.VeiculoId,
                 PlacaVeiculo = os.Veiculo.Placa.Valor,

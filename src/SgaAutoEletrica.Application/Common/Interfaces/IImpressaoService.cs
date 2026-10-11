@@ -7,6 +7,6 @@ public interface IImpressaoService
 {
     void ImprimirOS(OrdemServicoDetalheDTO os);
     void ImprimirCupomOrcamento(OrdemServicoDetalheDTO os);
-    void ImprimirEtiqueta(PecaDTO peca);
+    void ImprimirEtiqueta(PecaDTO peca, int copias);
     System.Drawing.Bitmap GerarEtiquetaBitmap(PecaDTO peca, string nomeEmpresa);
 }

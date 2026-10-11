@@ -13,6 +13,7 @@ public class OrdemServicoDetalheDTO
 
     public Guid ClienteId { get; set; }
     public string NomeCliente { get; set; } = string.Empty;
+    public string? CpfCliente { get; set; } = string.Empty;
     public string TelefoneCliente { get; set; } = string.Empty;
 
     public Guid VeiculoId { get; set; }
