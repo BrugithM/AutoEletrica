@@ -45,11 +45,11 @@ public partial class App : System.Windows.Application
         var culturaBr = new System.Globalization.CultureInfo("pt-BR");
         System.Threading.Thread.CurrentThread.CurrentCulture = culturaBr;
         System.Threading.Thread.CurrentThread.CurrentUICulture = culturaBr;
-
         System.Windows.FrameworkElement.LanguageProperty.OverrideMetadata(
             typeof(System.Windows.FrameworkElement),
             new System.Windows.FrameworkPropertyMetadata(
                 System.Windows.Markup.XmlLanguage.GetLanguage(culturaBr.IetfLanguageTag)));
+
         try
         {
             var services = new ServiceCollection();
@@ -57,8 +57,7 @@ public partial class App : System.Windows.Application
             var dbPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "SgaAutoEletrica",
-                "sga_dev.db"
-            );
+                "sga_dev.db");
 
             Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
@@ -71,7 +70,9 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<MainWindow>();
             services.AddTransient<LoginWindow>();
+            services.AddTransient<PrimeiroAcessoWindow>();
             services.AddTransient<ViewModels.LoginViewModel>();
+            services.AddTransient<ViewModels.PrimeiroAcessoViewModel>();
 
             services.AddTransient<ViewModels.Dashboard.DashboardViewModel>();
             services.AddTransient<Views.Dashboard.DashboardView>();
@@ -84,6 +85,8 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.Pecas.ListaPecasViewModel>();
             services.AddTransient<Views.Pecas.ListaPecasView>();
+
+            services.AddTransient<ViewModels.Marcas.GerenciarMarcasViewModel>();
 
             services.AddTransient<ViewModels.Servicos.ListaServicosViewModel>();
             services.AddTransient<Views.Servicos.ListaServicosView>();
@@ -102,33 +105,36 @@ public partial class App : System.Windows.Application
             services.AddTransient<ViewModels.Configuracoes.ConfiguracoesImpressoraViewModel>();
             services.AddTransient<Views.Configuracoes.ConfiguracoesImpressoraView>();
 
-            services.AddTransient<ViewModels.Configuracoes.BackupViewModel>();
-            services.AddTransient<Views.Configuracoes.BackupView>();
-
             services.AddTransient<ViewModels.Configuracoes.ConfiguracaoEmpresaViewModel>();
             services.AddTransient<Views.Configuracoes.ConfiguracaoEmpresaView>();
 
-            services.AddTransient<ViewModels.Dashboard.DashboardViewModel>();
-            services.AddTransient<Views.Dashboard.DashboardView>();
+            services.AddTransient<ViewModels.Configuracoes.BackupViewModel>();
+            services.AddTransient<Views.Configuracoes.BackupView>();
+
+            services.AddTransient<ViewModels.Configuracoes.UsuariosViewModel>();
+            services.AddTransient<Views.Configuracoes.UsuariosView>();
+
+            services.AddTransient<ViewModels.Configuracoes.MeuPerfilViewModel>();
+            services.AddTransient<Views.Configuracoes.MeuPerfilView>();
 
             ServiceProvider = services.BuildServiceProvider();
 
-            using (var scope = ServiceProvider.CreateScope())
+            using var scope = ServiceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.Database.Migrate();
+
+            if (!context.Usuarios.Any())
             {
-                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                context.Database.CloseConnection();
-
-                context.Database.OpenConnection();
-                context.Database.ExecuteSqlRaw("PRAGMA journal_mode=WAL;");
-                context.Database.CloseConnection();
-
-                context.Database.Migrate();
+                var primeiroAcessoWindow = ServiceProvider.GetRequiredService<PrimeiroAcessoWindow>();
+                System.Windows.Application.Current.MainWindow = primeiroAcessoWindow;
+                primeiroAcessoWindow.Show();
             }
-
-            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
-            System.Windows.Application.Current.MainWindow = loginWindow;
-            loginWindow.Show();
+            else
+            {
+                var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+                System.Windows.Application.Current.MainWindow = loginWindow;
+                loginWindow.Show();
+            }
         }
         catch (Exception ex)
         {
@@ -147,24 +153,18 @@ public partial class App : System.Windows.Application
         try
         {
             using var scope = ServiceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetService<AppDbContext>();
-            context?.Database.CloseConnection();
-
             var backupService = scope.ServiceProvider.GetService<IBackupService>();
+
             _ = Task.Run(async () =>
             {
                 try
                 {
                     await backupService?.RealizarBackupAutomatico()!;
                 }
-                catch
-                {
-                }
+                catch { }
             }).Wait(2000);
         }
-        catch
-        {
-        }
+        catch { }
 
         Environment.Exit(0);
     }

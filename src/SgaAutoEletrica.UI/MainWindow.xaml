@@ -75,6 +75,13 @@
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Configurações">
+                                <MenuItem Header="Meu Perfil"
+                                          Click="BtnMeuPerfil_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Usuários"
+                                          Click="BtnUsuarios_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <Separator/>
                                 <MenuItem Header="Empresa"
                                           Click="BtnConfigEmpresa_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
@@ -85,6 +92,11 @@
                                           Click="BtnBackup_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
+                        <MenuItem Header="Sair"
+                                        Click="BtnSair_Click"
+                                  HorizontalAlignment="Right"
+                                  Background="#C0392B"
+                                  Padding="15,5"/>
                 </Menu>
 
                 <!-- BARRA DE ATALHOS -->

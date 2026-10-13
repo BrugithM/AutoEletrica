@@ -18,7 +18,7 @@ public partial class LoginWindow : Window
 
     private async void BtnLogin_Click(object sender, RoutedEventArgs e)
     {
-        _viewModel.Senha = TxtSenha.Password;
+        _viewModel.Senha = TxtSenha.Senha;
         await _viewModel.LoginAsync();
 
         if (_viewModel.UsuarioAutenticado != null)

@@ -1,0 +1,88 @@
+<Window x:Class="SgaAutoEletrica.UI.Views.PrimeiroAcessoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:SgaAutoEletrica.UI.Views.Controls"
+        Title="Primeiro Acesso"
+        Height="500"
+        Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                Text="Bem-vindo ao SGA AutoElétrica!"
+                   FontSize="22"
+                FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="1"
+                Text="Antes de começar, crie seu usuário administrador."
+                   FontSize="12"
+                Foreground="#555"
+                   HorizontalAlignment="Center"
+                Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="2"
+                Margin="0,0,0,15">
+            <TextBlock Text="Nome de usuário:"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,3"/>
+            <TextBox x:Name="TxtNome"
+                    Height="32"
+                    FontSize="14"
+                    Padding="5"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"
+                Margin="0,0,0,15">
+            <TextBlock Text="Senha (mínimo 6 caracteres):"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,3"/>
+            <controls:CampoSenha x:Name="TxtSenha"
+                    Height="32"
+                   />
+        </StackPanel>
+
+        <StackPanel Grid.Row="4"
+                Margin="0,0,0,15">
+            <TextBlock Text="Confirmar senha:"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,3"/>
+            <controls:CampoSenha x:Name="TxtConfirmarSenha"
+                    Height="32"
+                   />
+        </StackPanel>
+
+        <Border Grid.Row="5"
+                Background="#F0F8FF"
+                Padding="10"
+                CornerRadius="4"
+                Margin="0,10,0,0">
+            <TextBlock TextWrapping="Wrap"
+                    FontSize="11"
+                    Foreground="#444">
+                <Run Text="Dica: "
+                        FontWeight="Bold"/>
+                <Run Text="Use um nome que você vai lembrar (ex: seu nome ou 'dono'). Você poderá criar outros usuários depois em Configurações → Usuários."/>
+            </TextBlock>
+        </Border>
+
+        <Button Grid.Row="7"
+                Content="Criar usuário administrador"
+                Style="{StaticResource BotaoPadraoStyle}"
+                Click="BtnCriar_Click"
+                Height="30"/>
+    </Grid>
+</Window>

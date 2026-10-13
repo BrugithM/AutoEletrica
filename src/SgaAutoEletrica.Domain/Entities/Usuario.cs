@@ -52,4 +52,11 @@ public class Usuario
 
     public void Desativar() => Ativo = false;
     public void Ativar() => Ativo = true;
+
+    public void AlterarNome(string novoNome)
+{
+    if (string.IsNullOrWhiteSpace(novoNome))
+        throw new ArgumentException("Nome é obrigatório.", nameof(novoNome));
+    Nome = novoNome;
+}
 }

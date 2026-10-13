@@ -218,6 +218,20 @@ public partial class MainWindow : Window
     }
     // Configurações
 
+    private void BtnMeuPerfil_Click(object sender, RoutedEventArgs e)
+    {
+        EsconderDashboard();
+        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.MeuPerfilView>();
+        ContentArea.Content = view;
+    }
+
+    private void BtnUsuarios_Click(object sender, RoutedEventArgs e)
+    {
+        if (!TemPermissaoAdmin()) return;
+        EsconderDashboard();
+        var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Configuracoes.UsuariosView>();
+        ContentArea.Content = view;
+    }
     private void BtnConfigEmpresa_Click(object sender, RoutedEventArgs e)
     {
         if (!TemPermissaoAdmin()) return;
@@ -273,6 +287,29 @@ public partial class MainWindow : Window
         }
     }
 
+    private void BtnSair_Click(object sender, RoutedEventArgs e)
+    {
+        var confirmacao = MessageBox.Show(
+            "Deseja realmente sair do sistema?",
+            "Confirmar",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (confirmacao != MessageBoxResult.Yes)
+            return;
+
+        var sessao = App.ServiceProvider
+            .GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>();
+        sessao.Limpar();
+
+        var loginWindow = App.ServiceProvider
+            .GetRequiredService<Views.LoginWindow>();
+
+        System.Windows.Application.Current.MainWindow = loginWindow;
+        loginWindow.Show();
+
+        Close();
+    }
     private bool TemPermissaoAdmin()
     {
         var sessao = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>();
