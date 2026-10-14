@@ -45,3 +45,4 @@ node_modules/
 # Outros
 .idea/
 *.tmp
+src/publish/

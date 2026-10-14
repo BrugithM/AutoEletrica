@@ -15,7 +15,6 @@
       Scope="perMachine">
 
     <WixVariable Id="WixUILicenseRtf" Value="TermosDeUso.rtf" />
-
     <Icon Id="AppIcon.ico" SourceFile="icon.ico" />
 
     <MajorUpgrade
