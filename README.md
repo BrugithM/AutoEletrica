@@ -76,7 +76,7 @@ SgaAutoEletrica/
     ├── SgaAutoEletrica.Infrastructure/
     ├── SgaAutoEletrica.Migrator/
     ├── SgaAutoEletrica.Installer/
-    └── publish/
+    └── publish/          # gerado por dotnet publish (não versionado)
 ```
 
 ### Responsabilidades das camadas
@@ -127,6 +127,21 @@ Durante a inicialização, a aplicação:
 5. Aplica as migrações pendentes do Entity Framework Core.
 6. Verifica se existem usuários cadastrados para direcionar o fluxo de primeiro acesso ou login.
 
+### Estrutura de diretórios em tempo de execução
+
+Após a instalação, a aplicação utiliza os seguintes diretórios em `%ProgramData%`:
+
+```text
+%ProgramData%\SgaAutoEletrica\
+├── Data\
+│   ├── sga.db              # banco de dados SQLite
+│   └── Backups\            # cópias de segurança do banco
+├── Config\                 # arquivos de configuração da aplicação
+└── Logs\                   # arquivos de log
+```
+
+### Banco de dados
+
 O caminho padrão configurado para o banco de dados é:
 
 ```text
@@ -160,6 +175,8 @@ O comando pressupõe que a ferramenta `dotnet-ef` e as dependências necessária
 - Git.
 - Visual Studio com suporte ao desenvolvimento desktop com .NET e WPF, ou ambiente compatível.
 
+> **Nota:** o projeto utiliza .NET 10. Certifique-se de ter o SDK correspondente instalado antes de compilar.
+
 ### Clonando o repositório
 
 ```bash
@@ -191,17 +208,55 @@ A execução depende da configuração correta do ambiente e das dependências d
 
 ## Instalador Windows
 
-O repositório contém um projeto de instalação baseado no WiX Toolset 7, configurado para a plataforma Windows x64.
+O repositório contém um projeto de instalação baseado no WiX Toolset 7, configurado para Windows x64.
 
 A configuração inclui:
 
+- Publicação **single-file** e **self-contained** (não requer .NET instalado na máquina de destino).
 - Diretório de instalação em `Program Files`.
-- Atalho no Menu Iniciar.
-- Diretórios destinados aos dados e às configurações da aplicação.
+- Atalhos no Menu Iniciar e na Área de Trabalho.
+- Ícone personalizado do aplicativo.
+- Termos de uso apresentados durante a instalação.
+- Criação dos diretórios de dados, configurações e logs em `%ProgramData%`.
+- Permissões de escrita para os usuários nas pastas de dados.
 - Interface de instalação com seleção do diretório.
-- Configuração de atualização de versões anteriores.
+- Atualização automática de versões anteriores.
 
-A geração do instalador depende da publicação prévia dos arquivos da aplicação e da configuração adequada das dependências do projeto de instalação.
+### Gerando o instalador
+
+```bash
+# 1. Publicar o app (single-file, self-contained)
+cd src/SgaAutoEletrica.UI
+dotnet publish -c Release -o ../publish
+cd ../..
+
+# 2. (Opcional, mas recomendado) Limpar o cache do instalador
+rm -rf src/SgaAutoEletrica.Installer/obj
+
+# 3. Compilar o instalador
+cd src/SgaAutoEletrica.Installer
+dotnet build -c Release
+cd ../..
+```
+
+O instalador gerado estará em:
+
+```text
+src/SgaAutoEletrica.Installer/bin/Release/SgaAutoEletrica_Setup.msi
+```
+
+> **Importante:** o projeto WiX reutiliza arquivos do cache de build. Ao republicar o
+> aplicativo, recomenda-se limpar a pasta `obj` do instalador antes de compilar, para
+> garantir que o `.msi` incorpore a versão mais recente do executável.
+
+### Requisitos para execução do instalador
+
+- Windows 10 ou 11 (64 bits).
+- Privilégios de administrador durante a instalação (`Scope="perMachine"`).
+
+> **Observação:** como o instalador não é assinado digitalmente, o Windows pode exibir
+> um aviso do SmartScreen na primeira execução. Basta clicar em **"Mais informações"**
+> e em **"Executar mesmo assim"** para prosseguir.
 
 ## Backup e recuperação de dados
 
@@ -214,10 +269,13 @@ O sistema possui funcionalidades para proteger os dados armazenados no banco SQL
 
 Por padrão, os backups são armazenados em `Backups`, dentro do diretório de dados do sistema:
 
-`%ProgramData%\SgaAutoEletrica\Data\Backups`
+```text
+%ProgramData%\SgaAutoEletrica\Data\Backups
+```
 
-**Importante:** recomenda-se manter cópias adicionais em outro local para reduzir o risco de perda de dados.
+Os arquivos seguem o padrão de nomenclatura `backup_YYYYMMDD_HHMMSS.db`.
 
+> **Importante:** recomenda-se manter cópias adicionais em outro local para reduzir o risco de perda de dados.
 
 ## Status do projeto
 
@@ -232,8 +290,6 @@ Copyright © 2026 BrugithM. Todos os direitos reservados, observada a titularida
 Este repositório é disponibilizado publicamente para apresentação do projeto e avaliação técnica.
 
 A publicação do código não concede, por si só, autorização geral para copiar, modificar, redistribuir ou explorar comercialmente o software. Bibliotecas e componentes de terceiros permanecem sujeitos às respectivas licenças.
-
-Para informações adicionais, consulte o aviso de direitos autorais do repositório.
 
 ---
 
