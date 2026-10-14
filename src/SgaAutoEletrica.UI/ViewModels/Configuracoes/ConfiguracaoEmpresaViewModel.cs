@@ -92,7 +92,7 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
         _mediator = mediator;
 
         _pastaImagens = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
             "SgaAutoEletrica",
             "Config");
 
@@ -133,7 +133,7 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
                 var fileInfo = new FileInfo(dialog.FileName);
                 if (fileInfo.Length > 5 * 1024 * 1024)
                 {
-                    MessageBox.Show("A imagem deve ter no máximo 5MB.", "Aviso", 
+                    MessageBox.Show("A imagem deve ter no máximo 5MB.", "Aviso",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -154,7 +154,7 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao copiar imagem: {ex.Message}", "Erro", 
+                MessageBox.Show($"Erro ao copiar imagem: {ex.Message}", "Erro",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -176,19 +176,19 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(NomeEmpresa))
         {
-            MessageBox.Show("Nome da empresa é obrigatório.", "Aviso", 
+            MessageBox.Show("Nome da empresa é obrigatório.", "Aviso",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (string.IsNullOrWhiteSpace(Cnpj))
         {
-            MessageBox.Show("CNPJ é obrigatório.", "Aviso", 
+            MessageBox.Show("CNPJ é obrigatório.", "Aviso",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (string.IsNullOrWhiteSpace(Telefone))
         {
-            MessageBox.Show("Telefone é obrigatório.", "Aviso", 
+            MessageBox.Show("Telefone é obrigatório.", "Aviso",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
@@ -205,7 +205,7 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
                 LogoPath = LogoPath
             });
 
-            MessageBox.Show("Configurações salvas com sucesso!", "Sucesso", 
+            MessageBox.Show("Configurações salvas com sucesso!", "Sucesso",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -213,7 +213,7 @@ public class ConfiguracaoEmpresaViewModel : INotifyPropertyChanged
             var inner = ex;
             while (inner.InnerException != null)
                 inner = inner.InnerException;
-            MessageBox.Show($"Erro: {inner.Message}", "Erro", 
+            MessageBox.Show($"Erro: {inner.Message}", "Erro",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

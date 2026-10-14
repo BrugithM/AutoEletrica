@@ -8,9 +8,10 @@ using SgaAutoEletrica.Infrastructure.Persistence.Context;
 var services = new ServiceCollection();
 
 var dbPath = Path.Combine(
-    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
     "SgaAutoEletrica",
-    "sga_dev.db");
+    "Data",
+    "sga.db");
 
 Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 

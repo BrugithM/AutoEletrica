@@ -14,13 +14,15 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
         var dbPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
             "SgaAutoEletrica",
-            "sga_dev.db");
+            "Data",
+            "sga.db");
 
         Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
         optionsBuilder.UseSqlite($"Data Source={dbPath}");
+
         return new AppDbContext(optionsBuilder.Options);
     }
 }
