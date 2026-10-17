@@ -9,5 +9,5 @@ public class PecaBuscaDTO
     public string? MarcaNome { get; set; }
     public string? CategoriaNome { get; set; }
     public decimal ValorVenda { get; set; }
-    public int Estoque { get; set; }
+    public decimal Estoque { get; set; }
 }

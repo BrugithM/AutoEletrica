@@ -33,7 +33,7 @@ public class NotaFiscalEntrada
         Finalizada = false;
     }
 
-    public void AdicionarItem(int pecaId, int quantidade, decimal valorUnitario)
+    public void AdicionarItem(int pecaId, decimal quantidade, decimal valorUnitario)
     {
         if (Finalizada)
             throw new InvalidOperationException("Não é possível adicionar itens a uma nota já finalizada.");
@@ -43,7 +43,7 @@ public class NotaFiscalEntrada
         RecalcularTotal();
     }
 
-    public List<(int PecaId, int Quantidade)> Finalizar()
+    public List<(int PecaId, decimal Quantidade)> Finalizar()
     {
         if (Finalizada)
             throw new InvalidOperationException("Nota já está finalizada.");

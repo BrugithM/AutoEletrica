@@ -9,13 +9,13 @@ public class ItemPecaOS
     public int PecaId { get; private set; }
     public Peca Peca { get; private set; } = null!;
 
-    public int Quantidade { get; private set; }
+    public decimal Quantidade { get; private set; }
     public decimal PrecoUnitario { get; private set; }
     public decimal ValorTotal { get; private set; }
 
     private ItemPecaOS() { }
 
-    public ItemPecaOS(int pecaId, int quantidade, decimal precoUnitario)
+    public ItemPecaOS(int pecaId, decimal quantidade, decimal precoUnitario)
     {
         if (quantidade <= 0)
             throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));

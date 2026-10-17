@@ -15,7 +15,7 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.10");
 
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.CategoriaPeca", b =>
                 {
@@ -191,8 +191,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<int>("PecaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Quantidade")
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(10,2)");
@@ -224,8 +224,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Quantidade")
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(10,2)");
@@ -403,11 +403,11 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Estoque")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Estoque")
+                        .HasColumnType("decimal(18,3)");
 
-                    b.Property<int>("EstoqueMinimo")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("EstoqueMinimo")
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<Guid?>("FornecedorId")
                         .HasColumnType("TEXT");

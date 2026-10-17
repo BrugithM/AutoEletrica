@@ -25,8 +25,8 @@ public class PecaDTO
     public decimal MarkupPercentual { get; set; }
     public decimal MargemLucro { get; set; }
     
-    public int Estoque { get; set; }
-    public int EstoqueMinimo { get; set; }
+    public decimal Estoque { get; set; }
+    public decimal EstoqueMinimo { get; set; }
     public bool Ativo { get; set; }
     public bool EstoqueBaixo { get; set; }
 }

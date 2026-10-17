@@ -193,14 +193,14 @@
 
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="Estoque Inicial"/>
-                            <TextBox Text="{Binding EstoqueInicial, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding EstoqueInicial, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
                                      Height="26"
                                      Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Estoque Mínimo"/>
-                            <TextBox Text="{Binding EstoqueMinimo, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding EstoqueMinimo, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
                                      Height="26"
                                      Margin="0,2,0,0"/>
                         </StackPanel>

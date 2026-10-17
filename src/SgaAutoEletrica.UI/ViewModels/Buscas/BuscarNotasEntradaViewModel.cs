@@ -15,7 +15,7 @@ namespace SgaAutoEletrica.UI.ViewModels.Buscas;
 public class BuscarNotasEntradaViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
-    private const int TamanhoPagina = 20;
+    private const int TamanhoPagina = 40;
 
     public ObservableCollection<NotaFiscalEntradaResumoDTO> Notas { get; } = new();
     public ObservableCollection<ItemNotaEntradaDetalheDTO> ItensNF { get; } = new();

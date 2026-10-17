@@ -63,8 +63,8 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         set { _pecaSelecionada = value; OnPropertyChanged(); }
     }
 
-    private int _quantidade = 1;
-    public int Quantidade
+    private decimal _quantidade = 1;
+    public decimal Quantidade
     {
         get => _quantidade;
         set { _quantidade = value; OnPropertyChanged(); }
@@ -291,8 +291,8 @@ public class ItemNFEntradaTemporario : INotifyPropertyChanged
     public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
 
-    private int _quantidade;
-    public int Quantidade
+    private decimal _quantidade;
+    public decimal Quantidade
     {
         get => _quantidade;
         set

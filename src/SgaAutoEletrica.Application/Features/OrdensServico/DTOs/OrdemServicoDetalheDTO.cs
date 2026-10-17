@@ -38,7 +38,7 @@ public class ItemPecaOSDTO
     public Guid Id { get; set; }
     public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
-    public int Quantidade { get; set; }
+    public decimal Quantidade { get; set; }
     public decimal PrecoUnitario { get; set; }
     public decimal ValorTotal { get; set; }
 }

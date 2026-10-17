@@ -130,7 +130,7 @@
                     <StackPanel Grid.Column="1"
                                 Margin="0,0,5,0">
                         <TextBlock Text="Qtd"/>
-                        <TextBox Text="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding Quantidade, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
                                  Height="26"
                                  Margin="0,2,0,0"/>
                     </StackPanel>
@@ -164,7 +164,7 @@
                                             Width="*"
                                             IsReadOnly="True"/>
                         <DataGridTextColumn Header="Qtd"
-                                            Binding="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}"
+                                            Binding="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.###}}"
                                             Width="80"/>
                         <DataGridTextColumn Header="Valor Unit. (R$)"
                                             Binding="{Binding ValorUnitario, UpdateSourceTrigger=LostFocus, StringFormat=N2}"

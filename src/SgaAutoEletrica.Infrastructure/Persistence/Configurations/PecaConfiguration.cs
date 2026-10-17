@@ -21,8 +21,13 @@ public class PecaConfiguration : IEntityTypeConfiguration<Peca>
         builder.Property(p => p.ValorVenda).HasColumnType("decimal(10,2)");
         builder.Property(p => p.MarkupPercentual).HasColumnType("decimal(10,2)");
 
-        builder.Property(p => p.Estoque).IsRequired();
-        builder.Property(p => p.EstoqueMinimo).IsRequired();
+        builder.Property(p => p.Estoque)
+            .IsRequired()
+            .HasColumnType("decimal(18,3)");
+
+        builder.Property(p => p.EstoqueMinimo)
+            .IsRequired()
+            .HasColumnType("decimal(18,3)");
         builder.Property(p => p.Ativo).IsRequired();
         builder.Property(p => p.DataCadastro).IsRequired();
 

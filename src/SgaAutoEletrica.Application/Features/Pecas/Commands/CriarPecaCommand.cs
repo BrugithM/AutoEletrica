@@ -8,8 +8,8 @@ public class CriarPecaCommand : IRequest<int>
     public string Descricao { get; set; } = string.Empty;
     public decimal ValorCusto { get; set; }
     public decimal ValorVenda { get; set; }
-    public int EstoqueInicial { get; set; }
-    public int EstoqueMinimo { get; set; } = 5;
+    public decimal EstoqueInicial { get; set; }
+    public decimal EstoqueMinimo { get; set; } = 5;
     public string? CodigoPeca { get; set; }
     public string? CodigoBarras { get; set; }
     public int? MarcaId { get; set; }

@@ -96,8 +96,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
     public bool TemServicoSelecionado => ServicoSelecionadoParaRemover != null;
 
-    private int _quantidadePeca = 1;
-    public int QuantidadePeca
+    private decimal _quantidadePeca = 1;
+    public decimal QuantidadePeca
     {
         get => _quantidadePeca;
         set { _quantidadePeca = value; OnPropertyChanged(); }
@@ -231,7 +231,7 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         if (PecaSelecionada == null || QuantidadePeca <= 0) return;
         if (QuantidadePeca > PecaSelecionada.Estoque)
         {
-            MessageBox.Show($"Estoque insuficiente. Disponível: {PecaSelecionada.Estoque}", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show($"Estoque insuficiente. Disponível: {PecaSelecionada.Estoque:0.###}", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
@@ -379,8 +379,8 @@ public class ItemPecaTemporario : INotifyPropertyChanged
     public int PecaId { get; set; }
     public string Nome { get; set; } = string.Empty;
 
-    private int _quantidade;
-    public int Quantidade
+    private decimal _quantidade;
+    public decimal Quantidade
     {
         get => _quantidade;
         set { _quantidade = value; OnPropertyChanged(); OnPropertyChanged(nameof(ValorTotal)); }

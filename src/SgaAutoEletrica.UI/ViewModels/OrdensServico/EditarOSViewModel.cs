@@ -58,8 +58,8 @@ public class EditarOSViewModel : INotifyPropertyChanged
         set { _servicoSelecionado = value; OnPropertyChanged(); }
     }
 
-    private int _quantidadePeca = 1;
-    public int QuantidadePeca
+    private decimal _quantidadePeca = 1;
+    public decimal QuantidadePeca
     {
         get => _quantidadePeca;
         set { _quantidadePeca = value; OnPropertyChanged(); }
@@ -495,7 +495,7 @@ public class ItemPecaOSTemporario : INotifyPropertyChanged
     public Guid Id { get; set; }
     public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
-    public int Quantidade { get; set; }
+    public decimal Quantidade { get; set; }
 
     private decimal _precoUnitario;
     public decimal PrecoUnitario

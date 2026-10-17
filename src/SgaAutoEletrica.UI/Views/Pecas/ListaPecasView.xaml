@@ -185,8 +185,8 @@
                 <DataGridTextColumn Header="Marca" Binding="{Binding MarcaNome}" Width="100"/>
                 <DataGridTextColumn Header="Categoria" Binding="{Binding CategoriaNome}" Width="100"/>
                 <DataGridTextColumn Header="Cód. Barras" Binding="{Binding CodigoBarras}" Width="120"/>
-                <DataGridTextColumn Header="Est." Binding="{Binding Estoque}" Width="50"/>
-                <DataGridTextColumn Header="Mín." Binding="{Binding EstoqueMinimo}" Width="50"/>
+                <DataGridTextColumn Header="Est." Binding="{Binding Estoque, StringFormat={}{0:0.###}}" Width="50"/>
+                <DataGridTextColumn Header="Mín." Binding="{Binding EstoqueMinimo, StringFormat={}{0:0.###}}" Width="50"/>
                 <DataGridTextColumn Header="Custo" Binding="{Binding ValorCusto, StringFormat=C2}" Width="80"/>
                 <DataGridTextColumn Header="Venda" Binding="{Binding ValorVenda, StringFormat=C2}" Width="80"/>
                 <DataGridTextColumn Header="Fornecedor" Binding="{Binding FornecedorNome}" Width="150"/>

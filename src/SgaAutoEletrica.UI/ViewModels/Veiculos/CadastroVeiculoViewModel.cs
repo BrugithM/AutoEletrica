@@ -21,7 +21,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     public string Placa { get; set; } = string.Empty;
     public string Modelo { get; set; } = string.Empty;
     public string Marca { get; set; } = string.Empty;
-    public int Ano { get; set; } = DateTime.Now.Year;
+    public int Ano { get; set; } = 0;
     public string Versao { get; set; } = string.Empty;
     public string Motor { get; set; } = string.Empty;
     public string TipoMotor { get; set; } = string.Empty;
@@ -183,7 +183,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         Placa = string.Empty;
         Modelo = string.Empty;
         Marca = string.Empty;
-        Ano = DateTime.Now.Year;
+        Ano = 0;
         Versao = string.Empty;
         Motor = string.Empty;
         TipoMotor = string.Empty;

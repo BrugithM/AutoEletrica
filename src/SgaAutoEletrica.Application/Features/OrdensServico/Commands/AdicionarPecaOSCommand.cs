@@ -6,5 +6,5 @@ public class AdicionarPecaOSCommand : IRequest
 {
     public Guid OrdemServicoId { get; set; }
     public int PecaId { get; set; }
-    public int Quantidade { get; set; }
+    public decimal Quantidade { get; set; }
 }

@@ -184,7 +184,7 @@
                         Binding="{Binding NomePeca}"
                         Width="*"/>
                 <DataGridTextColumn Header="Qtd"
-                        Binding="{Binding Quantidade}"
+                        Binding="{Binding Quantidade, StringFormat={}{0:0.###}}"
                         Width="80"/>
                 <DataGridTextColumn Header="Valor Unit. (R$)"
                         Binding="{Binding ValorUnitario, StringFormat=C2}"

@@ -18,5 +18,5 @@ public class ListarPecasQuery : IRequest<ListaPaginadaDTO<PecaDTO>>
 
     public bool? Ativo { get; set; } = true;
     public int Pagina { get; set; } = 1;
-    public int TamanhoPagina { get; set; } = 20;
+    public int TamanhoPagina { get; set; } = 40;
 }

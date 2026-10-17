@@ -25,8 +25,8 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
     public string CodigoBarras { get; set; } = string.Empty;
     public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
-    public int EstoqueInicial { get; set; }
-    public int EstoqueMinimo { get; set; } = 5;
+    public decimal EstoqueInicial { get; set; }
+    public decimal EstoqueMinimo { get; set; } = 5;
 
     private decimal _valorCusto;
     public decimal ValorCusto

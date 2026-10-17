@@ -105,7 +105,7 @@ public class ImpressaoService : IImpressaoService
 
         foreach (var peca in os.ItensPeca)
         {
-            var descricao = $"{peca.NomePeca} x{peca.Quantidade}";
+            var descricao = $"{peca.NomePeca} x{peca.Quantidade:0.###}";
             var valor = peca.ValorTotal.ToString("C2");
             sb.AppendLine(FormatarLinhaComValorDireita(descricao, valor, 40));
         }
@@ -396,7 +396,7 @@ public class ImpressaoService : IImpressaoService
         {
             g.DrawString(peca.PecaId.ToString(), fonteTexto, Brushes.Black, xCodigo + 10, y + 22);
             g.DrawString(TruncarTexto(peca.NomePeca, 50), fonteTexto, Brushes.Black, xDescricao + 10, y + 22);
-            g.DrawString($"{peca.Quantidade}", fonteTexto, Brushes.Black, xQtd + 10, y + 22);
+            g.DrawString($"{peca.Quantidade:0.###}", fonteTexto, Brushes.Black, xQtd + 10, y + 22);
             g.DrawString(peca.PrecoUnitario.ToString("C2"), fonteTexto, Brushes.Black, xUnit + 10, y + 22);
             g.DrawString(peca.ValorTotal.ToString("C2"), fonteTextoBold, Brushes.Black, xTotal + 10, y + 22);
 

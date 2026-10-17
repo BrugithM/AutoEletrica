@@ -20,8 +20,8 @@ public class Peca
     public decimal ValorVenda { get; private set; }
     public decimal MarkupPercentual { get; private set; }
 
-    public int Estoque { get; private set; }
-    public int EstoqueMinimo { get; private set; }
+    public decimal Estoque { get; private set; }
+    public decimal EstoqueMinimo { get; private set; }
     public bool Ativo { get; private set; }
     public DateTime DataCadastro { get; private set; }
     public DateTime? DataUltimaAtualizacaoCusto { get; private set; }
@@ -40,8 +40,8 @@ public class Peca
         string descricao,
         decimal valorCusto,
         decimal valorVenda,
-        int estoqueInicial,
-        int estoqueMinimo = 5,
+        decimal estoqueInicial,
+        decimal estoqueMinimo = 5,
         string? codigoPeca = null,
         string? codigoBarras = null,
         int? marcaId = null,
@@ -92,14 +92,14 @@ public class Peca
     }
 
     // Estoque
-    public void DarEntradaEstoque(int quantidade)
+    public void DarEntradaEstoque(decimal quantidade)
     {
         if (quantidade <= 0)
             throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
         Estoque += quantidade;
     }
 
-    public void DarBaixaEstoque(int quantidade)
+    public void DarBaixaEstoque(decimal quantidade)
     {
         if (quantidade <= 0)
             throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
@@ -150,7 +150,7 @@ public class Peca
         int? marcaId = null,
         Guid? categoriaId = null,
         Guid? fornecedorId = null,
-        int? estoqueMinimo = null)
+        decimal? estoqueMinimo = null)
     {
         if (string.IsNullOrWhiteSpace(nome))
             throw new ArgumentException("Nome é obrigatório.", nameof(nome));

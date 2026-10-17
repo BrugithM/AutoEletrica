@@ -13,9 +13,9 @@ public class MovimentacaoEstoqueViewModel : INotifyPropertyChanged
     private readonly PecaDTO _peca;
 
     public string NomePeca { get; }
-    public int EstoqueAtual { get; }
+    public decimal EstoqueAtual { get; }
 
-    public int Quantidade { get; set; }
+    public decimal Quantidade { get; set; }
     public bool EhEntrada { get; set; } = true;
 
     public MovimentacaoEstoqueViewModel(IMediator mediator, PecaDTO peca)

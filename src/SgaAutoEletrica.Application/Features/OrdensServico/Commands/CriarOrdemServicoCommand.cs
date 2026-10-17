@@ -5,7 +5,7 @@ namespace SgaAutoEletrica.Application.Features.OrdensServico.Commands;
 public class ItemPecaOSRequest
 {
     public int PecaId { get; set; }
-    public int Quantidade { get; set; }
+    public decimal Quantidade { get; set; }
     public decimal PrecoUnitario { get; set; }
 }
 

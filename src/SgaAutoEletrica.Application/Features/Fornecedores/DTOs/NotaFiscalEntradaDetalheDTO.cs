@@ -15,7 +15,7 @@ public class NotaFiscalEntradaDetalheDTO
 public class ItemNotaEntradaDetalheDTO
 {
     public string NomePeca { get; set; } = string.Empty;
-    public int Quantidade { get; set; }
+    public decimal Quantidade { get; set; }
     public decimal ValorUnitario { get; set; }
     public decimal ValorTotal { get; set; }
 }

@@ -48,7 +48,7 @@ public class OrdemServico
         DataAbertura = DateTime.UtcNow;
     }
 
-    public void AdicionarPeca(int pecaId, int quantidade, decimal precoUnitario)
+    public void AdicionarPeca(int pecaId, decimal quantidade, decimal precoUnitario)
     {
         if (Status == StatusOS.Finalizada || Status == StatusOS.Cancelada)
             throw new InvalidOperationException("Não é possivel adicionar peças a uma OS finalizada ou cancelada");

@@ -11,7 +11,9 @@ public class ItemPecaOSConfiguration : IEntityTypeConfiguration<ItemPecaOS>
         builder.ToTable("ItensPecaOS");
         builder.HasKey(i => i.Id);
 
-        builder.Property(i => i.Quantidade).IsRequired();
+        builder.Property(i => i.Quantidade)
+            .IsRequired()
+            .HasColumnType("decimal(18,3)");
         builder.Property(i => i.PrecoUnitario).HasColumnType("decimal(10,2)");
         builder.Property(i => i.ValorTotal).HasColumnType("decimal(10,2)");
 
