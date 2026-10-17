@@ -14,7 +14,7 @@ namespace SgaAutoEletrica.UI.ViewModels.OrdensServico;
 public class ListaOSViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
-    private const int TamanhoPagina = 20;
+    private const int TamanhoPagina = 40;
 
     public ObservableCollection<OrdemServicoResumoDTO> Ordens { get; } = new();
     public List<string> StatusOpcoes { get; } = new() { "Todos", "Aberta", "EmAndamento", "AguardandoPecas", "Finalizada", "Cancelada" };

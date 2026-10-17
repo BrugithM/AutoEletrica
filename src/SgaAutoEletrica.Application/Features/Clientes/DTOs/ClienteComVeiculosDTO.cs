@@ -4,8 +4,8 @@ public class ClienteComVeiculosDTO
 {
     public Guid Id { get; set; }
     public string NomeCompleto { get; set; } = string.Empty;
-    public string Cpf { get; set; } = string.Empty;
-    public string Telefone { get; set; } = string.Empty;
+    public string? CpfCnpj { get; set; }
+    public string? Telefone { get; set; }
     public string? EnderecoCompleto { get; set; }
     public List<VeiculoResumoDTO> Veiculos { get; set; } = new();
 }

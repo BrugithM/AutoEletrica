@@ -271,22 +271,6 @@ public partial class MainWindow : Window
         NavegarPara(view);
     }
 
-    private void BtnBuscarPlaca_Click(object sender, RoutedEventArgs e)
-    {
-        EsconderDashboard();
-        var input = Microsoft.VisualBasic.Interaction.InputBox("Digite a placa:", "Buscar Placa", "");
-        if (!string.IsNullOrWhiteSpace(input))
-        {
-            var view = App.ServiceProvider.GetRequiredService<SgaAutoEletrica.UI.Views.Veiculos.ListaVeiculosView>();
-            if (view.DataContext is SgaAutoEletrica.UI.ViewModels.Veiculos.ListaVeiculosViewModel vm)
-            {
-                vm.TermoBusca = input;
-                _ = vm.BuscarAsync();
-            }
-            ContentArea.Content = view;
-        }
-    }
-
     private void BtnSair_Click(object sender, RoutedEventArgs e)
     {
         var confirmacao = MessageBox.Show(

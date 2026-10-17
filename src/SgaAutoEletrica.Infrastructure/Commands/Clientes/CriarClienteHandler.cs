@@ -18,7 +18,7 @@ public class CriarClienteHandler : IRequestHandler<CriarClienteCommand, Guid>
 
     public async Task<Guid> Handle(CriarClienteCommand request, CancellationToken cancellationToken)
     {
-        var cliente = new Cliente(request.NomeCompleto, request.Cpf, request.Telefone);
+        var cliente = new Cliente(request.NomeCompleto, request.CpfCnpj, request.Telefone);
 
         if (!string.IsNullOrWhiteSpace(request.Logradouro) &&
             !string.IsNullOrWhiteSpace(request.Bairro) &&

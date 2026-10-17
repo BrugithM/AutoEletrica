@@ -4,7 +4,7 @@ using SgaAutoEletrica.Domain.Entities;
 
 namespace SgaAutoEletrica.Infrastructure.Persistence.Configurations;
 
-public class ClienteConfigueation : IEntityTypeConfiguration<Cliente>
+public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
 {
     public void Configure(EntityTypeBuilder<Cliente> builder)
     {
@@ -20,20 +20,24 @@ public class ClienteConfigueation : IEntityTypeConfiguration<Cliente>
         
         builder.Property(c => c.Ativo).IsRequired();
 
-        builder.OwnsOne(c => c.Cpf, cpf =>
+        builder.OwnsOne(c => c.CpfCnpj, cpfCnpj =>
         {
-            cpf.Property(p => p.Valor)
-            .HasColumnName("Cpf")
-            .IsRequired()
-            .HasMaxLength(11);
+            cpfCnpj.Property(p => p.Valor)
+                .HasColumnName("CpfCnpj")
+                .IsRequired(false)
+                .HasMaxLength(14);
+
+            cpfCnpj.Property(p => p.EhCpf)
+                .HasColumnName("EhCpf")
+                .IsRequired(false);
         });
 
         builder.OwnsOne(c => c.Telefone, telefone =>
         {
             telefone.Property(t => t.Valor)
-            .HasColumnName("Telefone")
-            .IsRequired()
-            .HasMaxLength(11);
+                .HasColumnName("Telefone")
+                .IsRequired(false)
+                .HasMaxLength(11);
         });
 
         builder.OwnsOne(c => c.Endereco, endereco =>

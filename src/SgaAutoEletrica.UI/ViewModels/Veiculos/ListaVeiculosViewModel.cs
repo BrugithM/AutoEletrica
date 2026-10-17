@@ -15,7 +15,7 @@ namespace SgaAutoEletrica.UI.ViewModels.Veiculos;
 public class ListaVeiculosViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
-    private const int TamanhoPagina = 20;
+    private const int TamanhoPagina = 40;
 
     public ObservableCollection<VeiculoDTO> Veiculos { get; } = new();
 

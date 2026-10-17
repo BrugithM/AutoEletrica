@@ -1,5 +1,7 @@
 using System.Windows;
+using System.Windows.Controls;
 using MediatR;
+using SgaAutoEletrica.Domain.ValueObjects;
 using SgaAutoEletrica.UI.ViewModels.Clientes;
 
 namespace SgaAutoEletrica.UI.Views.Clientes;
@@ -32,41 +34,35 @@ public partial class CadastroClienteWindow : Window
         _viewModel.Limpar();
     }
 
-    private void TxtCpf_LostFocus(object sender, RoutedEventArgs e)
-{
-    if (string.IsNullOrWhiteSpace(_viewModel.Cpf)) return;
-
-    try
+    private void TxtCpfCnpj_LostFocus(object sender, RoutedEventArgs e)
     {
-        var cpf = new SgaAutoEletrica.Domain.ValueObjects.Cpf(_viewModel.Cpf);
-        _viewModel.Cpf = cpf.Formatado();
-        OnPropertyChanged(nameof(_viewModel.Cpf));
-    }
-    catch
-    {
-    }
-}
+        if (string.IsNullOrWhiteSpace(_viewModel.CpfCnpj)) return;
 
-private void TxtTelefone_LostFocus(object sender, RoutedEventArgs e)
-{
-    if (string.IsNullOrWhiteSpace(_viewModel.Telefone)) return;
-
-    try
-    {
-        var tel = new SgaAutoEletrica.Domain.ValueObjects.Telefone(_viewModel.Telefone);
-        _viewModel.Telefone = tel.Formatado();
-        OnPropertyChanged(nameof(_viewModel.Telefone));
+        try
+        {
+            var cpfCnpj = CpfCnpj.Criar(_viewModel.CpfCnpj);
+            _viewModel.CpfCnpj = cpfCnpj?.Formatado() ?? string.Empty;
+            TxtCpfCnpj.GetBindingExpression(TextBox.TextProperty)?.UpdateTarget();
+        }
+        catch
+        {
+            // valor inválido: deixa como está, o usuário corrige
+        }
     }
-    catch
-    {
-    }
-}
 
-private void OnPropertyChanged(string propertyName)
-{
-    var binding = TxtCpf.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty);
-    binding?.UpdateTarget();
-    var binding2 = TxtTelefone.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty);
-    binding2?.UpdateTarget();
-}
+    private void TxtTelefone_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(_viewModel.Telefone)) return;
+
+        try
+        {
+            var tel = Telefone.Criar(_viewModel.Telefone);
+            _viewModel.Telefone = tel?.Formatado() ?? string.Empty;
+            TxtTelefone.GetBindingExpression(TextBox.TextProperty)?.UpdateTarget();
+        }
+        catch
+        {
+            // valor inválido: deixa como está
+        }
+    }
 }

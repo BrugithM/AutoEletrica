@@ -39,12 +39,12 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="CPF"/>
-                            <TextBox x:Name="TxtCpf"
-                                     Text="{Binding Cpf, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBlock Text="CPF/CNPJ"/>
+                            <TextBox x:Name="TxtCpfCnpj"
+                                     Text="{Binding CpfCnpj, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
                                     Margin="0,2,0,0"
-                                     LostFocus="TxtCpf_LostFocus"/>
+                                     LostFocus="TxtCpfCnpj_LostFocus"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">

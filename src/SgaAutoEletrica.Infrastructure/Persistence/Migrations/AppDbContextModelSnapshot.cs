@@ -15,7 +15,7 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.CategoriaPeca", b =>
                 {
@@ -617,7 +617,6 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("Valor")
-                                .IsRequired()
                                 .HasMaxLength(11)
                                 .HasColumnType("TEXT")
                                 .HasColumnName("Telefone");
@@ -630,16 +629,19 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("ClienteId");
                         });
 
-                    b.OwnsOne("SgaAutoEletrica.Domain.ValueObjects.Cpf", "Cpf", b1 =>
+                    b.OwnsOne("SgaAutoEletrica.Domain.ValueObjects.CpfCnpj", "CpfCnpj", b1 =>
                         {
                             b1.Property<Guid>("ClienteId")
                                 .HasColumnType("TEXT");
 
+                            b1.Property<bool?>("EhCpf")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("EhCpf");
+
                             b1.Property<string>("Valor")
-                                .IsRequired()
-                                .HasMaxLength(11)
+                                .HasMaxLength(14)
                                 .HasColumnType("TEXT")
-                                .HasColumnName("Cpf");
+                                .HasColumnName("CpfCnpj");
 
                             b1.HasKey("ClienteId");
 
@@ -649,13 +651,11 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("ClienteId");
                         });
 
-                    b.Navigation("Cpf")
-                        .IsRequired();
+                    b.Navigation("CpfCnpj");
 
                     b.Navigation("Endereco");
 
-                    b.Navigation("Telefone")
-                        .IsRequired();
+                    b.Navigation("Telefone");
                 });
 
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.Fornecedor", b =>

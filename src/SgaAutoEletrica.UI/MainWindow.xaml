@@ -228,17 +228,6 @@
                                                                    HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                         </Button>
-                                        <Button Click="BtnBuscarPlaca_Click"
-                                                Style="{StaticResource AtalhoButtonStyle}">
-                                                <StackPanel>
-                                                        <TextBlock Text="🔍"
-                                                                   FontSize="24"
-                                                                   HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Buscar Placa"
-                                                                   FontSize="11"
-                                                                   HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                        </Button>
                                 </StackPanel>
                         </ScrollViewer>
                 </Border>

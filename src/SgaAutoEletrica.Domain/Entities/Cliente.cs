@@ -5,8 +5,8 @@ public class Cliente
 {
     public Guid Id { get; private set; }
     public string NomeCompleto { get; private set; }
-    public Cpf Cpf { get; private set; }
-    public Telefone Telefone { get; private set; }
+    public CpfCnpj? CpfCnpj { get; private set; }
+    public Telefone? Telefone { get; private set; }
     public Endereco? Endereco { get; private set; }
     public DateTime DataCadastro { get; private set; }
     public bool Ativo { get; private set; }
@@ -16,29 +16,28 @@ public class Cliente
     private Cliente()
     {
         NomeCompleto = string.Empty;
-        Cpf = null!;
-        Telefone = null!;
     }
 
-    public Cliente(string nomeCompleto, string cpf, string telefone)
+    public Cliente(string nomeCompleto, string? cpfCnpj, string? telefone)
     {
         if (string.IsNullOrWhiteSpace(nomeCompleto))
             throw new ArgumentException("Nome é obrigatório", nameof(nomeCompleto));
 
         Id = Guid.NewGuid();
         NomeCompleto = nomeCompleto;
-        Cpf = new Cpf(cpf);
-        Telefone = new Telefone(telefone);
+        CpfCnpj = CpfCnpj.Criar(cpfCnpj);
+        Telefone = Telefone.Criar(telefone);
         DataCadastro = DateTime.UtcNow;
         Ativo = true;
     }
 
-    public void AtualizarDados(string nomeCompleto, string telefone)
+    public void AtualizarDados(string nomeCompleto, string? cpfCnpj, string? telefone)
     {
         if (string.IsNullOrWhiteSpace(nomeCompleto))
             throw new ArgumentException("Nome é obrigatório", nameof(nomeCompleto));
         NomeCompleto = nomeCompleto;
-        Telefone = new Telefone(telefone);
+        CpfCnpj = CpfCnpj.Criar(cpfCnpj);
+        Telefone = Telefone.Criar(telefone);
     }
 
     public void AdicionarEndereco(Endereco endereco)

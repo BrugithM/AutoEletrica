@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using MediatR;
 using SgaAutoEletrica.Domain.ValueObjects;
 using SgaAutoEletrica.UI.ViewModels.Fornecedores;
@@ -49,9 +50,9 @@ public partial class CadastroFornecedorWindow : Window
 
         try
         {
-            var tel = new Telefone(_viewModel.Telefone);
-            _viewModel.Telefone = tel.Formatado();
-            TxtTelefone.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty)?.UpdateTarget();
+            var tel = Telefone.Criar(_viewModel.Telefone);
+            _viewModel.Telefone = tel?.Formatado() ?? string.Empty;
+            TxtTelefone.GetBindingExpression(TextBox.TextProperty)?.UpdateTarget();
         }
         catch
         {

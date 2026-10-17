@@ -65,7 +65,7 @@
                                  VerticalContentAlignment="Center"
                                  Padding="4"
                                  Margin="0,0,2,0"
-                                 ToolTip="Nome, CPF ou Telefone"/>
+                                 ToolTip="Nome, CPF/CNPJ ou Telefone"/>
                         <Button Content="⌕"
                                 Command="{Binding BuscarCommand}"
                                 Width="28"
@@ -108,7 +108,7 @@
 
                                         <StackPanel Grid.Column="1"
                                                     Margin="0,0,5,0">
-                                                <TextBlock Text="CPF:"
+                                                <TextBlock Text="CPF/CNPJ:"
                                                            FontWeight="SemiBold"
                                                            Margin="0,0,0,3"/>
                                                 <TextBox Text="{Binding BuscaCpf, UpdateSourceTrigger=PropertyChanged}"
@@ -179,8 +179,8 @@
                                 <DataGridTextColumn Header="Nome"
                                                     Binding="{Binding NomeCompleto}"
                                                     Width="250"/>
-                                <DataGridTextColumn Header="CPF"
-                                                    Binding="{Binding Cpf}"
+                                <DataGridTextColumn Header="CPF/CNPJ"
+                                                    Binding="{Binding CpfCnpj}"
                                                     Width="140"/>
                                 <DataGridTextColumn Header="Telefone"
                                                     Binding="{Binding Telefone}"

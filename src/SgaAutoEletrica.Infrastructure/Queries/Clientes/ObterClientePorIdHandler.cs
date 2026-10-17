@@ -24,8 +24,8 @@ public class ObterClientePorIdHandler : IRequestHandler<ObterClientePorIdQuery, 
             {
                 Id = c.Id,
                 NomeCompleto = c.NomeCompleto,
-                Cpf = c.Cpf.Valor,
-                Telefone = c.Telefone.Valor,
+                CpfCnpj = c.CpfCnpj != null ? c.CpfCnpj.Formatado() : null,
+                Telefone = c.Telefone != null ? c.Telefone.Formatado() : null,
                 EnderecoCompleto = c.Endereco != null ? c.Endereco.Completo() : null,
                 DataCadastro = c.DataCadastro,
                 QuantidadeVeiculos = c.Veiculos.Count

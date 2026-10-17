@@ -2,22 +2,31 @@ namespace SgaAutoEletrica.Domain.ValueObjects;
 
 public class Telefone
 {
-    public string Valor {get; }
-    public Telefone(string valor)
+    public string Valor { get; }
+
+    private Telefone(string valor)
     {
+        Valor = valor;
+    }
+
+    public static Telefone? Criar(string? valor)
+    {
+        if (string.IsNullOrWhiteSpace(valor))
+            return null;
+
         var apenasNumeros = RemoverFormatacao(valor);
 
         if (!EhValido(apenasNumeros))
             throw new ArgumentException($"Telefone inválido: {valor}");
 
-        Valor = apenasNumeros;
+        return new Telefone(apenasNumeros);
     }
 
     public string Formatado()
     {
-        if (Valor.Length == 11) 
+        if (Valor.Length == 11)
             return Convert.ToUInt64(Valor).ToString(@"(00) 00000-0000");
-        else 
+        else
             return Convert.ToUInt64(Valor).ToString(@"(00) 0000-0000");
     }
 
@@ -30,7 +39,6 @@ public class Telefone
         if (telefone.Length < 10 || telefone.Length > 11)
             return false;
 
-        // Não pode ser todos iguais
         if (telefone.All(c => c == telefone[0]))
             return false;
 
@@ -52,5 +60,4 @@ public class Telefone
     public override int GetHashCode() => Valor.GetHashCode();
 
     public override string ToString() => Formatado();
-
 }

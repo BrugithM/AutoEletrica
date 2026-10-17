@@ -189,8 +189,6 @@
                 <DataGridTextColumn Header="Mín." Binding="{Binding EstoqueMinimo}" Width="50"/>
                 <DataGridTextColumn Header="Custo" Binding="{Binding ValorCusto, StringFormat=C2}" Width="80"/>
                 <DataGridTextColumn Header="Venda" Binding="{Binding ValorVenda, StringFormat=C2}" Width="80"/>
-                <DataGridTextColumn Header="Lucro" Binding="{Binding MargemLucro, StringFormat={}{0:F1}%}" Width="70"/>
-                <DataGridTextColumn Header="Markup" Binding="{Binding MarkupPercentual, StringFormat={}{0:F1}%}" Width="70"/>
                 <DataGridTextColumn Header="Fornecedor" Binding="{Binding FornecedorNome}" Width="150"/>
             </DataGrid.Columns>
         </DataGrid>

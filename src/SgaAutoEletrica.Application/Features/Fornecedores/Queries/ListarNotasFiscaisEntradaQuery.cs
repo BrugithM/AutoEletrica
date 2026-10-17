@@ -8,5 +8,5 @@ public class ListarNotasFiscaisEntradaQuery : IRequest<ListaPaginadaDTO<NotaFisc
 {
     public string? TermoBusca { get; set; }
     public int Pagina { get; set; } = 1;
-    public int TamanhoPagina { get; set; } = 20;
+    public int TamanhoPagina { get; set; } = 40;
 }

@@ -91,7 +91,7 @@
                                                     Binding="{Binding ValorTotal, StringFormat=C2}"
                                                     Width="120"/>
                                 <DataGridTextColumn Header="Abertura"
-                                                    Binding="{Binding DataAbertura, StringFormat=dd/MM/yyyy HH:mm}"
+                                                    Binding="{Binding DataAbertura, Converter={StaticResource UtcParaLocal}, StringFormat=dd/MM/yyyy HH:mm}"
                                                     Width="150"/>
                         </DataGrid.Columns>
                 </DataGrid>

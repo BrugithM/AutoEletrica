@@ -9,6 +9,7 @@
                 <conv:InverterBoolConverter x:Key="InverterBoolConverter"/>
                 <conv:DecimalConverter x:Key="DecimalConverter"/>
                 <conv:BoolParaStatusConverter x:Key="BoolParaStatusConverter"/>
+                <conv:UtcParaLocalConverter x:Key="UtcParaLocal"/>
                 <conv:InverterBoolParaVisibilidadeConverter x:Key="InverterBoolParaVisibilidade"/>
 
                 <!-- Estilo dos botões de atalho -->

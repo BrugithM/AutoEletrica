@@ -86,8 +86,8 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
                 Observacao = v.Observacao,
                 ClienteId = v.ClienteId,
                 NomeCliente = v.Cliente.NomeCompleto,
-                CpfCliente = v.Cliente.Cpf.Formatado(),
-                TelefoneCliente = v.Cliente.Telefone.Formatado(),
+                CpfCliente = v.Cliente.CpfCnpj != null ? v.Cliente.CpfCnpj.Formatado() : null,
+                TelefoneCliente = v.Cliente.Telefone != null ? v.Cliente.Telefone.Formatado() : null,
                 Ativo = v.Ativo
             })
             .ToListAsync(cancellationToken);

@@ -50,13 +50,13 @@
 
                     <!-- Nome -->
                     <TextBlock Text="Nome"/>
-                    <TextBox Text="{Binding Nome, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Descricao, UpdateSourceTrigger=PropertyChanged}"
                              Height="26"
                              Margin="0,2,0,10"/>
 
                     <!-- Descrição -->
                     <TextBlock Text="Descrição"/>
-                    <TextBox Text="{Binding Descricao, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Nome, UpdateSourceTrigger=PropertyChanged}"
                              Height="26"
                              Margin="0,2,0,10"/>
 

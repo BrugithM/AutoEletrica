@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Clientes.Commands;
+using SgaAutoEletrica.Domain.Entities;
 using SgaAutoEletrica.Domain.ValueObjects;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
@@ -21,7 +22,7 @@ public class AtualizarClienteHandler : IRequestHandler<AtualizarClienteCommand>
             .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken)
             ?? throw new InvalidOperationException("Cliente não encontrado.");
 
-        cliente.AtualizarDados(request.NomeCompleto, request.Telefone);
+        cliente.AtualizarDados(request.NomeCompleto, request.CpfCnpj, request.Telefone);
 
         if (!string.IsNullOrWhiteSpace(request.Logradouro) &&
             !string.IsNullOrWhiteSpace(request.Bairro) &&

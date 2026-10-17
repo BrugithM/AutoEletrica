@@ -28,8 +28,8 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
             var termo = request.TermoBusca.Trim().ToLower();
             query = query.Where(c =>
                 c.NomeCompleto.ToLower().Contains(termo) ||
-                c.Cpf.Valor.Contains(termo) ||
-                c.Telefone.Valor.Contains(termo));
+                (c.CpfCnpj != null && c.CpfCnpj.Valor != null && c.CpfCnpj.Valor.Contains(termo)) ||
+                (c.Telefone != null && c.Telefone.Valor != null && c.Telefone.Valor.Contains(termo)));
         }
 
         if (!string.IsNullOrWhiteSpace(request.Nome))
@@ -41,13 +41,13 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
         if (!string.IsNullOrWhiteSpace(request.Cpf))
         {
             var termo = new string(request.Cpf.Where(char.IsDigit).ToArray());
-            query = query.Where(c => c.Cpf.Valor.Contains(termo));
+            query = query.Where(c => c.CpfCnpj != null && c.CpfCnpj.Valor != null && c.CpfCnpj.Valor.Contains(termo));
         }
 
         if (!string.IsNullOrWhiteSpace(request.Telefone))
         {
             var termo = new string(request.Telefone.Where(char.IsDigit).ToArray());
-            query = query.Where(c => c.Telefone.Valor.Contains(termo));
+            query = query.Where(c => c.Telefone != null && c.Telefone.Valor != null && c.Telefone.Valor.Contains(termo));
         }
 
         if (!string.IsNullOrWhiteSpace(request.Endereco))
@@ -74,8 +74,8 @@ public class ListarClientesHandler : IRequestHandler<ListarClientesQuery, ListaP
             {
                 Id = c.Id,
                 NomeCompleto = c.NomeCompleto,
-                Cpf = c.Cpf.Formatado(),
-                Telefone = c.Telefone.Formatado(),
+                CpfCnpj = c.CpfCnpj != null ? c.CpfCnpj.Formatado() : null,
+                Telefone = c.Telefone != null ? c.Telefone.Formatado() : null,
                 EnderecoCompleto = c.Endereco != null ? c.Endereco.Completo() : null,
                 DataCadastro = c.DataCadastro,
                 QuantidadeVeiculos = c.Veiculos.Count(v => v.Ativo),

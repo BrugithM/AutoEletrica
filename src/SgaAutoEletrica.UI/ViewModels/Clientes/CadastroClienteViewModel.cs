@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Features.Clientes.Commands;
 using SgaAutoEletrica.Application.Features.Clientes.Queries;
 
@@ -14,7 +13,7 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
     private readonly Guid? _clienteId;
 
     public string NomeCompleto { get; set; } = string.Empty;
-    public string Cpf { get; set; } = string.Empty;
+    public string CpfCnpj { get; set; } = string.Empty;
     public string Telefone { get; set; } = string.Empty;
     public string Logradouro { get; set; } = string.Empty;
     public string Numero { get; set; } = string.Empty;
@@ -44,38 +43,38 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
     }
 
     private async void CarregarDadosAsync(Guid clienteId)
-{
-    var cliente = await _mediator.Send(new ObterClienteParaEdicaoQuery { Id = clienteId });
-    if (cliente != null)
     {
-        NomeCompleto = cliente.NomeCompleto;
-        Cpf = cliente.Cpf;
-        Telefone = cliente.Telefone;
-        Logradouro = cliente.Logradouro ?? "";
-        Numero = cliente.Numero ?? "";
-        Complemento = cliente.Complemento ?? "";
-        Bairro = cliente.Bairro ?? "";
-        Cidade = cliente.Cidade ?? "";
-        Estado = cliente.Estado ?? "";
-        Cep = cliente.Cep ?? "";
+        var cliente = await _mediator.Send(new ObterClienteParaEdicaoQuery { Id = clienteId });
+        if (cliente != null)
+        {
+            NomeCompleto = cliente.NomeCompleto;
+            CpfCnpj = cliente.CpfCnpj ?? "";
+            Telefone = cliente.Telefone ?? "";
+            Logradouro = cliente.Logradouro ?? "";
+            Numero = cliente.Numero ?? "";
+            Complemento = cliente.Complemento ?? "";
+            Bairro = cliente.Bairro ?? "";
+            Cidade = cliente.Cidade ?? "";
+            Estado = cliente.Estado ?? "";
+            Cep = cliente.Cep ?? "";
 
-        OnPropertyChanged(nameof(NomeCompleto));
-        OnPropertyChanged(nameof(Cpf));
-        OnPropertyChanged(nameof(Telefone));
-        OnPropertyChanged(nameof(Logradouro));
-        OnPropertyChanged(nameof(Numero));
-        OnPropertyChanged(nameof(Complemento));
-        OnPropertyChanged(nameof(Bairro));
-        OnPropertyChanged(nameof(Cidade));
-        OnPropertyChanged(nameof(Estado));
-        OnPropertyChanged(nameof(Cep));
+            OnPropertyChanged(nameof(NomeCompleto));
+            OnPropertyChanged(nameof(CpfCnpj));
+            OnPropertyChanged(nameof(Telefone));
+            OnPropertyChanged(nameof(Logradouro));
+            OnPropertyChanged(nameof(Numero));
+            OnPropertyChanged(nameof(Complemento));
+            OnPropertyChanged(nameof(Bairro));
+            OnPropertyChanged(nameof(Cidade));
+            OnPropertyChanged(nameof(Estado));
+            OnPropertyChanged(nameof(Cep));
+        }
     }
-}
 
     public void Limpar()
     {
         NomeCompleto = string.Empty;
-        Cpf = string.Empty;
+        CpfCnpj = string.Empty;
         Telefone = string.Empty;
         Logradouro = string.Empty;
         Numero = string.Empty;
@@ -86,7 +85,7 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
         Cep = string.Empty;
 
         OnPropertyChanged(nameof(NomeCompleto));
-        OnPropertyChanged(nameof(Cpf));
+        OnPropertyChanged(nameof(CpfCnpj));
         OnPropertyChanged(nameof(Telefone));
         OnPropertyChanged(nameof(Logradouro));
         OnPropertyChanged(nameof(Numero));
@@ -99,21 +98,25 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
 
     public async Task<bool> SalvarAsync()
     {
-        if (string.IsNullOrWhiteSpace(NomeCompleto) || string.IsNullOrWhiteSpace(Cpf))
+        if (string.IsNullOrWhiteSpace(NomeCompleto))
         {
-            MessageBox.Show("Nome e CPF são obrigatórios.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Nome é obrigatório.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
 
         try
         {
+            var cpfCnpjNormalizado = string.IsNullOrWhiteSpace(CpfCnpj) ? null : CpfCnpj;
+            var telefoneNormalizado = string.IsNullOrWhiteSpace(Telefone) ? null : Telefone;
+
             if (_clienteId.HasValue)
             {
                 await _mediator.Send(new AtualizarClienteCommand
                 {
                     Id = _clienteId.Value,
                     NomeCompleto = NomeCompleto,
-                    Telefone = Telefone,
+                    CpfCnpj = cpfCnpjNormalizado,      
+                    Telefone = telefoneNormalizado,
                     Logradouro = Logradouro,
                     Numero = Numero,
                     Complemento = Complemento,
@@ -128,8 +131,8 @@ public class CadastroClienteViewModel : INotifyPropertyChanged
                 await _mediator.Send(new CriarClienteCommand
                 {
                     NomeCompleto = NomeCompleto,
-                    Cpf = Cpf,
-                    Telefone = Telefone,
+                    CpfCnpj = cpfCnpjNormalizado,
+                    Telefone = telefoneNormalizado,
                     Logradouro = Logradouro,
                     Numero = Numero,
                     Complemento = Complemento,

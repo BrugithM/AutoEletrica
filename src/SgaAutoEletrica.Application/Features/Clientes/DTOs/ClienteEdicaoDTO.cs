@@ -4,8 +4,8 @@ public class ClienteEdicaoDTO
 {
     public Guid Id { get; set; }
     public string NomeCompleto { get; set; } = string.Empty;
-    public string Cpf { get; set; } = string.Empty;
-    public string Telefone { get; set; } = string.Empty;
+    public string? CpfCnpj { get; set; } = string.Empty;
+    public string? Telefone { get; set; } = string.Empty;
 
     public string? Logradouro { get; set; }
     public string? Numero { get; set; }

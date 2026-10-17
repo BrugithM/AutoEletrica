@@ -153,7 +153,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
 
         Titulo = $"Detalhes da OS Nº {os.Numero}";
         NumeroOS = os.Numero.ToString();
-        DataAbertura = os.DataAbertura.ToString("dd/MM/yyyy HH:mm");
+        DataAbertura = os.DataAbertura.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
         InfoCliente = $"Cliente: {os.NomeCliente} - CPF: {os.TelefoneCliente}";
         InfoCliente = $"Cliente: {os.NomeCliente} (Tel: {os.TelefoneCliente})";
         InfoVeiculo = $"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - Placa: {os.PlacaVeiculo}";

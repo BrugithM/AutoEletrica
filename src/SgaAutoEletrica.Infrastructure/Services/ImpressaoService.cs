@@ -233,8 +233,8 @@ public class ImpressaoService : IImpressaoService
         float xCol2 = margemEsq + larguraColuna1;
         float xCol3 = xCol2 + larguraColuna2;
 
-        // Logo + empresa
-        DesenharLogoEEmpresa(
+        // Logo 
+        DesenharLogoEmpresa(
             g,
             empresa,
             margemEsq + 10,
@@ -332,13 +332,13 @@ public class ImpressaoService : IImpressaoService
         g.DrawLine(canetaFina, margemEsq, y + alturaLinha, margemDir, y + alturaLinha);
         y += alturaLinha;
 
-        float colVeiculo1 = larguraUtil * 0.50f;
-        float colVeiculo2 = larguraUtil * 0.25f;
+        float colVeiculo1 = larguraUtil * 0.40f;
+        float colVeiculo2 = larguraUtil * 0.30f;
 
         float xV2 = margemEsq + colVeiculo1;
         float xV3 = xV2 + colVeiculo2;
 
-        var descricaoVeiculo = $"{os.MarcaVeiculo} {os.ModeloVeiculo} {os.AnoVeiculo}".Trim();
+        var descricaoVeiculo = $"{os.ModeloVeiculo}".Trim();
 
         g.DrawString("VEÍCULO", fonteLabel, Brushes.Black, margemEsq + 15, y + 18);
         g.DrawString(TruncarTexto(descricaoVeiculo, 45), fonteTexto, Brushes.Black,
@@ -546,7 +546,7 @@ public class ImpressaoService : IImpressaoService
             g.DrawString(textoId, fonteId, Brushes.Black, centroX - tamanhoId.Width / 2, y);
             y += fonteId.GetHeight(g) + 5;
 
-            var nome = peca.Nome.Length > 40 ? peca.Nome.Substring(0, 40) + "..." : peca.Nome;
+            var nome = peca.Descricao.Length > 40 ? peca.Descricao.Substring(0, 40) + "..." : peca.Descricao;
             var tamanhoNome = g.MeasureString(nome, fonteNome);
             g.DrawString(nome, fonteNome, Brushes.Black, centroX - tamanhoNome.Width / 2, y);
             y += fonteNome.GetHeight(g) + 10;
@@ -620,7 +620,7 @@ public class ImpressaoService : IImpressaoService
         printDocument.Print();
     }
 
-    private void DesenharLogoEEmpresa(Graphics g, Domain.Entities.ConfiguracaoEmpresa? empresa,
+    private void DesenharLogoEmpresa(Graphics g, Domain.Entities.ConfiguracaoEmpresa? empresa,
     float x, float y, float larguraMaxima, float alturaMaxima,
     Font fonteTitulo, Font fonteTexto)
 {
@@ -657,10 +657,6 @@ public class ImpressaoService : IImpressaoService
             // Se falhar, segue sem o logo
         }
     }
-
-    var tamanhoTexto = g.MeasureString(empresa.NomeEmpresa, fonteTitulo);
-    var textoY = y + (alturaMaxima - tamanhoTexto.Height) / 2;
-    g.DrawString(empresa.NomeEmpresa, fonteTitulo, Brushes.Black, xAtual, textoY);
 }
 
     private string TruncarTexto(string texto, int tamanhoMaximo)

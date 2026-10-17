@@ -21,7 +21,7 @@ namespace SgaAutoEletrica.UI.ViewModels.Pecas;
 public class ListaPecasViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
-    private const int TamanhoPagina = 20;
+    private const int TamanhoPagina = 40;
 
     public ObservableCollection<PecaDTO> Pecas { get; } = new();
     public ObservableCollection<CategoriaPecaDTO> Categorias { get; } = new();

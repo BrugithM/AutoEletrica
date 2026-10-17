@@ -41,7 +41,7 @@ public class Fornecedor
         Contato = contato;
 
         if(!string.IsNullOrWhiteSpace(telefone))
-        Telefone = new Telefone(telefone);
+        Telefone = Telefone.Criar(telefone);
     }
 
     public void AdicionarEndereco(Endereco endereco)

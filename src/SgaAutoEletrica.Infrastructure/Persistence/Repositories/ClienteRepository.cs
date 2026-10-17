@@ -21,10 +21,17 @@ public class ClienteRepository : IClienteRepository
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
-    public async Task<Cliente?> ObterPorCpf(string cpf, CancellationToken cancellationToken = default)
+    public async Task<Cliente?> ObterPorCpfCnpj(string cpfCnpj, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(cpfCnpj))
+            return null;
+
+        var apenasNumeros = new string(cpfCnpj.Where(char.IsDigit).ToArray());
+
         return await _context.Clientes
-            .FirstOrDefaultAsync(c => c.Cpf.Valor == cpf, cancellationToken);
+            .FirstOrDefaultAsync(
+                c => c.CpfCnpj != null && c.CpfCnpj.Valor == apenasNumeros,
+                cancellationToken);
     }
 
     public async Task<List<Cliente>> ListarTodos(CancellationToken cancellationToken = default)
