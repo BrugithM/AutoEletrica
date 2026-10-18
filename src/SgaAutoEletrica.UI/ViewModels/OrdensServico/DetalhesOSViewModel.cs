@@ -70,6 +70,13 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         private set { _observacao = value; OnPropertyChanged(); }
     }
 
+    private string _descricaoServicos = string.Empty;
+    public string DescricaoServicos
+    {
+        get => _descricaoServicos;
+        private set { _descricaoServicos = value; OnPropertyChanged(); }
+    }
+
     private decimal _valorTotalPecas;
     public decimal ValorTotalPecas
     {
@@ -160,6 +167,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         StatusAtual = os.Status.ToString();
         Status = os.Status;
         Observacao = os.Observacao ?? "";
+        DescricaoServicos = os.DescricaoServicos ?? "";
         ValorTotalPecas = os.ValorTotalPecas;
         ValorTotalServicos = os.ValorTotalServicos;
         DescontoPercentual = os.DescontoPercentual;

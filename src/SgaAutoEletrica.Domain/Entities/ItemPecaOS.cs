@@ -42,4 +42,12 @@ public class ItemPecaOS
         PrecoUnitario = novoPreco;
         ValorTotal = Math.Round(Quantidade * novoPreco, 2);
     }
+    public void AtualizarQuantidade(decimal novaQuantidade)
+    {
+        if (novaQuantidade <= 0)
+            throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(novaQuantidade));
+
+        Quantidade = novaQuantidade;
+        ValorTotal = Math.Round(Quantidade * PrecoUnitario, 2);
+    }
 }

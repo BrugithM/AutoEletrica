@@ -12,6 +12,8 @@ public class ItemServicoOSConfiguration : IEntityTypeConfiguration<ItemServicoOS
         builder.HasKey(i => i.Id);
 
         builder.Property(i => i.PrecoUnitario).HasColumnType("decimal(10,2)");
+        builder.Property(i => i.NomePersonalizado).HasColumnType("TEXT");
+
 
         builder.HasOne(i => i.Servico)
             .WithMany()

@@ -10,6 +10,8 @@ public class ItemServicoOS
     public Servico Servico { get; private set; } = null;
 
     public decimal PrecoUnitario { get; private set; }
+    public string? NomePersonalizado { get; private set; }
+
 
     private ItemServicoOS() { }
 
@@ -34,4 +36,11 @@ public class ItemServicoOS
             throw new ArgumentException("Preço unitário não pode ser negativo.", nameof(novoPreco));
 
         PrecoUnitario = novoPreco;
-    }}
+    }
+
+     public void AtualizarNomePersonalizado(string? nome)
+    {
+        NomePersonalizado = string.IsNullOrWhiteSpace(nome) ? null : nome.Trim();
+    }
+    
+    }

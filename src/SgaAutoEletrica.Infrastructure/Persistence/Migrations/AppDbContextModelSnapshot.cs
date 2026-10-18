@@ -245,6 +245,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("NomePersonalizado")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("OrdemServicoId")
                         .HasColumnType("TEXT");
 
@@ -337,11 +340,13 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("DescontoPercentual")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DescricaoServicos")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Observacao")
-                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("Quilometragem")

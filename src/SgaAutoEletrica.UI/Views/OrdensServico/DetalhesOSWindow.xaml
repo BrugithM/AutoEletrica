@@ -94,6 +94,14 @@
         <TabControl Grid.Row="2"
                     Margin="15,0,15,5"
                     MaxHeight="300">
+            <TabItem Header="Descrição de Serviços">
+                <TextBox Text="{Binding DescricaoServicos, Mode=Oneway}"
+                         Margin="10"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         IsReadOnly="True"
+                         VerticalScrollBarVisibility="Auto"/>
+            </TabItem>
             <TabItem Header="Serviços Aplicados">
                 <DataGrid ItemsSource="{Binding ServicosNaOS}"
                           AutoGenerateColumns="False"

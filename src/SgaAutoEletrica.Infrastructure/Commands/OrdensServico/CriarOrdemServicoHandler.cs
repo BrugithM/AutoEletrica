@@ -30,7 +30,7 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
         while (await _context.OrdensServico.AnyAsync(os => os.Numero == proximo, cancellationToken))
             proximo++;
 
-        var os = new OrdemServico(proximo, request.ClienteId, request.VeiculoId, request.Observacao);
+        var os = new OrdemServico(proximo, request.ClienteId, request.VeiculoId, request.Observacao, request.DescricaoServicos);
         if (request.Quilometragem.HasValue)
             os.AtualizarQuilometragem(request.Quilometragem);
 
@@ -50,7 +50,7 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
                 ?? throw new InvalidOperationException("Serviço não encontrado.");
 
             var preco = item.PrecoUnitario > 0 ? item.PrecoUnitario : servico.PrecoPadrao;
-            os.AdicionarServico(item.ServicoId, preco);
+            os.AdicionarServico(item.ServicoId, preco, item.NomePersonalizado);
         }
 
         if (request.DescontoPercentual > 0)

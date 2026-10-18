@@ -41,27 +41,37 @@ public partial class EditarOSWindow : Window
 
     private void PecasGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-        if (e.EditAction == DataGridEditAction.Commit)
+        if (e.EditAction != DataGridEditAction.Commit) return;
+
+        var item = e.Row.Item as ItemPecaOSTemporario;
+        if (item == null) return;
+
+        var header = e.Column.Header?.ToString();
+
+        Dispatcher.BeginInvoke(new Action(async () =>
         {
-            var item = e.Row.Item as ItemPecaOSTemporario;
-            if (item != null)
-            {
-                Dispatcher.BeginInvoke(new Action(async () => await _viewModel.SalvarPrecoPecaAsync(item)),
-                    System.Windows.Threading.DispatcherPriority.Background);
-            }
-        }
+            if (header == "Qtd")
+                await _viewModel.SalvarQuantidadePecaAsync(item);
+            else if (header == "Valor Unit. (R$)")
+                await _viewModel.SalvarPrecoPecaAsync(item);
+        }), System.Windows.Threading.DispatcherPriority.Background);
     }
 
     private void ServicosGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-        if (e.EditAction == DataGridEditAction.Commit)
+        if (e.EditAction != DataGridEditAction.Commit) return;
+
+        var item = e.Row.Item as ItemServicoOSTemporario;
+        if (item == null) return;
+
+        var header = e.Column.Header?.ToString();
+
+        Dispatcher.BeginInvoke(new Action(async () =>
         {
-            var item = e.Row.Item as ItemServicoOSTemporario;
-            if (item != null)
-            {
-                Dispatcher.BeginInvoke(new Action(async () => await _viewModel.SalvarPrecoServicoAsync(item)),
-                    System.Windows.Threading.DispatcherPriority.Background);
-            }
-        }
+            if (header == "Serviço")
+                await _viewModel.SalvarNomeServicoAsync(item);
+            else if (header == "Valor Unit. (R$)")
+                await _viewModel.SalvarPrecoServicoAsync(item);
+        }), System.Windows.Threading.DispatcherPriority.Background);
     }
 }

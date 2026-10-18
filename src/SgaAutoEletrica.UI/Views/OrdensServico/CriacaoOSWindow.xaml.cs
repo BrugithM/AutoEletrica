@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using MediatR;
 using SgaAutoEletrica.UI.ViewModels.OrdensServico;
 
@@ -43,5 +44,26 @@ public partial class CriacaoOSWindow : Window
         var sucesso = await _viewModel.SalvarAsync(true);
         if (sucesso)
             DialogResult = true;
+    }
+
+    private void PecasGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+        if (e.EditAction != DataGridEditAction.Commit) return;
+        if (e.Column.Header?.ToString() != "Qtd") return;
+
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            _viewModel.RecalcularTotais();
+        }), System.Windows.Threading.DispatcherPriority.Background);
+    }
+
+    private void ServicosGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+        if (e.EditAction != DataGridEditAction.Commit) return;
+
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            _viewModel.RecalcularTotais();
+        }), System.Windows.Threading.DispatcherPriority.Background);
     }
 }

@@ -12,7 +12,8 @@ public class OrdemServicoConfiguration : IEntityTypeConfiguration<OrdemServico>
         builder.HasKey(os => os.Id);
 
         builder.Property(os => os.Numero).IsRequired();
-        builder.Property(os => os.Observacao).HasMaxLength(1000);
+        builder.Property(os => os.Observacao).HasColumnType("TEXT");
+        builder.Property(os => os.DescricaoServicos).HasColumnType("TEXT");
         builder.Property(os => os.DataAbertura).IsRequired();
 
         builder.Property(os => os.Status)

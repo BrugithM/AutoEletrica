@@ -110,6 +110,13 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         set { _observacao = value; OnPropertyChanged(); }
     }
 
+    private string _descricaoServicos = string.Empty;
+    public string DescricaoServicos
+    {
+        get => _descricaoServicos;
+        set { _descricaoServicos = value; OnPropertyChanged(); }
+    }
+
     private decimal _desconto;
     public decimal Desconto
     {
@@ -261,6 +268,7 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
             };
 
             PecasNaOS.Add(novo);
+            OrdenarPecas();
         }
 
         OnPropertyChanged(nameof(ValorTotalPecas));
@@ -274,7 +282,7 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         var novo = new ItemServicoTemporario
         {
             ServicoId = ServicoSelecionado.Id,
-            Nome = ServicoSelecionado.Nome,
+            NomeOriginal = ServicoSelecionado.Nome,
             Preco = ServicoSelecionado.PrecoPadrao
         };
 
@@ -293,6 +301,14 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ValorTotalGeral));
     }
 
+    public void OrdenarPecas()
+    {
+        var ordenadas = PecasNaOS.OrderBy(p => p.Nome, StringComparer.CurrentCultureIgnoreCase).ToList();
+        PecasNaOS.Clear();
+        foreach (var p in ordenadas)
+            PecasNaOS.Add(p);
+    }
+
     private void RemoverPeca()
     {
         if (PecaSelecionadaParaRemover == null) return;
@@ -307,6 +323,13 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
         if (ServicoSelecionadoParaRemover == null) return;
         ServicosNaOS.Remove(ServicoSelecionadoParaRemover);
         ServicoSelecionadoParaRemover = null;
+        OnPropertyChanged(nameof(ValorTotalServicos));
+        OnPropertyChanged(nameof(ValorTotalGeral));
+    }
+
+    public void RecalcularTotais()
+    {
+        OnPropertyChanged(nameof(ValorTotalPecas));
         OnPropertyChanged(nameof(ValorTotalServicos));
         OnPropertyChanged(nameof(ValorTotalGeral));
     }
@@ -336,20 +359,27 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
                 ClienteId = ClienteSelecionado.Id,
                 VeiculoId = VeiculoSelecionado.Id,
                 Observacao = Observacao,
+                DescricaoServicos = string.IsNullOrWhiteSpace(DescricaoServicos) ? null : DescricaoServicos,
                 DescontoPercentual = Desconto,
                 Quilometragem = Quilometragem,
                 AprovarIniciar = aprovarIniciar
             };
 
             foreach (var item in PecasNaOS)
-                command.Pecas.Add(new ItemPecaOSRequest { 
-                    PecaId = item.PecaId, 
+                command.Pecas.Add(new ItemPecaOSRequest
+                {
+                    PecaId = item.PecaId,
                     Quantidade = item.Quantidade,
                     PrecoUnitario = item.PrecoUnitario
-                    });
+                });
 
             foreach (var item in ServicosNaOS)
-                command.Servicos.Add(new ItemServicoOSRequest { ServicoId = item.ServicoId, PrecoUnitario = item.Preco });
+                command.Servicos.Add(new ItemServicoOSRequest
+                {
+                    ServicoId = item.ServicoId,
+                    PrecoUnitario = item.Preco,
+                    NomePersonalizado = item.NomePersonalizado
+                });
 
             await _mediator.Send(command);
 
@@ -403,17 +433,39 @@ public class ItemPecaTemporario : INotifyPropertyChanged
 public class ItemServicoTemporario : INotifyPropertyChanged
 {
     public Guid ServicoId { get; set; }
-    public string Nome { get; set; } = string.Empty;
+
+    public string NomeOriginal { get; set; } = string.Empty;
+
+    private string? _nomePersonalizado;
+    public string? NomePersonalizado
+    {
+        get => _nomePersonalizado;
+        set
+        {
+            _nomePersonalizado = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Nome));
+        }
+    }
+
+    public string Nome
+    {
+        get => NomePersonalizado ?? NomeOriginal;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value) || value == NomeOriginal)
+                NomePersonalizado = null;
+            else
+                NomePersonalizado = value;
+            OnPropertyChanged();
+        }
+    }
 
     private decimal _preco;
     public decimal Preco
     {
         get => _preco;
-        set
-        {
-            _preco = value;
-            OnPropertyChanged();
-        }
+        set { _preco = value; OnPropertyChanged(); }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

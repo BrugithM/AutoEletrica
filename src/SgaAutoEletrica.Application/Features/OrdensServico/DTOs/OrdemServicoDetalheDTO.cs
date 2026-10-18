@@ -8,13 +8,14 @@ public class OrdemServicoDetalheDTO
     public int Numero { get; set; }
     public StatusOS Status { get; set; }
     public string? Observacao { get; set; }
+    public string? DescricaoServicos { get; set; }
     public DateTime DataAbertura { get; set; }
     public DateTime? DataFinalizacao { get; set; }
 
     public Guid ClienteId { get; set; }
     public string NomeCliente { get; set; } = string.Empty;
-    public string? CpfCliente { get; set; } 
-    public string? TelefoneCliente { get; set; } 
+    public string? CpfCliente { get; set; }
+    public string? TelefoneCliente { get; set; }
 
     public Guid VeiculoId { get; set; }
     public string PlacaVeiculo { get; set; } = string.Empty;
@@ -25,8 +26,8 @@ public class OrdemServicoDetalheDTO
 
     public decimal ValorTotalPecas { get; set; }
     public decimal ValorTotalServicos { get; set; }
-    public decimal Desconto{get; set;}
-    public decimal DescontoPercentual{get; set;}
+    public decimal Desconto { get; set; }
+    public decimal DescontoPercentual { get; set; }
     public decimal ValorTotal { get; set; }
 
     public List<ItemPecaOSDTO> ItensPeca { get; set; } = new();
@@ -48,5 +49,6 @@ public class ItemServicoOSDTO
     public Guid Id { get; set; }
     public Guid ServicoId { get; set; }
     public string NomeServico { get; set; } = string.Empty;
+    public string? NomePersonalizado { get; set; }
     public decimal PrecoUnitario { get; set; }
 }

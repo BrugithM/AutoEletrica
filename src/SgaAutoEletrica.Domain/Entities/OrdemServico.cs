@@ -17,10 +17,10 @@ public class OrdemServico
     public DateTime DataAbertura { get; private set; }
     public DateTime? DataFinalizacao { get; private set; }
     public string? Observacao { get; private set; }
-    public int? Quilometragem
-    {
-        get; private set;
-    }
+
+    public string? DescricaoServicos { get; private set; }
+
+    public int? Quilometragem { get; private set; }
 
     public ICollection<ItemPecaOS> ItensPeca { get; private set; } = new List<ItemPecaOS>();
     public ICollection<ItemServicoOS> ItensServico { get; private set; } = new List<ItemServicoOS>();
@@ -34,7 +34,7 @@ public class OrdemServico
 
     private OrdemServico() { }
 
-    public OrdemServico(int numero, Guid clienteId, Guid veiculoId, string? observacao = null)
+    public OrdemServico(int numero, Guid clienteId, Guid veiculoId, string? observacao = null, string? descricaoServicos = null)
     {
         if (numero <= 0)
             throw new ArgumentException("Número da OS deve ser maior que zero.", nameof(numero));
@@ -44,6 +44,7 @@ public class OrdemServico
         ClienteId = clienteId;
         VeiculoId = veiculoId;
         Observacao = observacao;
+        DescricaoServicos = descricaoServicos;
         Status = StatusOS.Aberta;
         DataAbertura = DateTime.UtcNow;
     }
@@ -57,12 +58,15 @@ public class OrdemServico
         ItensPeca.Add(item);
         RecalcularTotais();
     }
-    public void AdicionarServico(Guid servicoId, decimal precoUnitario)
+
+    public void AdicionarServico(Guid servicoId, decimal precoUnitario, string? nomePersonalizado = null)
     {
         if (Status == StatusOS.Finalizada || Status == StatusOS.Cancelada)
             throw new InvalidOperationException("Não é possível adicionar serviços a uma OS finalizada ou cancelada.");
 
         var item = new ItemServicoOS(servicoId, precoUnitario);
+        if (!string.IsNullOrWhiteSpace(nomePersonalizado))
+            item.AtualizarNomePersonalizado(nomePersonalizado);
         ItensServico.Add(item);
         RecalcularTotais();
     }
@@ -126,6 +130,7 @@ public class OrdemServico
         Desconto = Math.Round(subtotal * (DescontoPercentual / 100), 2);
         ValorTotal = Math.Round(subtotal - Desconto, 2);
     }
+
     public void IniciarServico()
     {
         if (Status != StatusOS.Aberta && Status != StatusOS.AguardandoPecas)
@@ -174,5 +179,10 @@ public class OrdemServico
     public void AdicionarObservacao(string observacao)
     {
         Observacao = observacao;
+    }
+
+    public void AtualizarDescricaoServicos(string? descricaoServicos)
+    {
+        DescricaoServicos = descricaoServicos;
     }
 }

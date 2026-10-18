@@ -114,6 +114,13 @@ public class EditarOSViewModel : INotifyPropertyChanged
         set { _observacao = value; OnPropertyChanged(); }
     }
 
+    private string _descricaoServicos = string.Empty;
+    public string DescricaoServicos
+    {
+        get => _descricaoServicos;
+        set { _descricaoServicos = value; OnPropertyChanged(); }
+    }
+
     private int? _quilometragem;
     public int? Quilometragem
     {
@@ -160,11 +167,12 @@ public class EditarOSViewModel : INotifyPropertyChanged
 
         Titulo = $"Editar OS Nº {os.Numero}";
         NumeroOS = os.Numero.ToString();
-        DataAbertura = os.DataAbertura.ToString("dd/MM/yyyy HH:mm");
+        DataAbertura = os.DataAbertura.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
         InfoCliente = $"Cliente: {os.NomeCliente} (Tel: {os.TelefoneCliente})";
         InfoVeiculo = $"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - Placa: {os.PlacaVeiculo}";
         StatusAtual = os.Status.ToString();
         Observacao = os.Observacao ?? "";
+        DescricaoServicos = os.DescricaoServicos ?? "";
         Desconto = os.DescontoPercentual;
         Quilometragem = os.Quilometragem;
 
@@ -189,6 +197,7 @@ public class EditarOSViewModel : INotifyPropertyChanged
             };
             PecasNaOS.Add(item);
         }
+        OrdenarPecas();
 
         ServicosNaOS.Clear();
         foreach (var servico in os.ItensServico)
@@ -197,7 +206,8 @@ public class EditarOSViewModel : INotifyPropertyChanged
             {
                 Id = servico.Id,
                 ServicoId = servico.ServicoId,
-                NomeServico = servico.NomeServico,
+                NomeOriginal = servico.NomeServico,
+                NomePersonalizado = servico.NomePersonalizado,
                 PrecoUnitario = servico.PrecoUnitario
             };
             item.PropertyChanged += (s, e) =>
@@ -222,6 +232,14 @@ public class EditarOSViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ValorTotalPecas));
         OnPropertyChanged(nameof(ValorTotalServicos));
         OnPropertyChanged(nameof(ValorTotalGeral));
+    }
+
+    public void OrdenarPecas()
+    {
+        var ordenadas = PecasNaOS.OrderBy(p => p.NomePeca, StringComparer.CurrentCultureIgnoreCase).ToList();
+        PecasNaOS.Clear();
+        foreach (var p in ordenadas)
+            PecasNaOS.Add(p);
     }
 
     public async Task SalvarPrecoPecaAsync(ItemPecaOSTemporario item)
@@ -259,6 +277,43 @@ public class EditarOSViewModel : INotifyPropertyChanged
 
             OnPropertyChanged(nameof(ValorTotalServicos));
             OnPropertyChanged(nameof(ValorTotalGeral));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    public async Task SalvarQuantidadePecaAsync(ItemPecaOSTemporario item)
+    {
+        try
+        {
+            await _mediator.Send(new AtualizarQuantidadeItemOSCommand
+            {
+                OrdemServicoId = _osId,
+                ItemId = item.Id,
+                NovaQuantidade = item.Quantidade
+            });
+
+            OnPropertyChanged(nameof(ValorTotalPecas));
+            OnPropertyChanged(nameof(ValorTotalGeral));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    public async Task SalvarNomeServicoAsync(ItemServicoOSTemporario item)
+    {
+        try
+        {
+            await _mediator.Send(new AtualizarNomeItemServicoOSCommand
+            {
+                OrdemServicoId = _osId,
+                ItemId = item.Id,
+                NovoNome = item.NomePersonalizado
+            });
         }
         catch (Exception ex)
         {
@@ -423,6 +478,7 @@ public class EditarOSViewModel : INotifyPropertyChanged
             };
             PecasNaOS.Add(item);
         }
+        OrdenarPecas();
 
         ServicosNaOS.Clear();
         foreach (var servico in os.ItensServico)
@@ -431,7 +487,8 @@ public class EditarOSViewModel : INotifyPropertyChanged
             {
                 Id = servico.Id,
                 ServicoId = servico.ServicoId,
-                NomeServico = servico.NomeServico,
+                NomeOriginal = servico.NomeServico,
+                NomePersonalizado = servico.NomePersonalizado,
                 PrecoUnitario = servico.PrecoUnitario
             };
             item.PropertyChanged += (s, e) =>
@@ -454,6 +511,12 @@ public class EditarOSViewModel : INotifyPropertyChanged
     {
         try
         {
+            await _mediator.Send(new AtualizarDescricaoServicosOSCommand
+            {
+                OrdemServicoId = _osId,
+                DescricaoServicos = string.IsNullOrWhiteSpace(DescricaoServicos) ? null : DescricaoServicos
+            });
+
             await _mediator.Send(new AtualizarObservacaoOSCommand
             {
                 OrdemServicoId = _osId,
@@ -494,8 +557,20 @@ public class ItemPecaOSTemporario : INotifyPropertyChanged
 {
     public Guid Id { get; set; }
     public int PecaId { get; set; }
-    public string NomePeca { get; set; } = string.Empty;
-    public decimal Quantidade { get; set; }
+
+    private string _nomePeca = string.Empty;
+    public string NomePeca
+    {
+        get => _nomePeca;
+        set { _nomePeca = value; OnPropertyChanged(); }
+    }
+
+    private decimal _quantidade;
+    public decimal Quantidade
+    {
+        get => _quantidade;
+        set { _quantidade = value; OnPropertyChanged(); OnPropertyChanged(nameof(ValorTotal)); }
+    }
 
     private decimal _precoUnitario;
     public decimal PrecoUnitario
@@ -520,7 +595,34 @@ public class ItemServicoOSTemporario : INotifyPropertyChanged
 {
     public Guid Id { get; set; }
     public Guid ServicoId { get; set; }
-    public string NomeServico { get; set; } = string.Empty;
+
+    public string NomeOriginal { get; set; } = string.Empty;
+
+    private string? _nomePersonalizado;
+    public string? NomePersonalizado
+    {
+        get => _nomePersonalizado;
+        set
+        {
+            _nomePersonalizado = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(NomeServico));
+        }
+    }
+
+    public string NomeServico
+    {
+        get => NomePersonalizado ?? NomeOriginal;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value) || value == NomeOriginal)
+                NomePersonalizado = null;
+            else
+                NomePersonalizado = value;
+
+            OnPropertyChanged();
+        }
+    }
 
     private decimal _precoUnitario;
     public decimal PrecoUnitario
@@ -536,4 +638,5 @@ public class ItemServicoOSTemporario : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
 }

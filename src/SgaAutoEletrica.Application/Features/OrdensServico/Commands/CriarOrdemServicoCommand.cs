@@ -13,6 +13,7 @@ public class ItemServicoOSRequest
 {
     public Guid ServicoId { get; set; }
     public decimal PrecoUnitario { get; set; }
+    public string? NomePersonalizado{get; set;}
 }
 
 public class CriarOrdemServicoCommand : IRequest<Guid>
@@ -20,6 +21,7 @@ public class CriarOrdemServicoCommand : IRequest<Guid>
     public Guid ClienteId { get; set; }
     public Guid VeiculoId { get; set; }
     public string? Observacao { get; set; }
+    public string? DescricaoServicos{get;set;}
     public decimal DescontoPercentual { get; set; }
     public int? Quilometragem { get; set; }
     public bool AprovarIniciar { get; set; } 
