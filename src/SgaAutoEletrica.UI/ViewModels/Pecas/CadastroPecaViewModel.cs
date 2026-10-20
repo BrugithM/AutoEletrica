@@ -12,6 +12,7 @@ using SgaAutoEletrica.Application.Features.Fornecedores.Queries;
 using SgaAutoEletrica.Application.Features.Marcas.DTOs;
 using SgaAutoEletrica.Application.Features.Marcas.Queries;
 using SgaAutoEletrica.Application.Features.Pecas.Commands;
+using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.Application.Features.Pecas.Queries;
 
 namespace SgaAutoEletrica.UI.ViewModels.Pecas;
@@ -116,7 +117,7 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
     public ICommand NovaCategoriaCommand { get; }
     public ICommand NovaMarcaCommand { get; }
 
-    public CadastroPecaViewModel(IMediator mediator, int? pecaId = null)
+    public CadastroPecaViewModel(IMediator mediator, int? pecaId = null, PecaDTO? pecaPDuplicar = null)
     {
         _mediator = mediator;
         _pecaId = pecaId;
@@ -129,6 +130,44 @@ public class CadastroPecaViewModel : INotifyPropertyChanged
             Titulo = "Editar Peça";
             CarregarDadosAsync(pecaId.Value);
         }
+        else if(pecaPDuplicar != null)
+        {
+            Titulo = "Duplicar Peça";
+            PreencherDadosParaDuplicacao(pecaPDuplicar);
+        }
+    }
+
+    private void PreencherDadosParaDuplicacao(PecaDTO peca)
+    {
+        _recalculando=true;
+
+        CodigoPeca = peca.CodigoPeca ?? "";
+        CodigoBarras = peca.CodigoBarras ?? "";
+        Nome = peca.Nome;
+        Descricao = peca.Descricao;
+        ValorCusto = peca.ValorCusto;
+        ValorVenda = peca.ValorVenda;
+        MargemLucro = peca.MargemLucro;
+        Markup = peca.MarkupPercentual;
+        EstoqueInicial = peca.Estoque; 
+        EstoqueMinimo = peca.EstoqueMinimo;
+
+        _recalculando = false;
+
+        _marcaIdParaSelecionar = peca.MarcaId;
+        _categoriaIdParaSelecionar = peca.CategoriaId;
+        _fornecedorIdParaSelecionar = peca.FornecedorId;
+
+        OnPropertyChanged(nameof(CodigoPeca));
+        OnPropertyChanged(nameof(CodigoBarras));
+        OnPropertyChanged(nameof(Nome));
+        OnPropertyChanged(nameof(Descricao));
+        OnPropertyChanged(nameof(ValorCusto));
+        OnPropertyChanged(nameof(ValorVenda));
+        OnPropertyChanged(nameof(MargemLucro));
+        OnPropertyChanged(nameof(Markup));
+        OnPropertyChanged(nameof(EstoqueInicial));
+        OnPropertyChanged(nameof(EstoqueMinimo));
     }
 
     private async void CarregarDadosAsync(int pecaId)

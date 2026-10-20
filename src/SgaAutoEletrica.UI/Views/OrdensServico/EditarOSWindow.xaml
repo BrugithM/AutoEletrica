@@ -126,6 +126,9 @@
                                                         <ComboBox ItemsSource="{Binding ServicosDisponiveis}"
                                                                   SelectedItem="{Binding ServicoSelecionado}"
                                                                   DisplayMemberPath="Nome"
+                                                                  IsEditable="True"
+                                                                  IsTextSearchEnabled="True"
+                                                                  TextSearch.TextPath="Nome"
                                                                   Width="400"
                                                                   Height="28"
                                                                   Margin="0,0,10,0"/>
@@ -151,7 +154,7 @@
                                         </Grid>
 
                                         <DataGrid Grid.Row="1"
-                                                x:Name="ServicosGrid"
+                                                  x:Name="ServicosGrid"
                                                   ItemsSource="{Binding ServicosNaOS}"
                                                   SelectedItem="{Binding ServicoSelecionadoParaRemover}"
                                                   AutoGenerateColumns="False"
@@ -193,6 +196,9 @@
                                                         <ComboBox ItemsSource="{Binding PecasDisponiveis}"
                                                                   SelectedItem="{Binding PecaSelecionada}"
                                                                   DisplayMemberPath="Nome"
+                                                                  IsEditable="True"
+                                                                  IsTextSearchEnabled="True"
+                                                                  TextSearch.TextPath="Nome"
                                                                   Width="300"
                                                                   Height="24"
                                                                   Margin="0,0,10,0"/>

@@ -15,29 +15,32 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                Text="Ficha Cadastral:"
-                FontWeight="Bold"
-                FontSize="13"
-                Margin="0,0,0,10"/>
+                   Text="Ficha Cadastral:"
+                   FontWeight="Bold"
+                   FontSize="13"
+                   Margin="0,0,0,10"/>
 
         <StackPanel Grid.Row="1">
             <!-- Cliente Associado -->
             <GroupBox Header="Cliente Associado"
-                    Padding="10"
-                    Margin="0,0,0,10">
+                      Padding="10"
+                      Margin="0,0,0,10">
                 <StackPanel>
                     <TextBlock Text="Nome Completo"/>
                     <ComboBox ItemsSource="{Binding Clientes}"
                               SelectedItem="{Binding ClienteSelecionado}"
                               DisplayMemberPath="NomeCompleto"
+                              IsEditable="True"
+                              IsTextSearchEnabled="True"
+                              TextSearch.TextPath="NomeCompleto"
                               Height="26"
-                            Margin="0,2,0,0"/>
+                              Margin="0,2,0,0"/>
                 </StackPanel>
             </GroupBox>
 
             <!-- Detalhes do Veículo -->
             <GroupBox Header="Detalhes do Veículo Selecionado"
-                    Padding="10">
+                      Padding="10">
                 <StackPanel>
                     <!-- Placa / Marca -->
                     <Grid Margin="0,0,0,10">
@@ -51,15 +54,15 @@
                             <TextBlock Text="Placa"/>
                             <TextBox Text="{Binding Placa, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"
-                                    MaxLength="7"/>
+                                     Margin="0,2,0,0"
+                                     MaxLength="7"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Marca"/>
                             <TextBox Text="{Binding Marca, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"/>
+                                     Margin="0,2,0,0"/>
                         </StackPanel>
                     </Grid>
 
@@ -75,14 +78,14 @@
                             <TextBlock Text="Modelo"/>
                             <TextBox Text="{Binding Modelo, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"/>
+                                     Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Ano"/>
                             <TextBox Text="{Binding Ano, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"/>
+                                     Margin="0,2,0,0"/>
                         </StackPanel>
                     </Grid>
 
@@ -98,14 +101,14 @@
                             <TextBlock Text="Versão"/>
                             <TextBox Text="{Binding Versao, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"/>
+                                     Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Motor"/>
                             <TextBox Text="{Binding Motor, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"/>
+                                     Margin="0,2,0,0"/>
                         </StackPanel>
                     </Grid>
 
@@ -119,25 +122,17 @@
 
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="Tipo Motor"/>
-                            <ComboBox SelectedItem="{Binding TipoMotor}"
-                                    Height="26"
-                                    Margin="0,2,0,0">
-                                <ComboBoxItem Content="Gasolina"/>
-                                <ComboBoxItem Content="Etanol"/>
-                                <ComboBoxItem Content="Flex"/>
-                                <ComboBoxItem Content="Diesel"/>
-                                <ComboBoxItem Content="GNV"/>
-                                <ComboBoxItem Content="Elétrico"/>
-                                <ComboBoxItem Content="Híbrido"/>
-                                <ComboBoxItem Content="Outro"/>
-                            </ComboBox>
+                            <ComboBox ItemsSource="{Binding TiposMotorDisponiveis}"
+                                      SelectedItem="{Binding TipoMotor}"
+                                      Height="26"
+                                      Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Cor"/>
                             <TextBox Text="{Binding Cor, UpdateSourceTrigger=PropertyChanged}"
                                      Height="26"
-                                    Margin="0,2,0,0"/>
+                                     Margin="0,2,0,0"/>
                         </StackPanel>
                     </Grid>
 
@@ -146,25 +141,25 @@
                     <Grid Margin="0,2,0,0">
                         <TextBox Text="{Binding Observacao, UpdateSourceTrigger=PropertyChanged}"
                                  Height="80"
-                                TextWrapping="Wrap"
-                                AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
                                  VerticalScrollBarVisibility="Auto"
                                  MaxLength="500"/>
                         <TextBlock Text="{Binding ObservacaoLength, StringFormat={}{0}/500}"
                                    HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"
+                                   VerticalAlignment="Bottom"
                                    Margin="0,0,5,3"
-                                Foreground="#888"
-                                FontSize="10"/>
+                                   Foreground="#888"
+                                   FontSize="10"/>
                     </Grid>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
 
         <StackPanel Grid.Row="2"
-                Orientation="Horizontal"
-                HorizontalAlignment="Right"
-                Margin="0,15,0,0">
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,15,0,0">
             <Button Content="Salvar"
                     Width="90"
                     Style="{StaticResource BotaoPadraoStyle}"

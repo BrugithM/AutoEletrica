@@ -202,8 +202,24 @@
                 <Style x:Key="InativoRowStyle"
                        TargetType="DataGridRow">
                         <Style.Triggers>
-                                <DataTrigger Binding="{Binding Ativo}"
+                                <DataTrigger Binding="{Binding Status}"
                                              Value="False">
+                                        <Setter Property="Background"
+                                                Value="#F0F0F0"/>
+                                        <Setter Property="Foreground"
+                                                Value="#999999"/>
+                                        <Setter Property="FontStyle"
+                                                Value="Italic"/>
+                                        <Setter Property="Opacity"
+                                                Value="0.6"/>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+                <Style x:Key="CanceladaRowStyle"
+                       TargetType="DataGridRow">
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status}"
+                                             Value="Cancelada">
                                         <Setter Property="Background"
                                                 Value="#F0F0F0"/>
                                         <Setter Property="Foreground"

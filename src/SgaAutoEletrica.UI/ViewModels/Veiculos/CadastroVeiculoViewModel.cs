@@ -8,6 +8,7 @@ using SgaAutoEletrica.Application.Features.Clientes.Queries;
 using SgaAutoEletrica.Application.Features.Veiculos.Commands;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.Queries;
+using SgaAutoEletrica.Domain.Enums;
 
 namespace SgaAutoEletrica.UI.ViewModels.Veiculos;
 
@@ -24,7 +25,12 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     public int Ano { get; set; } = 0;
     public string Versao { get; set; } = string.Empty;
     public string Motor { get; set; } = string.Empty;
-    public string TipoMotor { get; set; } = string.Empty;
+    private TipoMotor? _tipoMotor;
+    public TipoMotor? TipoMotor
+    {
+        get => _tipoMotor;
+        set { _tipoMotor = value; OnPropertyChanged(); }
+    }
     public string Cor { get; set; } = string.Empty;
     private string _observacao = string.Empty;
     public string Observacao
@@ -42,6 +48,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
 
     public ObservableCollection<ClienteResumoDTO> Clientes { get; } = new();
 
+    public Array TiposMotorDisponiveis { get; } = Enum.GetValues(typeof(SgaAutoEletrica.Domain.Enums.TipoMotor));
     private ClienteResumoDTO? _clienteSelecionado;
     public ClienteResumoDTO? ClienteSelecionado
     {
@@ -80,7 +87,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             Ano = veiculo.Ano;
             Versao = veiculo.Versao ?? "";
             Motor = veiculo.Motor ?? "";
-            TipoMotor = veiculo.TipoMotor ?? "";
+            TipoMotor = veiculo.TipoMotor;
             Cor = veiculo.Cor ?? "";
             Observacao = veiculo.Observacao ?? "";
             _clienteIdDoVeiculo = veiculo.ClienteId;
@@ -186,7 +193,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         Ano = 0;
         Versao = string.Empty;
         Motor = string.Empty;
-        TipoMotor = string.Empty;
+        TipoMotor = null;
         Cor = string.Empty;
         Observacao = string.Empty;
         ClienteSelecionado = null;

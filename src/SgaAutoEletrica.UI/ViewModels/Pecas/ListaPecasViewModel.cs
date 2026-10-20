@@ -15,6 +15,7 @@ using SgaAutoEletrica.Application.Features.Marcas.Queries;
 using SgaAutoEletrica.Application.Features.Pecas.Commands;
 using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.Application.Features.Pecas.Queries;
+using SgaAutoEletrica.UI.Views.Pecas;
 
 namespace SgaAutoEletrica.UI.ViewModels.Pecas;
 
@@ -127,7 +128,7 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     public bool BuscaApenasEstoqueBaixo
     {
         get => _buscaApenasEstoqueBaixo;
-        set { _buscaApenasEstoqueBaixo = value; OnPropertyChanged(); }
+        set { _buscaApenasEstoqueBaixo = value; OnPropertyChanged(); _ = BuscarAsync();}
     }
     private bool _mostrarInativos;
     public bool MostrarInativos
@@ -171,6 +172,7 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     public ICommand DesativarPecaCommand { get; }
     public ICommand MovimentarEstoqueCommand { get; }
     public ICommand AtualizarCommand { get; }
+    public ICommand DuplicarPecaCommand { get; }
     public ICommand AbrirFornecedorCommand { get; }
     public ICommand PaginaAnteriorCommand { get; }
     public ICommand ProximaPaginaCommand { get; }
@@ -187,6 +189,7 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         DesativarPecaCommand = new RelayCommand(async _ => await DesativarPecaAsync(), _ => TemPecaSelecionada && EhAdministrador);
         MovimentarEstoqueCommand = new RelayCommand(async _ => await MovimentarEstoqueAsync(), _ => TemPecaSelecionada && EhAdministrador);
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
+        DuplicarPecaCommand = new RelayCommand(async _ => await DuplicarPecaAsync(), _ => PecaSelecionada != null);
         AbrirFornecedorCommand = new RelayCommand(_ => AbrirFornecedor(), _ => TemFornecedor);
         PaginaAnteriorCommand = new RelayCommand(async _ => await IrParaPaginaAnterior(), _ => TemPaginaAnterior);
         ProximaPaginaCommand = new RelayCommand(async _ => await IrParaProximaPagina(), _ => TemProximaPagina);
@@ -196,18 +199,21 @@ public class ListaPecasViewModel : INotifyPropertyChanged
     {
         Categorias.Clear();
         Categorias.Add(new CategoriaPecaDTO { Id = Guid.Empty, Nome = "Todas" });
+        Categorias.Add(new CategoriaPecaDTO { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Nome = "(Sem Categoria)" });
         var cats = await _mediator.Send(new ListarCategoriasPecaQuery());
         foreach (var cat in cats)
             Categorias.Add(cat);
 
         Fornecedores.Clear();
         Fornecedores.Add(new FornecedorDTO { Id = Guid.Empty, NomeEmpresa = "Todos" });
+        Fornecedores.Add(new FornecedorDTO { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), NomeEmpresa = "(Sem Fornecedor)" });
         var forns = await _mediator.Send(new ListarFornecedoresQuery());
         foreach (var forn in forns)
             Fornecedores.Add(forn);
 
         Marcas.Clear();
         Marcas.Add(new MarcaDTO { Id = 0, Nome = "Todas" });
+        Marcas.Add(new MarcaDTO {Id = -1, Nome = "(Sem Marca)"});
         var marcas = await _mediator.Send(new ListarMarcasQuery());
         foreach (var m in marcas)
             Marcas.Add(m);
@@ -230,12 +236,12 @@ public class ListaPecasViewModel : INotifyPropertyChanged
                 Nome = ModoBuscaAvancada ? BuscaNome : null,
                 CodigoPeca = ModoBuscaAvancada ? BuscaCodigoPeca : null,
                 CodigoBarras = ModoBuscaAvancada ? BuscaCodigoBarras : null,
-                MarcaId = ModoBuscaAvancada && BuscaMarca != null && BuscaMarca.Id > 0 ? BuscaMarca.Id : null,
-                CategoriaId = ModoBuscaAvancada && BuscaCategoria != null && BuscaCategoria.Id != Guid.Empty 
+                MarcaId = ModoBuscaAvancada && BuscaMarca != null && (BuscaMarca.Id > 0 || BuscaMarca.Id == -1) ? BuscaMarca.Id : null,
+                CategoriaId = ModoBuscaAvancada && BuscaCategoria != null && BuscaCategoria.Id != Guid.Empty
                     ? BuscaCategoria.Id : null,
-                FornecedorId = ModoBuscaAvancada && BuscaFornecedor != null && BuscaFornecedor.Id != Guid.Empty 
+                FornecedorId = ModoBuscaAvancada && BuscaFornecedor != null && BuscaFornecedor.Id != Guid.Empty
                     ? BuscaFornecedor.Id : null,
-                ApenasEstoqueBaixo = ModoBuscaAvancada && BuscaApenasEstoqueBaixo,
+                ApenasEstoqueBaixo = BuscaApenasEstoqueBaixo,
                 Ativo = MostrarInativos ? null : true,
                 Pagina = PaginaAtual,
                 TamanhoPagina = TamanhoPagina
@@ -286,6 +292,25 @@ public class ListaPecasViewModel : INotifyPropertyChanged
         await BuscarAsync();
     }
 
+    private async Task DuplicarPecaAsync()
+    {
+        if (PecaSelecionada == null) return;
+
+        var pecaCompleta = await _mediator.Send(new ObterPecaPorIdQuery { Id = PecaSelecionada.Id });
+
+        if (pecaCompleta == null)
+        {
+            MessageBox.Show("Não foi possível carregar os dados da peça.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        var dialog = new CadastroPecaWindow(_mediator, null, pecaCompleta);
+
+        if (dialog.ShowDialog() == true)
+        {
+            await BuscarAsync();
+        }
+    }
     private async Task DesativarPecaAsync()
     {
         if (PecaSelecionada == null) return;

@@ -32,13 +32,6 @@ public class AtualizarVeiculoHandler : IRequestHandler<AtualizarVeiculoCommand>
         if (veiculo.ClienteId != request.ClienteId)
             veiculo.AlterarCliente(request.ClienteId);
 
-        TipoMotor? tipoMotor = null;
-        if (!string.IsNullOrWhiteSpace(request.TipoMotor) &&
-            Enum.TryParse<TipoMotor>(request.TipoMotor, out var parsed))
-        {
-            tipoMotor = parsed;
-        }
-
         veiculo.AtualizarDados(
             request.Placa,
             request.Modelo,
@@ -46,7 +39,7 @@ public class AtualizarVeiculoHandler : IRequestHandler<AtualizarVeiculoCommand>
             request.Ano,
             request.Versao,
             request.Motor,
-            tipoMotor,
+            request.TipoMotor,
             request.Cor,
             request.Observacao);
 

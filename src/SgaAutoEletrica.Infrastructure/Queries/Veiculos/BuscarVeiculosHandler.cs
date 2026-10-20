@@ -81,7 +81,7 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
                 Ano = v.Ano,
                 Versao = v.Versao,
                 Motor = v.Motor,
-                TipoMotor = v.TipoMotor != null ? v.TipoMotor.ToString() : null,
+                TipoMotor = v.TipoMotor,
                 Cor = v.Cor,
                 Observacao = v.Observacao,
                 ClienteId = v.ClienteId,

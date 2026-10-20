@@ -116,6 +116,9 @@
                                       ItemsSource="{Binding PecasDisponiveis}"
                                       SelectedItem="{Binding PecaSelecionada}"
                                       DisplayMemberPath="Nome"
+                                      IsEditable="True"
+                                      IsTextSearchEnabled="True"
+                                      TextSearch.TextPath="Nome"
                                       Height="26"/>
                             <Button Grid.Column="1"
                                     Content="➕"

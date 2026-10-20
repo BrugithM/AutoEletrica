@@ -29,16 +29,14 @@ public class Veiculo
     }
 
     // Construtor para cadastro manual.
-    public Veiculo(string placa, Guid clienteId, string modelo, string marca, int ano)
+    public Veiculo(string placa, Guid clienteId, string modelo, string marca, int ano,
+        string? versao = null, string? motor = null, TipoMotor? tipoMotor = null, 
+        string? cor = null, string? observacao = null)
     {
-        if (string.IsNullOrWhiteSpace(placa))
-            throw new ArgumentException("Placa é obrigatória.", nameof(placa));
-        if (string.IsNullOrWhiteSpace(modelo))
-            throw new ArgumentException("Modelo é obrigatório.", nameof(modelo));
-        if (string.IsNullOrWhiteSpace(marca))
-            throw new ArgumentException("Marca é obrigatória.", nameof(marca));
-        if (ano < 1950 || ano > DateTime.Now.Year + 1)
-            throw new ArgumentException($"Ano inválido: {ano}. Deve estar entre 1950 e {DateTime.Now.Year + 1}.", nameof(ano));
+        if (string.IsNullOrWhiteSpace(placa)) throw new ArgumentException("Placa é obrigatória.", nameof(placa));
+        if (string.IsNullOrWhiteSpace(modelo)) throw new ArgumentException("Modelo é obrigatório.", nameof(modelo));
+        if (string.IsNullOrWhiteSpace(marca)) throw new ArgumentException("Marca é obrigatória.", nameof(marca));
+        if (ano < 1950 || ano > DateTime.Now.Year + 1) throw new ArgumentException($"Ano inválido: {ano}.");
 
         Id = Guid.NewGuid();
         Placa = new Placa(placa);
@@ -46,6 +44,11 @@ public class Veiculo
         Modelo = modelo;
         Marca = marca;
         Ano = ano;
+        Versao = versao;
+        Motor = motor;
+        TipoMotor = tipoMotor;
+        Cor = cor;
+        Observacao = observacao;
         Ativo = true;
     }
 

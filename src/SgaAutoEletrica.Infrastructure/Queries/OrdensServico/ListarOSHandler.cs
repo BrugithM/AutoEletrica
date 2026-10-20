@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Common.DTOs;
 using SgaAutoEletrica.Application.Features.OrdensServico.DTOs;
 using SgaAutoEletrica.Application.Features.OrdensServico.Queries;
+using SgaAutoEletrica.Domain.Enums;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Queries.OrdensServico;
@@ -24,9 +25,14 @@ public class ListarOSHandler : IRequestHandler<ListarOSQuery, ListaPaginadaDTO<O
             .AsNoTracking()
             .AsQueryable();
 
-        if (request.Status.HasValue)
-            query = query.Where(os => os.Status == request.Status.Value);
-
+        if (request.Status != null && request.Status.Any())
+        {
+            query = query.Where(os => request.Status.Contains(os.Status));
+        }
+        else if(!request.MostrarCanceladas)
+        {
+            query = query.Where(os => os.Status != StatusOS.Cancelada);
+        }
         if (!string.IsNullOrWhiteSpace(request.TermoBusca))
         {
             var termo = request.TermoBusca.Trim().ToLower();

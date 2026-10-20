@@ -20,35 +20,10 @@ public class CriarVeiculoHandler : IRequestHandler<CriarVeiculoCommand, Guid>
     {
         Veiculo veiculo;
 
-        if (!string.IsNullOrWhiteSpace(request.Modelo) &&
-            !string.IsNullOrWhiteSpace(request.Marca) &&
-            request.Ano.HasValue)
+        if (!string.IsNullOrWhiteSpace(request.Modelo) && !string.IsNullOrWhiteSpace(request.Marca) && request.Ano > 0)
         {
-            veiculo = new Veiculo(request.Placa, request.ClienteId, request.Modelo, request.Marca, request.Ano.Value);
-
-            if (!string.IsNullOrWhiteSpace(request.Versao) ||
-                !string.IsNullOrWhiteSpace(request.Motor) ||
-                !string.IsNullOrWhiteSpace(request.Cor) ||
-                !string.IsNullOrWhiteSpace(request.Observacao))
-            {
-                TipoMotor? tipoMotor = null;
-                if (!string.IsNullOrWhiteSpace(request.TipoMotor) &&
-                    Enum.TryParse<TipoMotor>(request.TipoMotor, out var parsed))
-                {
-                    tipoMotor = parsed;
-                }
-
-                veiculo.AtualizarDados(
-                    request.Placa,
-                    request.Modelo,
-                    request.Marca,
-                    request.Ano.Value,
-                    request.Versao,
-                    request.Motor,
-                    tipoMotor,
-                    request.Cor,
-                    request.Observacao);
-            }
+            veiculo = new Veiculo(request.Placa, request.ClienteId, request.Modelo, request.Marca, request.Ano.Value,
+                request.Versao, request.Motor, request.TipoMotor, request.Cor, request.Observacao);
         }
         else
         {

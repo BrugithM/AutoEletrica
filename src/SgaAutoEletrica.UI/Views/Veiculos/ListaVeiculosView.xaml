@@ -49,12 +49,10 @@
                                 Command="{Binding AlternarModoBuscaCommand}"
                                 Width="160"
                                 Style="{StaticResource BotaoPadraoStyle}"/>
-                </StackPanel>
-
                 <!-- Busca Rápida -->
                 <StackPanel Grid.Row="2"
                             Orientation="Horizontal"
-                            Margin="10,0,10,10"
+                            Margin="10,0,0,0"
                             Visibility="{Binding ModoBuscaRapida, Converter={StaticResource BoolParaVisibilidade}}">
                         <TextBlock Text="Pesquisar:"
                                    VerticalAlignment="Center"
@@ -74,12 +72,9 @@
                                 IsDefault="True"
                                 Style="{StaticResource BotaoToolbarStyle}"
                                 Background="Transparent"/>
-
-                        <CheckBox Content="Mostrar inativos"
-                                  IsChecked="{Binding MostrarInativos}"
-                                  VerticalAlignment="Center"
-                                  FontWeight="SemiBold"/>
                 </StackPanel>
+                </StackPanel>
+
 
                 <!-- Busca Avançada -->
                 <Border Grid.Row="2"

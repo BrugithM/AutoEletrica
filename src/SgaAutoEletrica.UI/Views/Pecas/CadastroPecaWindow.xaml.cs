@@ -1,5 +1,6 @@
 using System.Windows;
 using MediatR;
+using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.UI.ViewModels.Pecas;
 
 namespace SgaAutoEletrica.UI.Views.Pecas;
@@ -9,11 +10,11 @@ public partial class CadastroPecaWindow : Window
     private readonly CadastroPecaViewModel _viewModel;
     private readonly IMediator _mediator;
 
-    public CadastroPecaWindow(IMediator mediator, int? pecaId = null)
+    public CadastroPecaWindow(IMediator mediator, int? pecaId = null, PecaDTO? pecaPDuplicar = null)
     {
         InitializeComponent();
         _mediator = mediator;
-        _viewModel = new CadastroPecaViewModel(mediator, pecaId);
+        _viewModel = new CadastroPecaViewModel(mediator, pecaId, pecaPDuplicar);
         DataContext = _viewModel;
         Loaded += CadastroPecaWindow_Loaded;
     }

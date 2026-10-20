@@ -48,10 +48,30 @@
                                            VerticalAlignment="Center"
                                            Margin="10,0,5,0"
                                            FontSize="12"/>
-                                <ComboBox ItemsSource="{Binding StatusOpcoes}"
-                                          SelectedItem="{Binding StatusFiltro}"
-                                          Width="150"
-                                          Height="28"/>
+                                <CheckBox Content="Abertas"
+                                                IsChecked="{Binding FiltroAberta, Mode=TwoWay}"
+                                                VerticalAlignment="Center"
+                                                Margin="10,0,5,0"
+                                                FontWeight="SemiBold"/>
+                                <CheckBox Content="Em Andamento"
+                                                IsChecked="{Binding FiltroEmAndamento, Mode=TwoWay}"
+                                                VerticalAlignment="Center"
+                                                Margin="10,0,5,0"
+                                                FontWeight="SemiBold"/>
+                                <CheckBox Content="Aguardando Peças"
+                                                IsChecked="{Binding FiltroAguardandoPecas, Mode=TwoWay}"
+                                                VerticalAlignment="Center"
+                                                Margin="10,0,5,0"
+                                                FontWeight="SemiBold"/>
+                                <CheckBox Content="Finalizadas"
+                                                IsChecked="{Binding FiltroFinalizada, Mode=TwoWay}"
+                                                VerticalAlignment="Center"
+                                                Margin="10,0,5,0"
+                                                FontWeight="SemiBold"/>
+                                <CheckBox Content="Mostrar Canceladas"
+                                          IsChecked="{Binding MostrarCanceladas, Mode=TwoWay}"
+                                          VerticalAlignment="Center"
+                                          FontWeight="SemiBold"/>
                         </StackPanel>
                 </Border>
 
@@ -70,6 +90,7 @@
                           SelectionMode="Single"
                           CanUserAddRows="False"
                           Margin="10,0,10,10"
+                          RowStyle="{StaticResource CanceladaRowStyle}"
                           MouseDoubleClick="DataGrid_MouseDoubleClick">
                         <DataGrid.Columns>
                                 <DataGridTextColumn Header="Nº"

@@ -17,7 +17,6 @@ public class ListaOSViewModel : INotifyPropertyChanged
     private const int TamanhoPagina = 40;
 
     public ObservableCollection<OrdemServicoResumoDTO> Ordens { get; } = new();
-    public List<string> StatusOpcoes { get; } = new() { "Todos", "Aberta", "EmAndamento", "AguardandoPecas", "Finalizada", "Cancelada" };
 
     private OrdemServicoResumoDTO? _osSelecionada;
     public OrdemServicoResumoDTO? OsSelecionada
@@ -33,16 +32,44 @@ public class ListaOSViewModel : INotifyPropertyChanged
         set { _termoBusca = value; OnPropertyChanged(); }
     }
 
-    private string _statusFiltro = "Todos";
-    public string StatusFiltro
+    private bool _mostrarCanceladas;
+    public bool MostrarCanceladas
     {
-        get => _statusFiltro;
+        get => _mostrarCanceladas;
         set
         {
-            _statusFiltro = value;
+            _mostrarCanceladas = value;
             OnPropertyChanged();
             _ = BuscarAsync();
         }
+    }
+
+    private bool _filtroAberta;
+    public bool FiltroAberta
+    {
+        get => _filtroAberta;
+        set { _filtroAberta = value; OnPropertyChanged(); _ = BuscarAsync(); }
+    }
+
+    private bool _filtroEmAndamento;
+    public bool FiltroEmAndamento
+    {
+        get => _filtroEmAndamento;
+        set { _filtroEmAndamento = value; OnPropertyChanged(); _ = BuscarAsync(); }
+    }
+
+    private bool _filtroAguardandoPecas;
+    public bool FiltroAguardandoPecas
+    {
+        get => _filtroAguardandoPecas;
+        set { _filtroAguardandoPecas = value; OnPropertyChanged(); _ = BuscarAsync(); }
+    }
+
+    private bool _filtroFinalizada;
+    public bool FiltroFinalizada
+    {
+        get => _filtroFinalizada;
+        set { _filtroFinalizada = value; OnPropertyChanged(); _ = BuscarAsync(); }
     }
 
     private int _paginaAtual = 1;
@@ -85,7 +112,16 @@ public class ListaOSViewModel : INotifyPropertyChanged
         _mediator = mediator;
 
         BuscarCommand = new RelayCommand(async _ => { PaginaAtual = 1; await BuscarAsync(); });
-        LimparCommand = new RelayCommand(async _ => { TermoBusca = ""; StatusFiltro = "Todos"; PaginaAtual = 1; await BuscarAsync(); });
+        LimparCommand = new RelayCommand(async _ => { 
+            TermoBusca = ""; 
+            FiltroAberta = false;
+            FiltroEmAndamento = false;
+            FiltroAguardandoPecas = false;
+            FiltroFinalizada = false;
+            MostrarCanceladas = false; 
+            PaginaAtual = 1; 
+            await BuscarAsync(); 
+            });
         NovaOSCommand = new RelayCommand(_ => NovaOS());
         AtualizarCommand = new RelayCommand(async _ => await BuscarAsync());
         VerDetalhesCommand = new RelayCommand(_ => VerDetalhes(), _ => OsSelecionada != null);
@@ -100,14 +136,17 @@ public class ListaOSViewModel : INotifyPropertyChanged
             Ordens.Clear();
             OsSelecionada = null;
 
-            StatusOS? status = null;
-            if (StatusFiltro != "Todos" && Enum.TryParse<StatusOS>(StatusFiltro, out var s))
-                status = s;
+            var statusSelecionados = new List<StatusOS>();
+            if(FiltroAberta) statusSelecionados.Add(StatusOS.Aberta);
+            if(FiltroEmAndamento) statusSelecionados.Add(StatusOS.EmAndamento);
+            if(FiltroAguardandoPecas) statusSelecionados.Add(StatusOS.AguardandoPecas);
+            if(FiltroFinalizada) statusSelecionados.Add(StatusOS.Finalizada);
 
             var resultado = await _mediator.Send(new ListarOSQuery
             {
                 TermoBusca = TermoBusca,
-                Status = status,
+                Status = statusSelecionados, 
+                MostrarCanceladas = MostrarCanceladas,
                 Pagina = PaginaAtual,
                 TamanhoPagina = TamanhoPagina
             });

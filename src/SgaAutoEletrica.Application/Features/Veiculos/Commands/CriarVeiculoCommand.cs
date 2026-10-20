@@ -1,4 +1,5 @@
 using MediatR;
+using SgaAutoEletrica.Domain.Enums;
 
 namespace SgaAutoEletrica.Application.Features.Veiculos.Commands;
 
@@ -12,7 +13,7 @@ public class CriarVeiculoCommand : IRequest<Guid>
     public int? Ano { get; set; }
     public string? Versao { get; set; }
     public string? Motor { get; set; }
-    public string? TipoMotor { get; set; }
+    public TipoMotor? TipoMotor { get; set; }
     public string? Cor { get; set; }
     public string? Observacao { get; set; }
 }

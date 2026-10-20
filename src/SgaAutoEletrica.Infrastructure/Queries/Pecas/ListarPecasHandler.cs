@@ -53,14 +53,29 @@ public class ListarPecasHandler : IRequestHandler<ListarPecasQuery, ListaPaginad
             query = query.Where(p => p.CodigoBarras != null && p.CodigoBarras.Valor.Contains(termo));
         }
 
-        if (request.MarcaId.HasValue)
-            query = query.Where(p => p.MarcaId == request.MarcaId.Value);
+         if (request.MarcaId.HasValue)
+        {
+            if (request.MarcaId.Value == -1) 
+                query = query.Where(p => p.MarcaId == null);
+            else if (request.MarcaId.Value != 0)
+                query = query.Where(p => p.MarcaId == request.MarcaId.Value);
+        }
 
         if (request.CategoriaId.HasValue && request.CategoriaId.Value != Guid.Empty)
-            query = query.Where(p => p.CategoriaId == request.CategoriaId.Value);
+            {
+                if(request.CategoriaId.Value == Guid.Parse("00000000-0000-0000-0000-000000000001"))
+                    query = query.Where(p => p.CategoriaId == null);
+                else
+                    query = query.Where(p => p.CategoriaId == request.CategoriaId.Value);
+            }
 
         if (request.FornecedorId.HasValue && request.FornecedorId.Value != Guid.Empty)
-            query = query.Where(p => p.FornecedorId == request.FornecedorId.Value);
+            {
+                if(request.FornecedorId.Value == Guid.Parse("00000000-0000-0000-0000-000000000001"))
+                    query = query.Where(p => p.FornecedorId == null);
+                else
+                    query = query.Where(p => p.FornecedorId == request.FornecedorId.Value);
+            }
 
         if (request.ApenasEstoqueBaixo)
             query = query.Where(p => p.Estoque <= p.EstoqueMinimo);
