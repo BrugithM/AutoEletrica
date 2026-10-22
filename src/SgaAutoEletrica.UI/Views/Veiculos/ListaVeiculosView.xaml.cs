@@ -17,7 +17,8 @@ public partial class ListaVeiculosView : UserControl
     }
 
     private async void ListaVeiculosView_Loaded(object sender, RoutedEventArgs e)
-    {
-        await _viewModel.BuscarAsync();
-    }
+{
+    await _viewModel.CarregarMarcasAsync(); 
+    await _viewModel.BuscarAsync();
+}
 }

@@ -10,6 +10,7 @@ public class BuscarVeiculosQuery : IRequest<ListaPaginadaDTO<VeiculoDTO>>
 
     public string? Placa { get; set; }
     public string? Modelo { get; set; }
+    public Guid? MarcaId { get; set; }
     public string? Marca { get; set; }
     public string? NomeCliente { get; set; }
     public int? Ano { get; set; }

@@ -60,9 +60,27 @@
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Marca"/>
-                            <TextBox Text="{Binding Marca, UpdateSourceTrigger=PropertyChanged}"
-                                     Height="26"
-                                     Margin="0,2,0,0"/>
+                            <Grid Margin="0,2,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Grid.Column="0"
+                                          ItemsSource="{Binding MarcasVeiculo}"
+                                          SelectedItem="{Binding MarcaVeiculoSelecionada}"
+                                          DisplayMemberPath="Nome"
+                                          IsEditable="True"
+                                          IsTextSearchEnabled="True"
+                                          TextSearch.TextPath="Nome"
+                                          Height="26"/>
+                                <Button Grid.Column="1"
+                                        Content="➕"
+                                        Command="{Binding NovaMarcaVeiculoCommand}"
+                                        Width="30"
+                                        Style="{StaticResource BotaoPadraoStyle}"
+                                        Margin="5,0,0,0"
+                                        ToolTip="Nova Marca de Veículo"/>
+                            </Grid>
                         </StackPanel>
                     </Grid>
 

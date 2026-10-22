@@ -2,9 +2,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Features.Clientes.DTOs;
 using SgaAutoEletrica.Application.Features.Clientes.Queries;
+using SgaAutoEletrica.Application.Features.MarcasVeiculo.DTOs;
+using SgaAutoEletrica.Application.Features.MarcasVeiculo.Queries;
 using SgaAutoEletrica.Application.Features.Veiculos.Commands;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.Queries;
@@ -25,12 +29,14 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     public int Ano { get; set; } = 0;
     public string Versao { get; set; } = string.Empty;
     public string Motor { get; set; } = string.Empty;
+
     private TipoMotor? _tipoMotor;
     public TipoMotor? TipoMotor
     {
         get => _tipoMotor;
         set { _tipoMotor = value; OnPropertyChanged(); }
     }
+
     public string Cor { get; set; } = string.Empty;
     private string _observacao = string.Empty;
     public string Observacao
@@ -47,8 +53,19 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
     public int ObservacaoLength => Observacao.Length;
 
     public ObservableCollection<ClienteResumoDTO> Clientes { get; } = new();
-
     public Array TiposMotorDisponiveis { get; } = Enum.GetValues(typeof(SgaAutoEletrica.Domain.Enums.TipoMotor));
+
+    public ObservableCollection<MarcaVeiculoDTO> MarcasVeiculo { get; } = new();
+
+    private MarcaVeiculoDTO? _marcaVeiculoSelecionada;
+    public MarcaVeiculoDTO? MarcaVeiculoSelecionada
+    {
+        get => _marcaVeiculoSelecionada;
+        set { _marcaVeiculoSelecionada = value; OnPropertyChanged(); }
+    }
+
+    public ICommand NovaMarcaVeiculoCommand { get; }
+
     private ClienteResumoDTO? _clienteSelecionado;
     public ClienteResumoDTO? ClienteSelecionado
     {
@@ -69,6 +86,8 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         _veiculoId = veiculoId;
         _clienteIdPreSelecionado = clienteIdPreSelecionado;
 
+        NovaMarcaVeiculoCommand = new RelayCommand(async _ => await NovaMarcaVeiculoAsync());
+
         if (veiculoId.HasValue)
         {
             Titulo = "Editar Veículo";
@@ -78,6 +97,8 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
 
     private async void CarregarDadosAsync(Guid veiculoId)
     {
+        await CarregarMarcasVeiculoAsync();
+
         var veiculo = await _mediator.Send(new ObterVeiculoPorIdQuery { Id = veiculoId });
         if (veiculo != null)
         {
@@ -92,6 +113,14 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             Observacao = veiculo.Observacao ?? "";
             _clienteIdDoVeiculo = veiculo.ClienteId;
 
+            MarcaVeiculoSelecionada = MarcasVeiculo.FirstOrDefault(m => m.Id == veiculo.MarcaVeiculoId);
+
+            if (MarcaVeiculoSelecionada == null && !string.IsNullOrWhiteSpace(veiculo.Marca))
+            {
+                MarcaVeiculoSelecionada = MarcasVeiculo.FirstOrDefault(m => 
+                    string.Equals(m.Nome, veiculo.Marca, StringComparison.OrdinalIgnoreCase));
+            }
+
             await CarregarClientesAsync();
             ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == veiculo.ClienteId);
 
@@ -105,6 +134,14 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Cor));
             OnPropertyChanged(nameof(Observacao));
         }
+    }
+
+    public async Task CarregarMarcasVeiculoAsync()
+    {
+        MarcasVeiculo.Clear();
+        var marcas = await _mediator.Send(new ListarMarcasVeiculoQuery { Ativo = true });
+        foreach (var m in marcas)
+            MarcasVeiculo.Add(m);
     }
 
     public async Task CarregarClientesAsync()
@@ -128,7 +165,21 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         }
     }
 
-    public async Task<bool> SalvarAsync()
+    private async Task NovaMarcaVeiculoAsync()
+    {
+        var dialog = new Views.MarcasVeiculo.CadastroMarcaVeiculoWindow(App.ServiceProvider.GetRequiredService<IMediator>());
+        if (dialog.ShowDialog() == true)
+        {
+            var idsAntes = MarcasVeiculo.Select(m => m.Id).ToHashSet();
+            await CarregarMarcasVeiculoAsync();
+
+            var nova = MarcasVeiculo.FirstOrDefault(m => !idsAntes.Contains(m.Id));
+            if (nova != null)
+                MarcaVeiculoSelecionada = nova;
+        }
+    }
+
+        public async Task<bool> SalvarAsync()
     {
         if (string.IsNullOrWhiteSpace(Placa))
         {
@@ -142,47 +193,65 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(Modelo) || string.IsNullOrWhiteSpace(Marca))
+        if (string.IsNullOrWhiteSpace(Modelo))
         {
-            MessageBox.Show("Modelo e Marca são obrigatórios.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Modelo é obrigatório.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
 
-        if (_veiculoId.HasValue)
+        if (MarcaVeiculoSelecionada == null)
         {
-            await _mediator.Send(new AtualizarVeiculoCommand
-            {
-                Id = _veiculoId.Value,
-                ClienteId = ClienteSelecionado.Id,
-                Placa = Placa,
-                Modelo = Modelo,
-                Marca = Marca,
-                Ano = Ano,
-                Versao = Versao,
-                Motor = Motor,
-                TipoMotor = TipoMotor,
-                Cor = Cor,
-                Observacao = Observacao
-            });
-        }
-        else
-        {
-            await _mediator.Send(new CriarVeiculoCommand
-            {
-                Placa = Placa,
-                ClienteId = ClienteSelecionado.Id,
-                Modelo = Modelo,
-                Marca = Marca,
-                Ano = Ano,
-                Versao = Versao,
-                Motor = Motor,
-                TipoMotor = TipoMotor,
-                Cor = Cor,
-                Observacao = Observacao
-            });
+            MessageBox.Show("Selecione uma marca válida.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
         }
 
-        return true;
+        try
+        {
+            if (_veiculoId.HasValue)
+            {
+                await _mediator.Send(new AtualizarVeiculoCommand
+                {
+                    Id = _veiculoId.Value,
+                    ClienteId = ClienteSelecionado.Id,
+                    Placa = Placa,
+                    Modelo = Modelo,
+                    Marca = MarcaVeiculoSelecionada.Nome, 
+                    MarcaVeiculoId = MarcaVeiculoSelecionada.Id, 
+                    Ano = Ano,
+                    Versao = Versao,
+                    Motor = Motor,
+                    TipoMotor = TipoMotor,
+                    Cor = Cor,
+                    Observacao = Observacao
+                });
+            }
+            else
+            {
+                await _mediator.Send(new CriarVeiculoCommand
+                {
+                    Placa = Placa,
+                    ClienteId = ClienteSelecionado.Id,
+                    Modelo = Modelo,
+                    Marca = MarcaVeiculoSelecionada.Nome,
+                    MarcaVeiculoId = MarcaVeiculoSelecionada.Id, 
+                    Ano = Ano,
+                    Versao = Versao,
+                    Motor = Motor,
+                    TipoMotor = TipoMotor,
+                    Cor = Cor,
+                    Observacao = Observacao
+                });
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            var inner = ex;
+            while (inner.InnerException != null)
+                inner = inner.InnerException;
+            MessageBox.Show($"Erro ao salvar veículo: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
     }
 
     public void Limpar()
@@ -190,6 +259,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         Placa = string.Empty;
         Modelo = string.Empty;
         Marca = string.Empty;
+        MarcaVeiculoSelecionada = null;
         Ano = 0;
         Versao = string.Empty;
         Motor = string.Empty;
@@ -201,6 +271,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Placa));
         OnPropertyChanged(nameof(Modelo));
         OnPropertyChanged(nameof(Marca));
+        OnPropertyChanged(nameof(MarcaVeiculoSelecionada));
         OnPropertyChanged(nameof(Ano));
         OnPropertyChanged(nameof(Versao));
         OnPropertyChanged(nameof(Motor));
@@ -210,6 +281,7 @@ public class CadastroVeiculoViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ObservacaoLength));
         OnPropertyChanged(nameof(ClienteSelecionado));
     }
+
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

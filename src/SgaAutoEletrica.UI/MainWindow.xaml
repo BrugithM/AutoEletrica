@@ -38,8 +38,11 @@
                                 <MenuItem Header="Cadastrar Categorias"
                                           Click="BtnCadastroCategorias_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Cadastrar Marcas"
+                                <MenuItem Header="Cadastrar Marcas de Peças"
                                           Click="BtnCadastroMarcas_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Cadastrar Marcas de Veiculos"
+                                          Click="BtnCadastroMarcasVeiculos_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Gerenciamento">
@@ -58,8 +61,11 @@
                                 <MenuItem Header="Categorias"
                                           Click="BtnCategorias_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
-                                <MenuItem Header="Marcas"
+                                <MenuItem Header="Marcas Peças"
                                           Click="BtnGerenciarMarcas_Click"
+                                          Style="{StaticResource SubMenuItemStyle}"/>
+                                <MenuItem Header="Marcas Veiculos"
+                                          Click="BtnGerenciarMarcasVeiculos_Click"
                                           Style="{StaticResource SubMenuItemStyle}"/>
                                 <MenuItem Header="Notas de Entrada"
                                           Click="BtnNotaEntradaLista_Click"

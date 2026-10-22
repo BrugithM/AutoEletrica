@@ -126,6 +126,11 @@ public partial class MainWindow : Window
         var dialog = new SgaAutoEletrica.UI.Views.Marcas.CadastroMarcaWindow(_mediator);
         dialog.ShowDialog();
     }
+    private void BtnCadastroMarcasVeiculos_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SgaAutoEletrica.UI.Views.MarcasVeiculo.CadastroMarcaVeiculoWindow(_mediator);
+        dialog.ShowDialog();
+    }
 
     // Gerenciamento
 
@@ -165,6 +170,11 @@ public partial class MainWindow : Window
         var dialog = new Views.Marcas.GerenciarMarcasWindow(_mediator);
         dialog.ShowDialog();
     }
+   private void BtnGerenciarMarcasVeiculos_Click(object sender, RoutedEventArgs e)
+{
+    var dialog = new SgaAutoEletrica.UI.Views.MarcasVeiculo.ListaMarcasVeiculoView(_mediator);
+    dialog.ShowDialog(); 
+}
 
     // Estoque
 

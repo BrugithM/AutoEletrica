@@ -18,6 +18,7 @@ public partial class CadastroVeiculoWindow : Window
 
     private async void CadastroVeiculoWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        await _viewModel.CarregarMarcasVeiculoAsync();
         await _viewModel.CarregarClientesAsync();
     }
 

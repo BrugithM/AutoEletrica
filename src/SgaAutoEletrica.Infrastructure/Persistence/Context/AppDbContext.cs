@@ -25,6 +25,7 @@ public class AppDbContext : DbContext
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<ConfiguracaoEmpresa> ConfiguracoesEmpresa => Set<ConfiguracaoEmpresa>();
     public DbSet<Marca> Marcas => Set<Marca>();
+    public DbSet<MarcaVeiculo> MarcasVeiculo => Set<MarcaVeiculo>();
 
     
     public AppDbContext(DbContextOptions<AppDbContext>options) : base(options){}

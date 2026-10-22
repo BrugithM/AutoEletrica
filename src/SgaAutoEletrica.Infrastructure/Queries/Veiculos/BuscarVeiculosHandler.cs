@@ -20,6 +20,7 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
     {
         var query = _context.Veiculos
             .Include(v => v.Cliente)
+            .Include(v => v.MarcaVeiculo)
             .AsNoTracking()
             .AsQueryable();
 
@@ -45,10 +46,22 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
             query = query.Where(v => v.Modelo.ToLower().Contains(termo));
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Marca))
+        if (request.MarcaId.HasValue)
         {
-            var termo = request.Marca.Trim().ToLower();
-            query = query.Where(v => v.Marca.ToLower().Contains(termo));
+            if (request.MarcaId.Value == Guid.Parse("00000000-0000-0000-0000-000000000001"))
+            {
+                query = query.Where(v => v.MarcaVeiculoId == null);
+            }
+            else
+            {
+                var marcaNome = await _context.MarcasVeiculo
+                    .Where(m => m.Id == request.MarcaId.Value)
+                    .Select(m => m.Nome)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                query = query.Where(v => v.MarcaVeiculoId == request.MarcaId.Value
+                    || (v.MarcaVeiculoId == null && v.Marca == marcaNome));
+            }
         }
 
         if (!string.IsNullOrWhiteSpace(request.NomeCliente))
@@ -78,6 +91,8 @@ public class BuscarVeiculosHandler : IRequestHandler<BuscarVeiculosQuery, ListaP
                 Placa = v.Placa.Valor,
                 Modelo = v.Modelo,
                 Marca = v.Marca,
+                MarcaVeiculoId = v.MarcaVeiculoId,
+                MarcaVeiculoNome = v.MarcaVeiculo != null ? v.MarcaVeiculo.Nome : null,
                 Ano = v.Ano,
                 Versao = v.Versao,
                 Motor = v.Motor,

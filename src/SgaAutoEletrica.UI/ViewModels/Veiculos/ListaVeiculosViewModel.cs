@@ -6,6 +6,8 @@ using System.Windows.Input;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SgaAutoEletrica.Application.Common.Interfaces;
+using SgaAutoEletrica.Application.Features.MarcasVeiculo.DTOs;
+using SgaAutoEletrica.Application.Features.MarcasVeiculo.Queries;
 using SgaAutoEletrica.Application.Features.Veiculos.Commands;
 using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
 using SgaAutoEletrica.Application.Features.Veiculos.Queries;
@@ -18,6 +20,7 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
     private const int TamanhoPagina = 40;
 
     public ObservableCollection<VeiculoDTO> Veiculos { get; } = new();
+    public ObservableCollection<MarcaVeiculoDTO> MarcasDisponiveis { get; } = new();
 
     public bool EhAdministrador => App.ServiceProvider
         .GetRequiredService<ISessaoUsuario>().EhAdministrador;
@@ -81,8 +84,8 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         set { _buscaModelo = value; OnPropertyChanged(); }
     }
 
-    private string _buscaMarca = string.Empty;
-    public string BuscaMarca
+    private MarcaVeiculoDTO? _buscaMarca;
+    public MarcaVeiculoDTO? BuscaMarca
     {
         get => _buscaMarca;
         set { _buscaMarca = value; OnPropertyChanged(); }
@@ -165,6 +168,18 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         OSVinculadasCommand = new RelayCommand(_ => OSVinculadas(), _ => TemVeiculoSelecionado);
     }
 
+    public async Task CarregarMarcasAsync()
+    {
+        MarcasDisponiveis.Clear();
+        MarcasDisponiveis.Add(new MarcaVeiculoDTO { Id = Guid.Empty, Nome = "Todas" });
+        MarcasDisponiveis.Add(new MarcaVeiculoDTO { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Nome = "(Sem Marca)" });
+
+        var marcas = await _mediator.Send(new ListarMarcasVeiculoQuery { Ativo = true });
+        foreach (var m in marcas) MarcasDisponiveis.Add(m);
+
+        BuscaMarca = MarcasDisponiveis.FirstOrDefault();
+    }
+
     public async Task BuscarAsync()
     {
         try
@@ -176,12 +191,16 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
             if (!string.IsNullOrWhiteSpace(BuscaAno) && int.TryParse(BuscaAno, out var anoParsed))
                 ano = anoParsed;
 
+            Guid? marcaId = ModoBuscaAvancada && BuscaMarca != null && BuscaMarca.Id != Guid.Empty
+                ? BuscaMarca.Id
+                : null;
+
             var resultado = await _mediator.Send(new BuscarVeiculosQuery
             {
                 TermoBusca = ModoBuscaRapida ? TermoBusca : null,
                 Placa = ModoBuscaAvancada ? BuscaPlaca : null,
                 Modelo = ModoBuscaAvancada ? BuscaModelo : null,
-                Marca = ModoBuscaAvancada ? BuscaMarca : null,
+                MarcaId = marcaId,
                 NomeCliente = ModoBuscaAvancada ? BuscaNomeCliente : null,
                 Ano = ModoBuscaAvancada ? ano : null,
                 Ativo = MostrarInativos ? null : true,
@@ -207,14 +226,18 @@ public class ListaVeiculosViewModel : INotifyPropertyChanged
         LimparCampos();
     }
 
-    private void LimparCampos()
+    private async void LimparCampos()
     {
         TermoBusca = string.Empty;
         BuscaPlaca = string.Empty;
         BuscaModelo = string.Empty;
-        BuscaMarca = string.Empty;
+        BuscaMarca = MarcasDisponiveis.FirstOrDefault();
         BuscaNomeCliente = string.Empty;
         BuscaAno = string.Empty;
+
+        await CarregarMarcasAsync();
+        BuscaMarca = MarcasDisponiveis.FirstOrDefault();
+
     }
 
     private async Task NovoVeiculoAsync()

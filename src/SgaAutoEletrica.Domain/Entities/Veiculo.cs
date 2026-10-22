@@ -17,6 +17,8 @@ public class Veiculo
     public string? Observacao { get; private set; }
     public bool Ativo { get; private set; }
 
+    public Guid? MarcaVeiculoId { get; private set; }
+    public MarcaVeiculo? MarcaVeiculo { get; private set; }
     public Guid ClienteId { get; private set; }
     public Cliente Cliente { get; private set; } = null!;
 
@@ -30,8 +32,8 @@ public class Veiculo
 
     // Construtor para cadastro manual.
     public Veiculo(string placa, Guid clienteId, string modelo, string marca, int ano,
-        string? versao = null, string? motor = null, TipoMotor? tipoMotor = null, 
-        string? cor = null, string? observacao = null)
+    string? versao = null, string? motor = null, TipoMotor? tipoMotor = null,
+    string? cor = null, string? observacao = null, Guid? marcaVeiculoId = null)
     {
         if (string.IsNullOrWhiteSpace(placa)) throw new ArgumentException("Placa é obrigatória.", nameof(placa));
         if (string.IsNullOrWhiteSpace(modelo)) throw new ArgumentException("Modelo é obrigatório.", nameof(modelo));
@@ -43,6 +45,7 @@ public class Veiculo
         ClienteId = clienteId;
         Modelo = modelo;
         Marca = marca;
+        MarcaVeiculoId = marcaVeiculoId;
         Ano = ano;
         Versao = versao;
         Motor = motor;
@@ -94,15 +97,9 @@ public class Veiculo
 
     // Atualiza os dados do veículo manualmente.
     public void AtualizarDados(
-        string placa,
-        string modelo,
-        string marca,
-        int ano,
-        string? versao = null,
-        string? motor = null,
-        TipoMotor? tipoMotor = null,
-        string? cor = null,
-        string? observacao = null)
+        string placa, string modelo, string marca, int ano,
+    string? versao = null, string? motor = null, TipoMotor? tipoMotor = null,
+    string? cor = null, string? observacao = null, Guid? marcaVeiculoId = null)
     {
         if (string.IsNullOrWhiteSpace(placa))
             throw new ArgumentException("Placa é obrigatória.", nameof(placa));
@@ -116,6 +113,7 @@ public class Veiculo
         Placa = new ValueObjects.Placa(placa);
         Modelo = modelo;
         Marca = marca;
+        MarcaVeiculoId = marcaVeiculoId;
         Ano = ano;
         Versao = versao;
         Motor = motor;

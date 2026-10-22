@@ -27,6 +27,8 @@ public class ListarVeiculosPorClienteHandler : IRequestHandler<ListarVeiculosPor
                 Placa = v.Placa.Valor,
                 Modelo = v.Modelo,
                 Marca = v.Marca,
+                MarcaVeiculoId = v.MarcaVeiculoId, 
+                MarcaVeiculoNome = v.MarcaVeiculo != null ? v.MarcaVeiculo.Nome : null, 
                 Ano = v.Ano,
                 Versao = v.Versao,
                 Motor = v.Motor,

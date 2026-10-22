@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Veiculos.Commands;
-using SgaAutoEletrica.Domain.Enums;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
 
 namespace SgaAutoEletrica.Infrastructure.Commands.Veiculos;
@@ -41,7 +40,8 @@ public class AtualizarVeiculoHandler : IRequestHandler<AtualizarVeiculoCommand>
             request.Motor,
             request.TipoMotor,
             request.Cor,
-            request.Observacao);
+            request.Observacao,
+            request.MarcaVeiculoId); 
 
         await _context.SaveChangesAsync(cancellationToken);
     }

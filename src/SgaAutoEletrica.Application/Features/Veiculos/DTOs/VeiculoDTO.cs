@@ -8,6 +8,8 @@ public class VeiculoDTO
     public string Placa { get; set; } = string.Empty;
     public string Modelo { get; set; } = string.Empty;
     public string Marca { get; set; } = string.Empty;
+    public Guid? MarcaVeiculoId { get; set; }
+    public string? MarcaVeiculoNome { get; set; }
     public int Ano { get; set; }
     public string? Versao { get; set; }
     public string? Motor { get; set; }

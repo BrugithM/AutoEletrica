@@ -6,6 +6,7 @@ using SgaAutoEletrica.Application;
 using SgaAutoEletrica.Application.Common.Interfaces;
 using SgaAutoEletrica.Infrastructure;
 using SgaAutoEletrica.Infrastructure.Persistence.Context;
+using SgaAutoEletrica.UI.ViewModels.MarcasVeiculo;
 using SgaAutoEletrica.UI.Views;
 
 namespace SgaAutoEletrica.UI;
@@ -117,6 +118,8 @@ public partial class App : System.Windows.Application
 
             services.AddTransient<ViewModels.Configuracoes.MeuPerfilViewModel>();
             services.AddTransient<Views.Configuracoes.MeuPerfilView>();
+
+            services.AddTransient<ListaMarcasVeiculoViewModel>();
 
             ServiceProvider = services.BuildServiceProvider();
 

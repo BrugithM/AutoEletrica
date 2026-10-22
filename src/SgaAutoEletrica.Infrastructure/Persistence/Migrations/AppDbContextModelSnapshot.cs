@@ -285,6 +285,25 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.ToTable("Marcas", (string)null);
                 });
 
+            modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.MarcaVeiculo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MarcasVeiculo", (string)null);
+                });
+
             modelBuilder.Entity("SgaAutoEletrica.Domain.Entities.NotaFiscalEntrada", b =>
                 {
                     b.Property<Guid>("Id")
@@ -533,6 +552,9 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("MarcaVeiculoId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Modelo")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -557,6 +579,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("MarcaVeiculoId");
 
                     b.ToTable("Veiculos", (string)null);
                 });
@@ -904,6 +928,11 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("SgaAutoEletrica.Domain.Entities.MarcaVeiculo", "MarcaVeiculo")
+                        .WithMany()
+                        .HasForeignKey("MarcaVeiculoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.OwnsOne("SgaAutoEletrica.Domain.ValueObjects.Placa", "Placa", b1 =>
                         {
                             b1.Property<Guid>("VeiculoId")
@@ -924,6 +953,8 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                         });
 
                     b.Navigation("Cliente");
+
+                    b.Navigation("MarcaVeiculo");
 
                     b.Navigation("Placa")
                         .IsRequired();
