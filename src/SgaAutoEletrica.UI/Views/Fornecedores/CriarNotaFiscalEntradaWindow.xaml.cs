@@ -8,10 +8,10 @@ public partial class CriarNotaFiscalEntradaWindow : Window
 {
     private readonly CriarNotaFiscalEntradaViewModel _viewModel;
 
-    public CriarNotaFiscalEntradaWindow(IMediator mediator)
+    public CriarNotaFiscalEntradaWindow(IMediator mediator, Guid? notaId = null)
     {
         InitializeComponent();
-        _viewModel = new CriarNotaFiscalEntradaViewModel(mediator);
+        _viewModel = new CriarNotaFiscalEntradaViewModel(mediator, notaId);
         DataContext = _viewModel;
         Loaded += CriarNotaFiscalEntradaWindow_Loaded;
     }

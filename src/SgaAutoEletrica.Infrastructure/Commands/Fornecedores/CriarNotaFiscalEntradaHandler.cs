@@ -37,7 +37,7 @@ public class CriarNotaFiscalEntradaHandler : IRequestHandler<CriarNotaFiscalEntr
 
         var dataReferencia = nf.DataEntrada;
 
-        foreach (var (pecaId, quantidade) in pecasParaEstoque)
+        foreach (var (pecaId, quantidade,_) in pecasParaEstoque)
         {
             var peca = await _context.Pecas.FindAsync([pecaId], cancellationToken);
             if (peca != null)

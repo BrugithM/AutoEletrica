@@ -5,6 +5,7 @@ public class NotaFiscalEntradaDetalheDTO
     public Guid Id { get; set; }
     public string Numero { get; set; } = string.Empty;
     public DateTime DataEntrada { get; set; }
+    public Guid FornecedorId { get; set; }
     public string NomeFornecedor { get; set; } = string.Empty;
     public string CnpjFornecedor { get; set; } = string.Empty;
     public decimal ValorTotal { get; set; }
@@ -14,6 +15,8 @@ public class NotaFiscalEntradaDetalheDTO
 
 public class ItemNotaEntradaDetalheDTO
 {
+    public Guid Id { get; set; }
+    public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
     public decimal Quantidade { get; set; }
     public decimal ValorUnitario { get; set; }

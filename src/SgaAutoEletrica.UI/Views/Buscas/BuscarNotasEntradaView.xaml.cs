@@ -19,4 +19,12 @@ public partial class BuscarNotasEntradaView : UserControl
     {
         await _viewModel.BuscarAsync();
     }
+
+    private void DataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (DataContext is BuscarNotasEntradaViewModel viewModel)
+        {
+            _ = viewModel.AbrirDetalhesAsync();
+        }
+    }
 }

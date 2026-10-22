@@ -18,26 +18,13 @@ public class BuscarNotasEntradaViewModel : INotifyPropertyChanged
     private const int TamanhoPagina = 40;
 
     public ObservableCollection<NotaFiscalEntradaResumoDTO> Notas { get; } = new();
-    public ObservableCollection<ItemNotaEntradaDetalheDTO> ItensNF { get; } = new();
 
     private NotaFiscalEntradaResumoDTO? _notaSelecionada;
     public NotaFiscalEntradaResumoDTO? NotaSelecionada
     {
         get => _notaSelecionada;
-        set
-        {
-            _notaSelecionada = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(TemNotaSelecionada));
-            OnPropertyChanged(nameof(TituloItens));
-            _ = CarregarItensAsync();
-        }
+        set { _notaSelecionada = value; OnPropertyChanged(); }
     }
-
-    public bool TemNotaSelecionada => NotaSelecionada != null;
-    public string TituloItens => NotaSelecionada != null
-        ? $"Itens da Nota Fiscal Nº {NotaSelecionada.Numero}:"
-        : "";
 
     public string NomeFornecedor { get; set; } = string.Empty;
     public string CnpjFornecedor { get; set; } = string.Empty;
@@ -95,7 +82,6 @@ public class BuscarNotasEntradaViewModel : INotifyPropertyChanged
         try
         {
             Notas.Clear();
-            ItensNF.Clear();
             NotaSelecionada = null;
 
             var resultado = await _mediator.Send(new BuscarNotasEntradaQuery
@@ -122,19 +108,6 @@ public class BuscarNotasEntradaViewModel : INotifyPropertyChanged
         }
     }
 
-    private async Task CarregarItensAsync()
-    {
-        ItensNF.Clear();
-        if (NotaSelecionada == null) return;
-
-        var nf = await _mediator.Send(new ObterNotaFiscalEntradaPorIdQuery { Id = NotaSelecionada.Id });
-        if (nf != null)
-        {
-            foreach (var item in nf.Itens)
-                ItensNF.Add(item);
-        }
-    }
-
     private async Task IrParaPaginaAnterior()
     {
         if (!TemPaginaAnterior) return;
@@ -156,6 +129,20 @@ public class BuscarNotasEntradaViewModel : INotifyPropertyChanged
         if (dialog.ShowDialog() == true)
         {
             _ = BuscarAsync();
+        }
+    }
+
+    public async Task AbrirDetalhesAsync()
+    {
+        if (NotaSelecionada == null) return;
+
+        var dialog = new Views.Fornecedores.DetalhesNotaFiscalWindow(
+            App.ServiceProvider.GetRequiredService<IMediator>(), 
+            NotaSelecionada.Id);
+
+        if (dialog.ShowDialog() == true)
+        {
+            await BuscarAsync(); 
         }
     }
 

@@ -16,6 +16,7 @@ namespace SgaAutoEletrica.UI.ViewModels.Fornecedores;
 public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 {
     private readonly IMediator _mediator;
+    private readonly Guid? _notaId; 
 
     public ObservableCollection<FornecedorDTO> Fornecedores { get; } = new();
     public ObservableCollection<PecaDTO> PecasDisponiveis { get; } = new();
@@ -98,9 +99,10 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
     public ICommand NovoFornecedorCommand { get; }
     public ICommand NovaPecaCommand { get; }
 
-    public CriarNotaFiscalEntradaViewModel(IMediator mediator)
+    public CriarNotaFiscalEntradaViewModel(IMediator mediator, Guid? notaId = null)
     {
         _mediator = mediator;
+        _notaId = notaId;
 
         AdicionarItemCommand = new RelayCommand(_ => AdicionarItem());
         RemoverItemCommand = new RelayCommand(_ => RemoverItem(), _ => TemItemSelecionado);
@@ -117,6 +119,37 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
         foreach (var p in pecas.Itens)
             PecasDisponiveis.Add(p);
+
+        if (_notaId.HasValue)
+        {
+            var nf = await _mediator.Send(new ObterNotaFiscalEntradaPorIdQuery { Id = _notaId.Value });
+            if (nf != null)
+            {
+                Numero = nf.Numero;
+                DataEntrada = nf.DataEntrada.ToLocalTime();
+                Observacao = nf.Observacao ?? "";
+                FornecedorSelecionado = Fornecedores.FirstOrDefault(f => f.Id == nf.FornecedorId);
+                
+                ItensNF.Clear();
+                foreach (var item in nf.Itens)
+                {
+                    var novoItem = new ItemNFEntradaTemporario
+                    {
+                        Id = item.Id,          
+                        PecaId = item.PecaId,  
+                        NomePeca = item.NomePeca,
+                        Quantidade = item.Quantidade,
+                        ValorUnitario = item.ValorUnitario
+                    };
+                    novoItem.PropertyChanged += (s, e) => {
+                        if (e.PropertyName == nameof(ItemNFEntradaTemporario.ValorTotal))
+                            OnPropertyChanged(nameof(ValorTotal));
+                    };
+                    ItensNF.Add(novoItem);
+                }
+                OnPropertyChanged(nameof(ValorTotal));
+            }
+        }
     }
 
     public void AdicionarItem()
@@ -175,7 +208,6 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         if (dialog.ShowDialog() == true)
         {
             var idsAntes = Fornecedores.Select(f => f.Id).ToHashSet();
-
             Fornecedores.Clear();
             var fornecedores = await _mediator.Send(new ListarFornecedoresQuery { Ativo = true });
             foreach (var f in fornecedores)
@@ -195,7 +227,6 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         if (dialog.ShowDialog() == true)
         {
             var idsAntes = PecasDisponiveis.Select(p => p.Id).ToHashSet();
-
             PecasDisponiveis.Clear();
             var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
             foreach (var p in pecas.Itens)
@@ -230,53 +261,79 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 
         try
         {
-            var jaExiste = await _mediator.Send(new VerificarNFExistenteQuery
+            if (_notaId.HasValue)
             {
-                Numero = Numero,
-                FornecedorId = FornecedorSelecionado.Id
-            });
-
-            if (jaExiste)
-            {
-                var confirmacao = MessageBox.Show(
-                    $"Já existe uma NF '{Numero}' para este fornecedor. Deseja continuar mesmo assim?",
-                    "NF Duplicada",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (confirmacao == MessageBoxResult.No)
-                    return false;
-            }
-
-            var command = new CriarNotaFiscalEntradaCommand
-            {
-                Numero = Numero,
-                FornecedorId = FornecedorSelecionado.Id,
-                DataEntrada = DataEntrada,
-                Observacao = Observacao
-            };
-
-            foreach (var item in ItensNF)
-            {
-                command.Itens.Add(new ItemNotaEntradaRequest
+                var command = new AtualizarNotaFiscalEntradaCommand
                 {
-                    PecaId = item.PecaId,
-                    Quantidade = item.Quantidade,
-                    ValorUnitario = item.ValorUnitario
+                    Id = _notaId.Value,
+                    Numero = Numero,
+                    FornecedorId = FornecedorSelecionado.Id,
+                    DataEntrada = DataEntrada,
+                    Observacao = Observacao
+                };
+
+                foreach (var item in ItensNF)
+                {
+                    command.Itens.Add(new AtualizarItemNotaRequest
+                    {
+                        PecaId = item.PecaId,
+                        Quantidade = item.Quantidade,
+                        ValorUnitario = item.ValorUnitario
+                    });
+                }
+                await _mediator.Send(command);
+                MessageBox.Show("Nota Fiscal atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                var jaExiste = await _mediator.Send(new VerificarNFExistenteQuery
+                {
+                    Numero = Numero,
+                    FornecedorId = FornecedorSelecionado.Id
                 });
+
+                if (jaExiste)
+                {
+                    var confirmacao = MessageBox.Show(
+                        $"Já existe uma NF '{Numero}' para este fornecedor. Deseja continuar mesmo assim?",
+                        "NF Duplicada",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (confirmacao == MessageBoxResult.No)
+                        return false;
+                }
+
+                var command = new CriarNotaFiscalEntradaCommand
+                {
+                    Numero = Numero,
+                    FornecedorId = FornecedorSelecionado.Id,
+                    DataEntrada = DataEntrada,
+                    Observacao = Observacao
+                };
+
+                foreach (var item in ItensNF)
+                {
+                    command.Itens.Add(new ItemNotaEntradaRequest
+                    {
+                        PecaId = item.PecaId,
+                        Quantidade = item.Quantidade,
+                        ValorUnitario = item.ValorUnitario
+                    });
+                }
+                await _mediator.Send(command);
+                MessageBox.Show("Nota Fiscal registrada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
-            await _mediator.Send(command);
-
-            MessageBox.Show("Nota Fiscal registrada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             return true;
         }
-        catch (Exception ex)
+       catch (Exception ex)
         {
             var inner = ex;
             while (inner.InnerException != null)
                 inner = inner.InnerException;
-            MessageBox.Show($"Erro: {inner.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            var detalheInterno = inner != ex ? $"\n\nDetalhe técnico: {inner.Message}" : string.Empty;
+            MessageBox.Show($"Erro: {ex.Message}{detalheInterno}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
     }
@@ -288,6 +345,7 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
 
 public class ItemNFEntradaTemporario : INotifyPropertyChanged
 {
+    public Guid? Id { get; set; }
     public int PecaId { get; set; }
     public string NomePeca { get; set; } = string.Empty;
 

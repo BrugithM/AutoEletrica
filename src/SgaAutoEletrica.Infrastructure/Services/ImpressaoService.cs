@@ -542,9 +542,9 @@ public class ImpressaoService : IImpressaoService
         };
         printDocument.PrintPage += (sender, e) =>
         {
-            var fonte = new Font("Consolas", 10);
+            var fonte = new Font("Consolas", 8);
             var brush = Brushes.Black;
-            var margem = 40f;
+            var margem = 2f;
             var yPos = margem;
             foreach (var linha in conteudo.Split('\n'))
             {

@@ -146,7 +146,7 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
         CancelarOSCommand = new RelayCommand(async _ => await CancelarAsync(), _ => PodeCancelar && EhAdministrador);
         FinalizarCommand = new RelayCommand(async _ => await FinalizarAsync(), _ => PodeFinalizar);
         ImprimirCupomOrcamentoCommand = new RelayCommand(_ => ImprimirCupomOrcamento(),
-    _ => Status == StatusOS.Aberta || Status == StatusOS.EmAndamento);
+    _ => Status != StatusOS.Cancelada);
     }
 
     public async Task CarregarDadosAsync()

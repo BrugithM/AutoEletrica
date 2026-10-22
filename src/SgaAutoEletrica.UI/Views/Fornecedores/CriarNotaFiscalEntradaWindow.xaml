@@ -167,7 +167,7 @@
                                             Width="*"
                                             IsReadOnly="True"/>
                         <DataGridTextColumn Header="Qtd"
-                                            Binding="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.###}}"
+                                            Binding="{Binding Quantidade, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
                                             Width="80"/>
                         <DataGridTextColumn Header="Valor Unit. (R$)"
                                             Binding="{Binding ValorUnitario, UpdateSourceTrigger=LostFocus, StringFormat=N2}"

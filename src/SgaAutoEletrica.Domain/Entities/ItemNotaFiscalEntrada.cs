@@ -1,4 +1,5 @@
 namespace SgaAutoEletrica.Domain.Entities;
+
 public class ItemNotaFiscalEntrada
 {
     public Guid Id { get; private set; }
@@ -24,6 +25,16 @@ public class ItemNotaFiscalEntrada
 
         Id = Guid.NewGuid();
         PecaId = pecaId;
+        Quantidade = quantidade;
+        ValorUnitario = valorUnitario;
+        ValorTotal = Math.Round(quantidade * valorUnitario, 2);
+    }
+
+    public void AtualizarDados(decimal quantidade, decimal valorUnitario)
+    {
+        if (quantidade <= 0) throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
+        if (valorUnitario < 0) throw new ArgumentException("Valor unitário não pode ser negativo.", nameof(valorUnitario));
+
         Quantidade = quantidade;
         ValorUnitario = valorUnitario;
         ValorTotal = Math.Round(quantidade * valorUnitario, 2);

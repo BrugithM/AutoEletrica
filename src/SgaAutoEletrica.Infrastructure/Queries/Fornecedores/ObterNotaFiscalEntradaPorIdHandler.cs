@@ -27,12 +27,15 @@ public class ObterNotaFiscalEntradaPorIdHandler : IRequestHandler<ObterNotaFisca
                 Id = nf.Id,
                 Numero = nf.Numero,
                 DataEntrada = nf.DataEntrada,
+                FornecedorId = nf.FornecedorId,
                 NomeFornecedor = nf.Fornecedor.NomeEmpresa,
                 CnpjFornecedor = nf.Fornecedor.Cnpj.Formatado(),
                 ValorTotal = nf.ValorTotal,
                 Observacao = nf.Observacao,
                 Itens = nf.Itens.Select(i => new ItemNotaEntradaDetalheDTO
                 {
+                    Id = i.Id,
+                    PecaId = i.PecaId,
                     NomePeca = i.Peca.Nome,
                     Quantidade = i.Quantidade,
                     ValorUnitario = i.ValorUnitario,
