@@ -9,6 +9,7 @@ O projeto faz parte do meu portfólio de desenvolvimento de software e foi desen
 ### Gestão de cadastros
 
 - Cadastro e consulta de clientes e veículos.
+- Cadastro e gerenciamento de marcas de veículos.
 - Gerenciamento de fornecedores.
 - Cadastro de peças, marcas e categorias.
 - Cadastro e gerenciamento de serviços.
@@ -24,6 +25,7 @@ O projeto faz parte do meu portfólio de desenvolvimento de software e foi desen
 
 - Criação e gerenciamento de ordens de serviço.
 - Associação de clientes e veículos aos atendimentos.
+- Suporte a ordens de serviço avulsas (sem veículo), para vendas de balcão e serviços externos.
 - Inclusão de peças e serviços nas ordens.
 - Cálculo de valores e aplicação de descontos.
 - Atualização de status e observações.

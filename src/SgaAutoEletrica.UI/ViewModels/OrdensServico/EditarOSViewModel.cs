@@ -169,7 +169,7 @@ public class EditarOSViewModel : INotifyPropertyChanged
         NumeroOS = os.Numero.ToString();
         DataAbertura = os.DataAbertura.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
         InfoCliente = $"Cliente: {os.NomeCliente} (Tel: {os.TelefoneCliente})";
-        InfoVeiculo = $"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - Placa: {os.PlacaVeiculo}";
+        InfoVeiculo = os.VeiculoId.HasValue ? $"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - Placa: {os.PlacaVeiculo}" : "";
         StatusAtual = os.Status.ToString();
         Observacao = os.Observacao ?? "";
         DescricaoServicos = os.DescricaoServicos ?? "";

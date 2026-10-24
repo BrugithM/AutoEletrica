@@ -164,7 +164,7 @@ public class ImpressaoService : IImpressaoService
                 y += alturaLinha;
                 g.DrawLine(canetaFina, margemEsq, y, margemDir, y);
                 g.DrawString("VEÍCULO", fonteLabel, Brushes.Black, margemEsq + 5, y + 5);
-                g.DrawString(TruncarTexto(estado.Os.ModeloVeiculo, 45), fonteTexto, Brushes.Black, margemEsq + 5, y + 20);
+                g.DrawString(TruncarTexto(estado.Os.ModeloVeiculo ?? "-", 45), fonteTexto, Brushes.Black, margemEsq + 5, y + 20);
                 g.DrawString("PLACA", fonteLabel, Brushes.Black, xC2 + 5, y + 5);
                 g.DrawString(TruncarTexto(estado.Os.PlacaVeiculo ?? "-", 15), fonteTexto, Brushes.Black, xC2 + 5, y + 20);
                 g.DrawString("QUILOMETRAGEM", fonteLabel, Brushes.Black, xC3 + 5, y + 5);
@@ -451,7 +451,7 @@ public class ImpressaoService : IImpressaoService
         sb.AppendLine("             ORÇAMENTO");
         sb.AppendLine(new string('=', LARGURA));
         sb.AppendLine($"Cliente: {os.NomeCliente}");
-        sb.AppendLine($"Veículo: {os.MarcaVeiculo} {os.ModeloVeiculo} - {os.PlacaVeiculo}");
+        sb.AppendLine($"Veículo: {os.MarcaVeiculo ?? ""} {os.ModeloVeiculo ?? ""} - {os.PlacaVeiculo ?? ""}");
         if (os.Quilometragem.HasValue)
             sb.AppendLine($"Km: {os.Quilometragem.Value:N0}");
         sb.AppendLine(new string('-', LARGURA));

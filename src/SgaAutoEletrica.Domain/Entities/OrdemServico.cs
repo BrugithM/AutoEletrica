@@ -10,8 +10,8 @@ public class OrdemServico
     public Guid ClienteId { get; private set; }
     public Cliente Cliente { get; private set; } = null!;
 
-    public Guid VeiculoId { get; private set; }
-    public Veiculo Veiculo { get; private set; } = null!;
+    public Guid? VeiculoId { get; private set; }
+    public Veiculo? Veiculo { get; private set; } = null!;
 
     public StatusOS Status { get; private set; }
     public DateTime DataAbertura { get; private set; }
@@ -34,7 +34,7 @@ public class OrdemServico
 
     private OrdemServico() { }
 
-    public OrdemServico(int numero, Guid clienteId, Guid veiculoId, string? observacao = null, string? descricaoServicos = null)
+    public OrdemServico(int numero, Guid clienteId, Guid? veiculoId, string? observacao = null, string? descricaoServicos = null)
     {
         if (numero <= 0)
             throw new ArgumentException("Número da OS deve ser maior que zero.", nameof(numero));

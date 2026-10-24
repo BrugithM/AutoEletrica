@@ -30,6 +30,15 @@ public class CriarOrdemServicoHandler : IRequestHandler<CriarOrdemServicoCommand
         while (await _context.OrdensServico.AnyAsync(os => os.Numero == proximo, cancellationToken))
             proximo++;
 
+        if (request.VeiculoId.HasValue)
+        {
+            var veiculoExiste = await _context.Veiculos
+                .AnyAsync(v => v.Id == request.VeiculoId.Value, cancellationToken);
+
+            if(!veiculoExiste)
+                throw new InvalidOperationException("O veículo informado não foi encontrado.");
+        }
+
         var os = new OrdemServico(proximo, request.ClienteId, request.VeiculoId, request.Observacao, request.DescricaoServicos);
         if (request.Quilometragem.HasValue)
             os.AtualizarQuilometragem(request.Quilometragem);

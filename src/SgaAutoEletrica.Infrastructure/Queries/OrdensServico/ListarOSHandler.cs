@@ -38,7 +38,7 @@ public class ListarOSHandler : IRequestHandler<ListarOSQuery, ListaPaginadaDTO<O
             var termo = request.TermoBusca.Trim().ToLower();
             query = query.Where(os =>
                 os.Cliente.NomeCompleto.ToLower().Contains(termo) ||
-                os.Veiculo.Placa.Valor.ToLower().Contains(termo) ||
+                (os.Veiculo != null && os.Veiculo.Placa.Valor.ToLower().Contains(termo)) ||
                 os.Numero.ToString().Contains(termo));
         }
 
@@ -53,8 +53,8 @@ public class ListarOSHandler : IRequestHandler<ListarOSQuery, ListaPaginadaDTO<O
                 Id = os.Id,
                 Numero = os.Numero,
                 NomeCliente = os.Cliente.NomeCompleto,
-                PlacaVeiculo = os.Veiculo.Placa.Valor,
-                ModeloVeiculo = os.Veiculo.Modelo,
+                PlacaVeiculo = os.Veiculo != null ? os.Veiculo.Placa.Valor : null,
+                ModeloVeiculo = os.Veiculo != null ? os.Veiculo.Modelo : null,
                 Status = os.Status,
                 ValorTotal = os.ValorTotal,
                 DataAbertura = os.DataAbertura,

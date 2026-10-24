@@ -385,7 +385,7 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("ValorTotalServicos")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<Guid>("VeiculoId")
+                    b.Property<Guid?>("VeiculoId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -867,8 +867,7 @@ namespace SgaAutoEletrica.Infrastructure.Persistence.Migrations
                     b.HasOne("SgaAutoEletrica.Domain.Entities.Veiculo", "Veiculo")
                         .WithMany()
                         .HasForeignKey("VeiculoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Cliente");
 

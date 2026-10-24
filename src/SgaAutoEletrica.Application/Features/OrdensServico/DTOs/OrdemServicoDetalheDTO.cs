@@ -17,11 +17,11 @@ public class OrdemServicoDetalheDTO
     public string? CpfCliente { get; set; }
     public string? TelefoneCliente { get; set; }
 
-    public Guid VeiculoId { get; set; }
-    public string PlacaVeiculo { get; set; } = string.Empty;
-    public string ModeloVeiculo { get; set; } = string.Empty;
-    public string MarcaVeiculo { get; set; } = string.Empty;
-    public int AnoVeiculo { get; set; }
+    public Guid? VeiculoId { get; set; }
+    public string? PlacaVeiculo { get; set; }
+    public string? ModeloVeiculo { get; set; }
+    public string? MarcaVeiculo { get; set; }
+    public int? AnoVeiculo { get; set; }
     public int? Quilometragem { get; set; }
 
     public decimal ValorTotalPecas { get; set; }

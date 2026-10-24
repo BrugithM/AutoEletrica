@@ -341,11 +341,6 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
             MessageBox.Show("Selecione um cliente.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
-        if (VeiculoSelecionado == null)
-        {
-            MessageBox.Show("Selecione um veículo.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return false;
-        }
         if (!PecasNaOS.Any() && !ServicosNaOS.Any())
         {
             MessageBox.Show("Adicione pelo menos uma peça ou serviço.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -357,7 +352,7 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
             var command = new CriarOrdemServicoCommand
             {
                 ClienteId = ClienteSelecionado.Id,
-                VeiculoId = VeiculoSelecionado.Id,
+                VeiculoId = VeiculoSelecionado?.Id,
                 Observacao = Observacao,
                 DescricaoServicos = string.IsNullOrWhiteSpace(DescricaoServicos) ? null : DescricaoServicos,
                 DescontoPercentual = Desconto,

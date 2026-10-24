@@ -177,6 +177,7 @@ public partial class MainWindow : Window
 }
 
     // Estoque
+    
 
     private void BtnPecas_Click(object sender, RoutedEventArgs e)
     {

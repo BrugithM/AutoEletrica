@@ -19,7 +19,7 @@ public class ItemServicoOSRequest
 public class CriarOrdemServicoCommand : IRequest<Guid>
 {
     public Guid ClienteId { get; set; }
-    public Guid VeiculoId { get; set; }
+    public Guid? VeiculoId { get; set; }
     public string? Observacao { get; set; }
     public string? DescricaoServicos{get;set;}
     public decimal DescontoPercentual { get; set; }
