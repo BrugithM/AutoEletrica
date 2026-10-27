@@ -160,12 +160,12 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
 
     public async Task CarregarDadosAsync()
     {
-        var clientes = await _mediator.Send(new ListarClientesQuery { TamanhoPagina = 1000 });
-        foreach (var c in clientes.Itens)
+        var clientes = await _mediator.Send(new ListarTodosClientesQuery());
+        foreach (var c in clientes)
             Clientes.Add(new ClienteResumoDTO { Id = c.Id, NomeCompleto = c.NomeCompleto, Telefone = c.Telefone });
 
-        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
-        foreach (var p in pecas.Itens)
+        var pecas = await _mediator.Send(new ListarTodasPecasQuery ());
+        foreach (var p in pecas)
             PecasDisponiveis.Add(p);
 
         var servicos = await _mediator.Send(new ListarServicosQuery());
@@ -188,8 +188,8 @@ public class CriacaoOSViewModel : INotifyPropertyChanged
             var idsAntes = PecasDisponiveis.Select(p => p.Id).ToHashSet();
 
             PecasDisponiveis.Clear();
-            var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
-            foreach (var p in pecas.Itens)
+            var pecas = await _mediator.Send(new ListarTodasPecasQuery ());
+            foreach (var p in pecas)
                 PecasDisponiveis.Add(p);
 
             var novaPeca = PecasDisponiveis.FirstOrDefault(p => !idsAntes.Contains(p.Id));

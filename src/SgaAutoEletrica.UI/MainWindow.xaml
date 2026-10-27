@@ -99,7 +99,7 @@
                                           Style="{StaticResource SubMenuItemStyle}"/>
                         </MenuItem>
                         <MenuItem Header="Sair"
-                                        Click="BtnSair_Click"
+                                  Click="BtnSair_Click"
                                   HorizontalAlignment="Right"
                                   Background="#C0392B"
                                   Padding="15,5"/>
@@ -279,13 +279,14 @@
                                            FontSize="11"/>
                                 <TextBlock Grid.Column="1"
                                            x:Name="TxtBanco"
-                                           Text="Banco: Conectado"
-                                           Foreground="#2ECC71"
+                                           Text="Banco: Verificando..."
+                                           Foreground="#F1C40F"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            FontSize="11"/>
                                 <TextBlock Grid.Column="2"
-                                           Text="Versão: 1.0.0"
+                                           x:Name="TxtVersao"
+                                           Text="Versão: ---"
                                            Foreground="White"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Right"

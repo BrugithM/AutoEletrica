@@ -5,8 +5,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SgaAutoEletrica.Application.Features.Configuracoes.Queries;
 using SgaAutoEletrica.Application.Common.Interfaces;
+using SgaAutoEletrica.Infrastructure.Persistence.Context;
+using System.Reflection;
 
 namespace SgaAutoEletrica.UI;
 
@@ -21,10 +24,35 @@ public partial class MainWindow : Window
         Loaded += MainWindow_Loaded;
     }
 
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         CarregarLogo();
         CarregarUsuarioLogado();
+
+        var versao = Assembly.GetExecutingAssembly().GetName().Version;
+        TxtVersao.Text = $"Versão: {versao?.Major}.{versao?.Minor}.{versao?.Build}";
+        try
+    {
+        var dbContext = App.ServiceProvider.GetRequiredService<AppDbContext>();
+        
+        var podeConectar = await dbContext.Database.CanConnectAsync();
+        
+        if (podeConectar)
+        {
+            TxtBanco.Text = "Banco: Conectado";
+            TxtBanco.Foreground = System.Windows.Media.Brushes.LightGreen;
+        }
+        else
+        {
+            TxtBanco.Text = "Banco: Desconectado";
+            TxtBanco.Foreground = System.Windows.Media.Brushes.LightCoral;
+        }
+    }
+    catch (Exception)
+    {
+        TxtBanco.Text = "Banco: Erro";
+        TxtBanco.Foreground = System.Windows.Media.Brushes.LightCoral;
+    }
     }
 
     private void BtnInicio_Click(object sender, RoutedEventArgs e)

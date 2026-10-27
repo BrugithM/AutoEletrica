@@ -116,8 +116,8 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         foreach (var f in fornecedores)
             Fornecedores.Add(f);
 
-        var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
-        foreach (var p in pecas.Itens)
+        var pecas = await _mediator.Send(new ListarTodasPecasQuery());
+        foreach (var p in pecas)
             PecasDisponiveis.Add(p);
 
         if (_notaId.HasValue)
@@ -228,8 +228,8 @@ public class CriarNotaFiscalEntradaViewModel : INotifyPropertyChanged
         {
             var idsAntes = PecasDisponiveis.Select(p => p.Id).ToHashSet();
             PecasDisponiveis.Clear();
-            var pecas = await _mediator.Send(new ListarPecasQuery { Ativo = true, TamanhoPagina = 1000 });
-            foreach (var p in pecas.Itens)
+            var pecas = await _mediator.Send(new ListarTodasPecasQuery ());
+            foreach (var p in pecas)
                 PecasDisponiveis.Add(p);
 
             var novaPeca = PecasDisponiveis.FirstOrDefault(p => !idsAntes.Contains(p.Id));
