@@ -162,8 +162,6 @@ public class OrdemServico
 
     public void Cancelar(string motivo)
     {
-        if (Status == StatusOS.Finalizada)
-            throw new InvalidOperationException("Não é possível cancelar uma OS já finalizada.");
         if (Status == StatusOS.Cancelada)
             throw new InvalidOperationException("OS já está cancelada.");
         if (string.IsNullOrWhiteSpace(motivo))
@@ -184,5 +182,14 @@ public class OrdemServico
     public void AtualizarDescricaoServicos(string? descricaoServicos)
     {
         DescricaoServicos = descricaoServicos;
+    }
+
+    public void AlterarClienteVeiculo(Guid clienteId, Guid? veiculoId)
+    {
+        if (clienteId == Guid.Empty)
+            throw new ArgumentException("Cliente é obrigatório.", nameof(clienteId));
+
+        ClienteId = clienteId;
+        VeiculoId = veiculoId;
     }
 }

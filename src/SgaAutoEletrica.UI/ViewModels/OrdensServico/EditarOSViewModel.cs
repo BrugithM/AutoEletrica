@@ -12,6 +12,10 @@ using SgaAutoEletrica.Application.Features.Pecas.DTOs;
 using SgaAutoEletrica.Application.Features.Servicos.Queries;
 using SgaAutoEletrica.Application.Features.Servicos.DTOs;
 using Microsoft.Extensions.DependencyInjection;
+using SgaAutoEletrica.Application.Features.Veiculos.DTOs;
+using SgaAutoEletrica.Application.Features.Clientes.DTOs;
+using SgaAutoEletrica.Application.Features.Clientes.Queries;
+using SgaAutoEletrica.Application.Features.Veiculos.Queries;
 
 namespace SgaAutoEletrica.UI.ViewModels.OrdensServico;
 
@@ -25,6 +29,9 @@ public class EditarOSViewModel : INotifyPropertyChanged
 
     public ObservableCollection<ItemPecaOSTemporario> PecasNaOS { get; } = new();
     public ObservableCollection<ItemServicoOSTemporario> ServicosNaOS { get; } = new();
+
+    public ObservableCollection<ClienteResumoDTO> Clientes { get; } = new();
+    public ObservableCollection<VeiculoDTO> Veiculos { get; } = new();
 
     private ItemPecaOSTemporario? _pecaSelecionadaParaRemover;
     public ItemPecaOSTemporario? PecaSelecionadaParaRemover
@@ -56,6 +63,25 @@ public class EditarOSViewModel : INotifyPropertyChanged
     {
         get => _servicoSelecionado;
         set { _servicoSelecionado = value; OnPropertyChanged(); }
+    }
+
+    private ClienteResumoDTO? _clienteSelecionado;
+    public ClienteResumoDTO? ClienteSelecionado
+    {
+        get => _clienteSelecionado;
+        set
+        {
+            _clienteSelecionado = value;
+            OnPropertyChanged();
+            _ = CarregarVeiculosAsync();
+        }
+    }
+
+    private VeiculoDTO? _veiculoSelecionado;
+    public VeiculoDTO? VeiculoSelecionado
+    {
+        get => _veiculoSelecionado;
+        set { _veiculoSelecionado = value; OnPropertyChanged(); }
     }
 
     private decimal _quantidadePeca = 1;
@@ -229,6 +255,19 @@ public class EditarOSViewModel : INotifyPropertyChanged
         foreach (var s in servicos)
             ServicosDisponiveis.Add(s);
 
+        var clientes = await _mediator.Send(new ListarTodosClientesQuery());
+        foreach (var c in clientes)
+            Clientes.Add(c);
+
+        ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == os.ClienteId);
+
+        await CarregarVeiculosAsync();
+
+        if (os.VeiculoId.HasValue)
+        {
+            VeiculoSelecionado = Veiculos.FirstOrDefault(v => v.Id == os.VeiculoId.Value);
+        }
+
         OnPropertyChanged(nameof(ValorTotalPecas));
         OnPropertyChanged(nameof(ValorTotalServicos));
         OnPropertyChanged(nameof(ValorTotalGeral));
@@ -282,6 +321,15 @@ public class EditarOSViewModel : INotifyPropertyChanged
         {
             MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+    }
+
+    private async Task CarregarVeiculosAsync()
+    {
+        Veiculos.Clear();
+        if (ClienteSelecionado == null) return;
+
+        var veiculos = await _mediator.Send(new ListarVeiculosPorClienteQuery { ClienteId = ClienteSelecionado.Id });
+        foreach (var v in veiculos) Veiculos.Add(v);
     }
 
     public async Task SalvarQuantidadePecaAsync(ItemPecaOSTemporario item)
@@ -377,7 +425,7 @@ public class EditarOSViewModel : INotifyPropertyChanged
         {
             var idsAntes = PecasDisponiveis.Select(p => p.Id).ToHashSet();
             PecasDisponiveis.Clear();
-            var pecas = await _mediator.Send(new ListarTodasPecasQuery ());
+            var pecas = await _mediator.Send(new ListarTodasPecasQuery());
             foreach (var p in pecas)
                 PecasDisponiveis.Add(p);
 
@@ -517,6 +565,14 @@ public class EditarOSViewModel : INotifyPropertyChanged
                 DescricaoServicos = string.IsNullOrWhiteSpace(DescricaoServicos) ? null : DescricaoServicos
             });
 
+            if(ClienteSelecionado != null)
+            {
+                await _mediator.Send(new AtualizarClienteVeiculoOSCommand{
+                    OrdemServicoId = _osId,
+                    ClienteId = ClienteSelecionado.Id,
+                    VeiculoId = VeiculoSelecionado?.Id
+                });
+            }
             await _mediator.Send(new AtualizarObservacaoOSCommand
             {
                 OrdemServicoId = _osId,

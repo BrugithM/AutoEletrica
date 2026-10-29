@@ -122,8 +122,8 @@ public class DetalhesOSViewModel : INotifyPropertyChanged
     public bool PodeIniciar => Status == StatusOS.Aberta || Status == StatusOS.AguardandoPecas;
     public bool PodeAguardarPecas => Status == StatusOS.EmAndamento;
     public bool PodeFinalizar => Status != StatusOS.Finalizada && Status != StatusOS.Cancelada;
-    public bool PodeCancelar => Status != StatusOS.Finalizada && Status != StatusOS.Cancelada;
-    public bool PodeEditar => Status == StatusOS.Aberta || Status == StatusOS.EmAndamento;
+    public bool PodeCancelar => Status != StatusOS.Cancelada;
+    public bool PodeEditar => Status != StatusOS.Cancelada;
     public bool PodeImprimir => true;
     public bool EhAdministrador => App.ServiceProvider.GetRequiredService<SgaAutoEletrica.Application.Common.Interfaces.ISessaoUsuario>().EhAdministrador;
 
